@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, House, Maximize2 } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, House, Maximize2 } from "lucide-react";
 import { useState } from "react";
 
+import { galleryImages, type GalleryImage } from "@/app/rooms/gallery-data";
 import { secondaryCopy } from "@/app/secondary-content";
 import { useLanguage } from "@/components/site/language-provider";
 import { PageHero } from "@/components/site/page-hero";
@@ -16,35 +17,63 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const bedroomImages = [
-  ["/images/room-1.jpg"],
-  ["/images/room-2.jpg", "/images/room-2-detail.jpg"],
-  ["/images/room-3.jpg"],
-  ["/images/room-4.jpg"],
-] as const;
-
-const sharedImages = [
-  "/images/about-main.jpg",
-  "/images/story.jpg",
-  "/images/about-detail.jpg",
-  "/images/mood.jpg",
-  "/images/local-1.jpg",
-  "/images/footer.jpg",
-] as const;
+const bedroomImageGroups = ([1, 2, 3, 4] as const).map((room) =>
+  galleryImages.filter((image) => image.room === room),
+);
 
 export function RoomsPageContent() {
   const { language } = useLanguage();
   const copy = secondaryCopy[language];
   const t = copy.rooms;
-  const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [activeImage, setActiveImage] = useState<GalleryImage | null>(null);
+
+  const getImageAlt = (image: GalleryImage) => {
+    if (image.room) {
+      return `${t.bedroomNames[image.room - 1]} — ${t.photoLabel} ${image.order}`;
+    }
+
+    const category =
+      image.category === "shared" ? t.galleryTabs.shared : t.galleryTabs.outdoors;
+    return `${category} — ${t.photoLabel} ${image.order}`;
+  };
+
+  const showAdjacentImage = (direction: -1 | 1) => {
+    if (!activeImage) return;
+    const currentIndex = galleryImages.findIndex((image) => image.src === activeImage.src);
+    const nextIndex = (currentIndex + direction + galleryImages.length) % galleryImages.length;
+    setActiveImage(galleryImages[nextIndex]);
+  };
+
+  const galleryTabs = [
+    { value: "all", label: t.galleryTabs.all, images: galleryImages },
+    {
+      value: "bedrooms",
+      label: t.galleryTabs.bedrooms,
+      images: galleryImages.filter((image) => image.category === "bedrooms"),
+    },
+    {
+      value: "shared",
+      label: t.galleryTabs.shared,
+      images: galleryImages.filter((image) => image.category === "shared"),
+    },
+    {
+      value: "outdoors",
+      label: t.galleryTabs.outdoors,
+      images: galleryImages.filter((image) => image.category === "outdoors"),
+    },
+  ] as const;
+  const activeImageIndex = activeImage
+    ? galleryImages.findIndex((image) => image.src === activeImage.src)
+    : -1;
 
   return (
     <main className="overflow-hidden bg-white text-[#26272b]">
       <div className="relative">
         <SiteHeader overlay />
         <PageHero
-          image="/images/room-1.jpg"
+          image="/images/gallery/bedroom-1-01.jpg"
           imageAlt={t.bedroomNames[0]}
           eyebrow={t.eyebrow}
           title={t.title}
@@ -59,9 +88,9 @@ export function RoomsPageContent() {
 
       <section className="bg-[#faf8f5] px-6 py-24 sm:px-10 md:py-32 lg:px-16">
         <div className="mx-auto max-w-[1500px] space-y-24 md:space-y-32">
-          {bedroomImages.map((images, index) => (
+          {bedroomImageGroups.map((images, index) => (
             <article
-              key={t.bedroomNames[index]}
+                  key={t.bedroomNames[index]}
               className={`grid items-center gap-10 lg:grid-cols-[1.3fr_.7fr] lg:gap-20 ${
                 index % 2 === 1 ? "lg:[&>*:first-child]:order-2" : ""
               }`}
@@ -74,7 +103,7 @@ export function RoomsPageContent() {
                   className="group absolute inset-0 overflow-hidden rounded-[8px] text-left shadow-[0_20px_55px_rgba(30,31,34,.12)]"
                 >
                   <img
-                    src={images[0]}
+                    src={images[0].src}
                     alt={t.bedroomNames[index]}
                     className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]"
                   />
@@ -85,12 +114,12 @@ export function RoomsPageContent() {
                 {images[1] ? (
                   <button
                     type="button"
-                    onClick={() => setActiveImage(images[1] ?? null)}
+                    onClick={() => setActiveImage(images[1])}
                     aria-label={`${t.openImage}: ${t.bedroomNames[index]}`}
                     className="group absolute bottom-5 right-5 h-[38%] w-[38%] overflow-hidden rounded-[6px] border-[5px] border-white bg-white shadow-2xl"
                   >
                     <img
-                      src={images[1]}
+                      src={images[1].src}
                       alt={t.bedroomNames[index]}
                       className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
                     />
@@ -114,34 +143,67 @@ export function RoomsPageContent() {
 
       <section className="px-6 py-24 sm:px-10 md:py-32 lg:px-16">
         <div className="mx-auto max-w-[1500px]">
-          <div className="mb-12 max-w-2xl">
-            <p className="eyebrow">{t.sharedEyebrow}</p>
-            <h2 className="section-title mt-5">{t.sharedTitle}</h2>
-            <p className="mt-6 text-base leading-7 text-[#737477]">{t.sharedText}</p>
+          <div className="mb-12 max-w-3xl">
+            <p className="eyebrow">{t.galleryEyebrow}</p>
+            <h2 className="section-title mt-5">{t.galleryTitle}</h2>
+            <p className="mt-6 max-w-2xl text-base leading-7 text-[#737477]">{t.galleryText}</p>
           </div>
-          <div className="grid auto-rows-[230px] gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {sharedImages.map((image, index) => (
-              <button
-                key={image}
-                type="button"
-                onClick={() => setActiveImage(image)}
-                aria-label={t.openImage}
-                className={`group relative overflow-hidden rounded-[7px] ${
-                  index === 0 || index === 3 ? "sm:row-span-2" : ""
-                }`}
+
+          <Tabs defaultValue="all" className="gap-0">
+            <div className="pb-2">
+              <TabsList
+                variant="line"
+                aria-label={t.galleryEyebrow}
+                className="grid h-auto w-full grid-cols-2 gap-1 border-b border-[#ded8ce] p-0 sm:inline-flex sm:w-fit sm:min-w-max sm:gap-2"
               >
-                <img
-                  src={image}
-                  alt={t.sharedTitle}
-                  className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                />
-                <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/20" />
-                <span className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full bg-white/90 text-[#2d2f33] opacity-0 transition group-hover:opacity-100">
-                  <Maximize2 className="size-4" />
-                </span>
-              </button>
+                {galleryTabs.map((tab) => (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className="min-h-12 w-full flex-none rounded-none px-2 text-[10px] font-semibold uppercase tracking-[.1em] text-[#77787b] data-[state=active]:text-[#292b2f] sm:w-auto sm:px-6 sm:text-xs sm:tracking-[.12em]"
+                  >
+                    {tab.label}
+                    <span className="text-[10px] text-[#a08f6d]">{tab.images.length}</span>
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
+
+            {galleryTabs.map((tab) => (
+              <TabsContent key={tab.value} value={tab.value} className="mt-10">
+                <div className="grid auto-rows-[155px] grid-cols-2 gap-3 sm:auto-rows-[210px] sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
+                  {tab.images.map((image, index) => (
+                    <button
+                      key={image.src}
+                      type="button"
+                      onClick={() => setActiveImage(image)}
+                      aria-label={`${t.openImage}: ${getImageAlt(image)}`}
+                      className={`group relative overflow-hidden rounded-[7px] bg-[#ece8e1] text-left shadow-[0_10px_28px_rgba(31,31,31,.07)] outline-none transition focus-visible:ring-2 focus-visible:ring-[#a08f6d] focus-visible:ring-offset-4 ${
+                        index % 11 === 0
+                          ? "col-span-2 row-span-2"
+                          : index % 7 === 3
+                            ? "row-span-2"
+                            : ""
+                      }`}
+                    >
+                      <img
+                        src={image.src}
+                        alt={getImageAlt(image)}
+                        loading="lazy"
+                        decoding="async"
+                        className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                      />
+                      <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/20" />
+                      <span className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full bg-white/92 text-[#2d2f33] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                        <Maximize2 className="size-4" />
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </TabsContent>
             ))}
-          </div>
+          </Tabs>
+
           <div className="mt-12 flex justify-end">
             <Link
               href="/#availability"
@@ -163,7 +225,32 @@ export function RoomsPageContent() {
             <DialogDescription>{t.notice}</DialogDescription>
           </DialogHeader>
           {activeImage ? (
-            <img src={activeImage} alt={t.title} className="max-h-[88vh] w-full object-contain" />
+            <div className="relative flex min-h-[45vh] items-center justify-center bg-[#17191d]">
+              <img
+                src={activeImage.src}
+                alt={getImageAlt(activeImage)}
+                className="max-h-[88vh] w-full object-contain"
+              />
+              <button
+                type="button"
+                onClick={() => showAdjacentImage(-1)}
+                aria-label={t.previousImage}
+                className="absolute left-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-black/55 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#25272b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:left-5"
+              >
+                <ChevronLeft className="size-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => showAdjacentImage(1)}
+                aria-label={t.nextImage}
+                className="absolute right-3 top-1/2 grid size-11 -translate-y-1/2 place-items-center rounded-full bg-black/55 text-white backdrop-blur-sm transition hover:bg-white hover:text-[#25272b] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white sm:right-5"
+              >
+                <ChevronRight className="size-5" />
+              </button>
+              <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-4 py-2 text-[11px] font-semibold tracking-[.12em] text-white backdrop-blur-sm">
+                {activeImageIndex + 1} / {galleryImages.length}
+              </span>
+            </div>
           ) : null}
         </DialogContent>
       </Dialog>

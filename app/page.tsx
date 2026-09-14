@@ -29,15 +29,13 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { type Language, siteCopy } from "./site-content";
-
-const WHATSAPP_NUMBER = "";
-const BANK_IBAN = "";
+import { BANK_IBAN, WHATSAPP_NUMBER } from "./site-config";
 
 const roomImages = [
-  "/images/room-1.jpg",
-  "/images/room-2.jpg",
-  "/images/room-3.jpg",
-  "/images/room-4.jpg",
+  "/images/gallery/bedroom-1-01.jpg",
+  "/images/gallery/bedroom-2-01.jpg",
+  "/images/gallery/bedroom-3-01.jpg",
+  "/images/gallery/bedroom-4-01.jpg",
 ];
 
 const localImages = [
@@ -184,7 +182,7 @@ export default function Home() {
 
   return (
     <main id="top" className="overflow-hidden bg-white text-[#26272b]">
-      <section className="relative h-[100svh] min-h-[760px] max-h-[920px] overflow-hidden text-white">
+      <section className="relative h-[100svh] min-h-[760px] max-h-[920px] text-white">
         <picture>
           <source media="(max-width: 640px)" srcSet="/images/hero-mobile.jpg" />
           <img
@@ -212,7 +210,7 @@ export default function Home() {
         </div>
 
         <div className="absolute bottom-0 left-1/2 z-20 w-[calc(100%-2rem)] max-w-[1360px] -translate-x-1/2 translate-y-1/2 bg-white text-[#24262d] shadow-[0_20px_60px_rgba(24,24,27,.2)] sm:w-[calc(100%-4rem)]">
-          <div className="grid md:grid-cols-[1.1fr_1.1fr_.9fr_.9fr_auto]">
+          <div className="grid sm:grid-cols-2 xl:grid-cols-[1.1fr_1.1fr_.9fr_.9fr_auto]">
             <DateField
               label={t.arrival}
               value={arrival}
@@ -225,15 +223,15 @@ export default function Home() {
               min={arrival || today}
               onChange={setDeparture}
             />
-            <div className="min-h-20 border-b border-[#ebe8e2] px-5 py-5 md:border-b-0 md:border-r">
+            <div className="min-h-20 border-b border-[#ebe8e2] px-5 py-5 xl:border-b-0 xl:border-r">
               <GuestCounter value={adults} onChange={setAdults} label={t.guests} />
             </div>
-            <div className="min-h-20 border-b border-[#ebe8e2] px-5 py-5 md:border-b-0 md:border-r">
+            <div className="min-h-20 border-b border-[#ebe8e2] px-5 py-5 xl:border-b-0 xl:border-r">
               <GuestCounter value={children} onChange={setChildren} label={t.children} />
             </div>
             <button
               onClick={() => scrollTo("availability")}
-              className="m-2 flex min-h-16 items-center justify-center gap-3 bg-[#30343a] px-7 text-xs font-semibold uppercase tracking-[.14em] text-white transition hover:bg-[#a08f6d]"
+              className="m-2 flex min-h-16 items-center justify-center gap-3 bg-[#30343a] px-7 text-xs font-semibold uppercase tracking-[.14em] text-white transition hover:bg-[#a08f6d] sm:col-span-2 xl:col-span-1"
             >
               <Search className="size-4" />
               {t.availability}
@@ -563,7 +561,7 @@ function DateField({
       className={`flex items-center gap-3 px-5 ${
         compact
           ? "min-h-16 rounded-[4px] bg-white"
-          : "min-h-20 border-b border-[#ebe8e2] md:border-b-0 md:border-r"
+          : "min-h-20 border-b border-[#ebe8e2] xl:border-b-0 xl:border-r"
       }`}
     >
       <CalendarDays className="size-4 shrink-0 text-[#a08f6d]" />
@@ -602,7 +600,7 @@ function AboutSection({ t }: { t: (typeof siteCopy)[Language] }) {
   return (
     <section
       id="villa"
-      className="relative scroll-mt-0 px-6 pb-28 pt-64 sm:px-10 md:pb-36 md:pt-44 lg:px-16"
+      className="relative scroll-mt-0 px-6 pb-28 pt-64 sm:px-10 sm:pt-44 md:pb-36 lg:px-16 xl:pt-32"
     >
       <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(circle_at_90%_40%,rgba(160,143,109,.10),transparent_55%)]" />
       <div className="relative mx-auto grid min-h-[720px] w-full max-w-[1500px] items-center gap-20 lg:grid-cols-[.82fr_1.18fr]">

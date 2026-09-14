@@ -25,8 +25,8 @@ export const secondaryCopy = {
       backHome: "Back to home",
     },
     about: {
-      eyebrow: "ABOUT RELAX VILLA",
-      title: "A private place for unhurried time together",
+      eyebrow: "ABOUT US",
+      title: "About Relax Villa",
       intro:
         "Relax Villa is a four-bedroom home in Badacsonytomaj, reserved exclusively for one group at a time.",
       storyEyebrow: "THE WHOLE PLACE IS YOURS",
@@ -37,6 +37,13 @@ export const secondaryCopy = {
         "At Relax Villa, every bedroom and shared space belongs to the same booking. There are no separate room guests, no shared common areas and no need to split your group across different properties.",
       secondBody:
         "Start the morning around one table, find a quiet corner in the afternoon, then come back together in the evening. The villa gives everyone space without losing the feeling of being together.",
+      directionEyebrow: "OUR VISION & MISSION",
+      visionTitle: "Our vision",
+      visionText:
+        "To be the private villa guests remember as the place where their group could truly slow down, reconnect and enjoy Badacsony together.",
+      missionTitle: "Our mission",
+      missionText:
+        "To welcome one group at a time into a carefully prepared home, with clear direct booking and the freedom to enjoy every space in complete privacy.",
       facts: [
         ["One group", "Exclusive use of the complete property throughout your stay."],
         ["Four bedrooms", "Every bedroom is included—none are booked separately."],
@@ -56,15 +63,28 @@ export const secondaryCopy = {
       notice: "One booking includes all four bedrooms and the villa's shared spaces.",
       bedroomNames: ["Bedroom One", "Bedroom Two", "Bedroom Three", "Bedroom Four"],
       bedroomNotes: [
-        "A bright, restful room with direct access to the villa's calm atmosphere.",
-        "A comfortable private room made for slowing down after a day together.",
-        "A flexible sleeping space for family or friends travelling as one group.",
-        "A quiet fourth bedroom, included with every complete-villa reservation.",
+        "A bright double bedroom with a skylight, television and doors opening toward the balcony.",
+        "A calm double bedroom with bedside lighting, storage and direct balcony access.",
+        "A practical twin room with two separate single beds for family or friends travelling together.",
+        "A flexible room with one double and one single bed, plus balcony access and air conditioning.",
       ],
       sharedEyebrow: "BEYOND THE BEDROOMS",
       sharedTitle: "Spaces made to share",
       sharedText:
         "The kitchen, dining areas and outdoor spaces are all part of the same private stay.",
+      galleryEyebrow: "FULL PHOTO TOUR",
+      galleryTitle: "See every space before you arrive",
+      galleryText:
+        "Browse 38 recent photos of the bedrooms, living spaces, pool, hot tub, sauna and garden.",
+      galleryTabs: {
+        all: "All photos",
+        bedrooms: "Bedrooms",
+        shared: "Living spaces",
+        outdoors: "Pool & wellness",
+      },
+      photoLabel: "Photo",
+      previousImage: "Previous photo",
+      nextImage: "Next photo",
       openImage: "Open image",
       cta: "Request your dates",
     },
@@ -115,6 +135,32 @@ export const secondaryCopy = {
       title: "Plan your private villa stay",
       intro:
         "Send your preferred dates for the complete villa. Availability and payment details are confirmed directly with the host.",
+      formEyebrow: "BOOKING ENQUIRY",
+      formTitle: "Tell us about your stay",
+      formIntro:
+        "All enquiries are for the complete four-bedroom villa. Complete the form and we will prepare your message for the host.",
+      formFields: {
+        name: "Full name",
+        email: "Email address",
+        whatsapp: "WhatsApp number",
+        arrival: "Arrival",
+        departure: "Departure",
+        guests: "Number of guests",
+        language: "Preferred language",
+        message: "Message",
+      },
+      formPlaceholder: "Tell us anything that will help us understand your stay.",
+      formSubmit: "Send booking enquiry",
+      formCopy: "Copy booking enquiry",
+      formRequired: "Required fields are marked with *.",
+      formTrust:
+        "Your request is not a confirmed booking until the host replies in writing.",
+      formDateError: "Departure must be later than arrival.",
+      formCopied:
+        "Online sending is not connected yet. Your message has not been sent; the enquiry details were copied.",
+      formDestinationMissing:
+        "Online sending is not connected yet and copying failed. Your information has not been sent.",
+      formReady: "Your enquiry is ready. Please complete sending it in the opened app.",
       visit: "Villa address",
       write: "Direct contact",
       writeText: "Email and WhatsApp details will appear here once confirmed.",
@@ -156,8 +202,8 @@ export const secondaryCopy = {
       backHome: "Zur Startseite",
     },
     about: {
-      eyebrow: "ÜBER RELAX VILLA",
-      title: "Ein privater Ort für entspannte gemeinsame Zeit",
+      eyebrow: "ÜBER UNS",
+      title: "Über Relax Villa",
       intro:
         "Relax Villa ist ein Haus mit vier Schlafzimmern in Badacsonytomaj und wird immer exklusiv an eine Gruppe vermietet.",
       storyEyebrow: "DIE GANZE VILLA GEHÖRT IHNEN",
@@ -168,6 +214,13 @@ export const secondaryCopy = {
         "In der Relax Villa gehören jedes Schlafzimmer und alle Gemeinschaftsbereiche zu derselben Buchung. Es gibt keine weiteren Zimmergäste, keine geteilten Bereiche und Ihre Gruppe muss nicht auf mehrere Unterkünfte verteilt werden.",
       secondBody:
         "Beginnen Sie den Morgen an einem Tisch, finden Sie am Nachmittag einen ruhigen Platz und kommen Sie abends wieder zusammen. Die Villa bietet Freiraum, ohne das Gefühl der Gemeinschaft zu verlieren.",
+      directionEyebrow: "UNSERE VISION & MISSION",
+      visionTitle: "Unsere Vision",
+      visionText:
+        "Eine private Villa zu sein, an die sich Gäste als den Ort erinnern, an dem ihre Gruppe wirklich entschleunigen, sich wieder näherkommen und Badacsony gemeinsam genießen konnte.",
+      missionTitle: "Unsere Mission",
+      missionText:
+        "Jeweils eine Gruppe in einem sorgfältig vorbereiteten Zuhause willkommen zu heißen – mit klarer Direktbuchung und der Freiheit, jeden Bereich vollkommen privat zu genießen.",
       facts: [
         ["Eine Gruppe", "Exklusive Nutzung der gesamten Unterkunft während Ihres Aufenthalts."],
         ["Vier Schlafzimmer", "Alle Schlafzimmer sind enthalten und werden nie einzeln vermietet."],
@@ -187,15 +240,28 @@ export const secondaryCopy = {
       notice: "Eine Buchung umfasst alle vier Schlafzimmer und die Gemeinschaftsbereiche der Villa.",
       bedroomNames: ["Schlafzimmer 1", "Schlafzimmer 2", "Schlafzimmer 3", "Schlafzimmer 4"],
       bedroomNotes: [
-        "Ein helles, ruhiges Zimmer in der entspannten Atmosphäre der Villa.",
-        "Ein komfortabler privater Raum zum Abschalten nach einem gemeinsamen Tag.",
-        "Ein flexibler Schlafbereich für Familien oder Freunde, die als Gruppe reisen.",
-        "Ein ruhiges viertes Schlafzimmer, das bei jeder Villenbuchung enthalten ist.",
+        "Ein helles Doppelzimmer mit Dachfenster, Fernseher und Türen zum Balkon.",
+        "Ein ruhiges Doppelzimmer mit Nachttischbeleuchtung, Stauraum und direktem Balkonzugang.",
+        "Ein praktisches Zweibettzimmer mit zwei getrennten Einzelbetten für gemeinsam reisende Familien oder Freunde.",
+        "Ein flexibles Zimmer mit einem Doppel- und einem Einzelbett, Balkonzugang und Klimaanlage.",
       ],
       sharedEyebrow: "MEHR ALS SCHLAFZIMMER",
       sharedTitle: "Räume für gemeinsame Zeit",
       sharedText:
         "Küche, Essbereiche und Außenbereiche gehören vollständig zu Ihrem privaten Aufenthalt.",
+      galleryEyebrow: "VOLLSTÄNDIGER FOTORUNDGANG",
+      galleryTitle: "Sehen Sie jeden Bereich vor Ihrer Anreise",
+      galleryText:
+        "Entdecken Sie 38 aktuelle Fotos der Schlafzimmer, Wohnbereiche, des Pools, Whirlpools, der Sauna und des Gartens.",
+      galleryTabs: {
+        all: "Alle Fotos",
+        bedrooms: "Schlafzimmer",
+        shared: "Wohnbereiche",
+        outdoors: "Pool & Wellness",
+      },
+      photoLabel: "Foto",
+      previousImage: "Vorheriges Foto",
+      nextImage: "Nächstes Foto",
       openImage: "Bild öffnen",
       cta: "Reisedaten anfragen",
     },
@@ -246,6 +312,32 @@ export const secondaryCopy = {
       title: "Planen Sie Ihren privaten Villenaufenthalt",
       intro:
         "Senden Sie Ihre Wunschdaten für die komplette Villa. Verfügbarkeit und Zahlungsdaten werden direkt mit dem Gastgeber bestätigt.",
+      formEyebrow: "BUCHUNGSANFRAGE",
+      formTitle: "Erzählen Sie uns von Ihrem Aufenthalt",
+      formIntro:
+        "Alle Anfragen gelten für die komplette Villa mit vier Schlafzimmern. Füllen Sie das Formular aus und wir bereiten Ihre Nachricht an den Gastgeber vor.",
+      formFields: {
+        name: "Vollständiger Name",
+        email: "E-Mail-Adresse",
+        whatsapp: "WhatsApp-Nummer",
+        arrival: "Anreise",
+        departure: "Abreise",
+        guests: "Anzahl der Gäste",
+        language: "Bevorzugte Sprache",
+        message: "Nachricht",
+      },
+      formPlaceholder: "Teilen Sie uns mit, was für Ihren Aufenthalt wichtig ist.",
+      formSubmit: "Buchungsanfrage senden",
+      formCopy: "Buchungsanfrage kopieren",
+      formRequired: "Pflichtfelder sind mit * gekennzeichnet.",
+      formTrust:
+        "Ihre Anfrage ist erst nach der schriftlichen Bestätigung durch den Gastgeber eine bestätigte Buchung.",
+      formDateError: "Die Abreise muss nach der Anreise liegen.",
+      formCopied:
+        "Der Online-Versand ist noch nicht eingerichtet. Ihre Nachricht wurde nicht gesendet; die Anfrage wurde kopiert.",
+      formDestinationMissing:
+        "Der Online-Versand ist noch nicht eingerichtet und das Kopieren ist fehlgeschlagen. Ihre Angaben wurden nicht gesendet.",
+      formReady: "Ihre Anfrage ist vorbereitet. Bitte senden Sie sie in der geöffneten App ab.",
       visit: "Adresse der Villa",
       write: "Direkter Kontakt",
       writeText: "E-Mail- und WhatsApp-Daten erscheinen hier nach der Bestätigung.",
@@ -287,8 +379,8 @@ export const secondaryCopy = {
       backHome: "Vissza a főoldalra",
     },
     about: {
-      eyebrow: "A RELAX VILLÁRÓL",
-      title: "Privát hely a nyugodt, közös pillanatokhoz",
+      eyebrow: "RÓLUNK",
+      title: "A Relax Villáról",
       intro:
         "A Relax Villa négy hálószobás ház Badacsonytomajban, amelyet egyszerre mindig csak egy társaság használ.",
       storyEyebrow: "AZ EGÉSZ VILLA AZ ÖNÖKÉ",
@@ -299,6 +391,13 @@ export const secondaryCopy = {
         "A Relax Villában minden hálószoba és közös tér ugyanahhoz a foglaláshoz tartozik. Nincsenek más szobavendégek vagy megosztott helyiségek, és a társaságnak nem kell több szálláshely között oszlania.",
       secondBody:
         "Indítsák a reggelt egy asztalnál, délután találjanak egy csendes sarkot, este pedig legyenek újra együtt. A villa mindenkinek teret ad, miközben megőrzi az együttlét érzését.",
+      directionEyebrow: "JÖVŐKÉPÜNK ÉS KÜLDETÉSÜNK",
+      visionTitle: "Jövőképünk",
+      visionText:
+        "Olyan privát villává válni, amelyre vendégeink úgy emlékeznek: itt társaságuk valóban lelassulhatott, újra egymásra találhatott, és együtt élvezhette Badacsony hangulatát.",
+      missionTitle: "Küldetésünk",
+      missionText:
+        "Egyszerre egy társaságot fogadni gondosan előkészített otthonunkban, átlátható közvetlen foglalással és azzal a szabadsággal, hogy minden teret teljesen privát módon élvezhessenek.",
       facts: [
         ["Egy társaság", "A teljes ingatlan kizárólagos használata a tartózkodás alatt."],
         ["Négy hálószoba", "Minden hálószoba a foglalás része, külön nem bérelhetők."],
@@ -318,15 +417,28 @@ export const secondaryCopy = {
       notice: "Egy foglalás mind a négy hálószobát és a villa közös tereit is tartalmazza.",
       bedroomNames: ["1. hálószoba", "2. hálószoba", "3. hálószoba", "4. hálószoba"],
       bedroomNotes: [
-        "Világos, nyugodt szoba, amely illik a villa pihentető hangulatához.",
-        "Kényelmes privát tér egy együtt töltött nap utáni lelassuláshoz.",
-        "Rugalmas hálótér egy társaságként utazó család vagy barátok számára.",
-        "Csendes negyedik hálószoba, amely minden teljes-villa foglalás része.",
+        "Világos franciaágyas szoba tetőablakkal, televízióval és erkélyre nyíló ajtóval.",
+        "Nyugodt franciaágyas szoba éjjeli világítással, tárolóhellyel és közvetlen erkélykapcsolattal.",
+        "Praktikus kétágyas szoba két külön ággyal, együtt utazó családoknak vagy barátoknak.",
+        "Rugalmas elrendezésű szoba egy franciaággyal és egy egyszemélyes ággyal, erkéllyel és légkondicionálóval.",
       ],
       sharedEyebrow: "A HÁLÓSZOBÁKON TÚL",
       sharedTitle: "Közös pillanatokhoz tervezett terek",
       sharedText:
         "A konyha, az étkezők és a kültéri terek mind a privát pihenés részei.",
+      galleryEyebrow: "TELJES FOTÓGALÉRIA",
+      galleryTitle: "Nézzenek meg minden teret érkezés előtt",
+      galleryText:
+        "Böngésszenek 38 friss fotót a hálószobákról, közös terekről, medencéről, jakuzziról, szaunáról és a kertről.",
+      galleryTabs: {
+        all: "Összes fotó",
+        bedrooms: "Hálószobák",
+        shared: "Közös terek",
+        outdoors: "Medence és wellness",
+      },
+      photoLabel: "Fotó",
+      previousImage: "Előző fotó",
+      nextImage: "Következő fotó",
       openImage: "Kép megnyitása",
       cta: "Időpont kérése",
     },
@@ -377,6 +489,32 @@ export const secondaryCopy = {
       title: "Tervezzék meg privát villapihenésüket",
       intro:
         "Küldjék el a teljes villára vonatkozó kívánt időpontot. Az elérhetőséget és a fizetési adatokat közvetlenül a házigazda igazolja vissza.",
+      formEyebrow: "FOGLALÁSI ÉRDEKLŐDÉS",
+      formTitle: "Meséljenek tervezett pihenésükről",
+      formIntro:
+        "Minden érdeklődés a teljes, négy hálószobás villára vonatkozik. Töltsék ki az űrlapot, mi pedig előkészítjük az üzenetet a házigazdának.",
+      formFields: {
+        name: "Teljes név",
+        email: "E-mail-cím",
+        whatsapp: "WhatsApp-szám",
+        arrival: "Érkezés",
+        departure: "Távozás",
+        guests: "Vendégek száma",
+        language: "Kapcsolattartás nyelve",
+        message: "Üzenet",
+      },
+      formPlaceholder: "Írják meg, mi segítene a pihenésük megtervezésében.",
+      formSubmit: "Foglalási érdeklődés küldése",
+      formCopy: "Foglalási érdeklődés másolása",
+      formRequired: "A kötelező mezőket * jelöli.",
+      formTrust:
+        "A kérés csak a házigazda írásos visszaigazolása után válik megerősített foglalássá.",
+      formDateError: "A távozás dátumának az érkezés után kell lennie.",
+      formCopied:
+        "Az online küldés még nincs beállítva. Az üzenetet nem küldtük el; a kérés adatait kimásoltuk.",
+      formDestinationMissing:
+        "Az online küldés még nincs beállítva, és a másolás nem sikerült. Az adatokat nem küldtük el.",
+      formReady: "Az érdeklődés elkészült. Kérjük, küldjék el a megnyitott alkalmazásban.",
       visit: "A villa címe",
       write: "Közvetlen kapcsolat",
       writeText: "A megerősített e-mail- és WhatsApp-adatok itt jelennek majd meg.",
