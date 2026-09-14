@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import {
   ArrowRight,
   ArrowUp,
@@ -11,15 +12,15 @@ import {
   ChevronLeft,
   ChevronRight,
   Copy,
-  Menu,
   MessageCircle,
   Minus,
   Plus,
   Search,
-  X,
 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { useLanguage } from "@/components/site/language-provider";
+import { SiteFooter } from "@/components/site/site-footer";
+import { SiteHeader } from "@/components/site/site-header";
 import {
   Dialog,
   DialogContent,
@@ -127,8 +128,7 @@ function MiniCalendar({ month, offset = 0 }: { month: string; offset?: number })
 }
 
 export default function Home() {
-  const [language, setLanguage] = useState<Language>("en");
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { language } = useLanguage();
   const [arrival, setArrival] = useState("");
   const [departure, setDeparture] = useState("");
   const [adults, setAdults] = useState(2);
@@ -143,17 +143,15 @@ export default function Home() {
   const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
 
   useEffect(() => {
-    document.documentElement.lang = language;
     const onScroll = () => setShowTop(window.scrollY > 900);
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [language]);
+  }, []);
 
   const scrollTo = (target: string) => {
     document
       .getElementById(target)
       ?.scrollIntoView({ behavior: "smooth", block: "start" });
-    setMenuOpen(false);
   };
 
   const startBooking = () => {
@@ -196,92 +194,7 @@ export default function Home() {
           />
         </picture>
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,22,23,.58)_0%,rgba(18,20,21,.22)_42%,rgba(12,14,16,.68)_100%)]" />
-
-        <header className="relative z-20 mx-auto flex w-full max-w-[1630px] items-center justify-between px-5 py-7 sm:px-8 md:py-10">
-          <button
-            onClick={() => scrollTo("top")}
-            aria-label="Relax Villa home"
-            className="group flex items-center gap-3"
-          >
-            <span className="relative grid h-12 w-16 place-items-center">
-              <span className="absolute left-0 h-8 w-12 -skew-x-12 rounded-full border-[9px] border-white/25" />
-              <span className="absolute right-0 h-8 w-12 -skew-x-12 rounded-full border-[9px] border-[#ad9872] border-l-transparent" />
-            </span>
-            <span className="hidden text-left text-[11px] font-semibold uppercase leading-tight tracking-[.24em] sm:block">
-              Relax
-              <br />
-              Villa
-            </span>
-          </button>
-
-          <div className="hero-actions flex items-center gap-3">
-            <div
-              className="hidden items-center rounded-full border border-white/25 bg-black/10 p-1 backdrop-blur-md md:flex"
-              aria-label="Choose language"
-            >
-              {(["en", "de", "hu"] as Language[]).map((item) => (
-                <button
-                  key={item}
-                  onClick={() => setLanguage(item)}
-                  className={`rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-wider transition ${
-                    language === item
-                      ? "bg-white text-[#27282c]"
-                      : "text-white/75 hover:text-white"
-                  }`}
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-            <Button
-              onClick={() => scrollTo("availability")}
-              className="hidden h-11 rounded-full bg-[#aa9771] px-6 text-xs font-semibold uppercase tracking-[.14em] text-white hover:bg-[#95825f] sm:inline-flex"
-            >
-              {t.book}
-            </Button>
-            <button
-              onClick={() => setMenuOpen(!menuOpen)}
-              aria-expanded={menuOpen}
-              aria-label="Open menu"
-              className="grid size-11 place-items-center rounded-full border border-white/25 bg-black/10 backdrop-blur-md transition hover:bg-white hover:text-[#27282c]"
-            >
-              {menuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
-            </button>
-          </div>
-        </header>
-
-        <div
-          className={`absolute right-[4%] top-24 z-30 w-[min(92vw,360px)] origin-top-right rounded-[2px] border border-white/15 bg-[#24262d]/95 p-7 shadow-2xl backdrop-blur-xl transition duration-300 ${
-            menuOpen
-              ? "scale-100 opacity-100"
-              : "pointer-events-none scale-95 opacity-0"
-          }`}
-        >
-          <nav className="flex flex-col">
-            {t.nav.map((item, index) => (
-              <button
-                key={item}
-                onClick={() => scrollTo(t.navTargets[index])}
-                className="border-b border-white/10 py-4 text-left text-sm font-semibold uppercase tracking-[.15em] text-white/75 transition hover:pl-2 hover:text-white"
-              >
-                {item}
-              </button>
-            ))}
-          </nav>
-          <div className="mt-6 flex gap-2 md:hidden">
-            {(["en", "de", "hu"] as Language[]).map((item) => (
-              <button
-                key={item}
-                onClick={() => setLanguage(item)}
-                className={`flex-1 rounded-full border border-white/20 py-2 text-xs uppercase ${
-                  language === item ? "bg-white text-[#24262d]" : "text-white"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
-          </div>
-        </div>
+        <SiteHeader overlay />
 
         <div className="relative z-10 mx-auto flex h-[calc(100%-180px)] w-full max-w-[1250px] -translate-y-5 flex-col items-center justify-center px-5 text-center">
           <p className="mb-5 max-w-full text-balance text-[10px] font-semibold uppercase leading-5 tracking-[.22em] text-[#d3c19f] sm:text-xs sm:tracking-[.36em]">
@@ -367,9 +280,13 @@ export default function Home() {
             ))}
           </div>
           <div className="mt-10 flex justify-end">
-            <OutlineAction onClick={() => setGalleryImage(roomImages[0])}>
+            <Link
+              href="/rooms"
+              className="group inline-flex items-center gap-3 rounded-full border border-[#2d2f33] px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em] transition hover:bg-[#2d2f33] hover:text-white"
+            >
               {t.gallery}
-            </OutlineAction>
+              <ArrowRight className="size-4 transition group-hover:translate-x-1" />
+            </Link>
           </div>
         </div>
       </section>
@@ -411,13 +328,13 @@ export default function Home() {
                     <p className="mt-3 text-sm leading-6 text-[#77787b]">
                       {description}
                     </p>
-                    <button
-                      onClick={() => scrollTo("availability")}
+                    <Link
+                      href={`/blog#${["slow-day", "pack-together", "shared-table"][index]}`}
                       className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[.14em] text-[#9b8968]"
                     >
                       {t.read}
                       <ArrowRight className="size-3.5" />
-                    </button>
+                    </Link>
                   </div>
                 </div>
               </article>
@@ -522,7 +439,7 @@ export default function Home() {
         </div>
       </section>
 
-      <Footer t={t} scrollTo={scrollTo} />
+      <SiteFooter />
 
       <button
         onClick={() => scrollTo("top")}
@@ -808,79 +725,5 @@ function StorySection({ t }: { t: (typeof siteCopy)[Language] }) {
         </div>
       </div>
     </section>
-  );
-}
-
-function Footer({
-  t,
-  scrollTo,
-}: {
-  t: (typeof siteCopy)[Language];
-  scrollTo: (target: string) => void;
-}) {
-  return (
-    <footer
-      id="contact"
-      className="relative min-h-[510px] px-6 py-28 text-white sm:px-10 lg:px-16"
-    >
-      <img
-        src="/images/footer.jpg"
-        alt={t.imageAlt}
-        className="absolute inset-0 h-full w-full object-cover grayscale"
-      />
-      <div className="absolute inset-0 bg-[#20232a]/90" />
-      <div className="relative mx-auto grid max-w-[1500px] gap-14 md:grid-cols-[1.1fr_.8fr_1.1fr]">
-        <div>
-          <div className="mb-8 flex items-center gap-3">
-            <span className="grid size-12 place-items-center rounded-full border border-white/20 text-sm font-bold text-[#d6c29b]">
-              RV
-            </span>
-            <span className="text-sm font-semibold uppercase tracking-[.2em]">
-              Relax Villa
-            </span>
-          </div>
-          <h3 className="text-sm font-bold">{t.contact}</h3>
-          <address className="mt-5 not-italic text-sm leading-7 text-white/65">
-            8257 Badacsonytomaj
-            <br />
-            Füredi út 5 · {t.addressCountry}
-            <br />
-            {t.emailPlaceholder}
-          </address>
-        </div>
-        <div>
-          <h3 className="text-sm font-bold">{t.footerExplore}</h3>
-          <nav className="mt-5 flex flex-col gap-3 text-sm text-white/65">
-            {t.nav.slice(0, 5).map((item, index) => (
-              <button
-                key={item}
-                onClick={() => scrollTo(t.navTargets[index])}
-                className="w-fit transition hover:text-white"
-              >
-                {item}
-              </button>
-            ))}
-          </nav>
-        </div>
-        <div>
-          <h3 className="text-sm font-bold">{t.footerBooking}</h3>
-          <p className="mt-5 max-w-md text-sm leading-7 text-white/65">
-            {t.footerNote}
-          </p>
-          <button
-            onClick={() => scrollTo("availability")}
-            className="mt-7 inline-flex items-center gap-3 border-b border-[#d2bd92] pb-2 text-xs font-semibold uppercase tracking-[.15em] text-[#d2bd92]"
-          >
-            {t.book}
-            <ArrowRight className="size-4" />
-          </button>
-          <div className="mt-10 flex flex-wrap gap-x-5 gap-y-2 text-xs text-white/45">
-            <span>{t.privacy}</span>
-            <span>{t.terms}</span>
-            <span>{t.cancellation}</span>
-          </div>
-        </div>
-      </div>
-    </footer>
   );
 }
