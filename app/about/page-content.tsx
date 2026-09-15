@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, BedDouble, Compass, Eye, House, UsersRound } from "lucide-react";
+import { ArrowRight, Compass, Eye } from "lucide-react";
 
 import { secondaryCopy } from "@/app/secondary-content";
+import { siteCopy } from "@/app/site-content";
 import { useLanguage } from "@/components/site/language-provider";
 import { PageHero } from "@/components/site/page-hero";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
-
-const factIcons = [UsersRound, BedDouble, House];
+import { VillaFeaturesSection } from "@/components/site/villa-features-section";
 
 export function AboutPageContent() {
   const { language } = useLanguage();
@@ -93,25 +93,7 @@ export function AboutPageContent() {
         </div>
       </section>
 
-      <section className="bg-[#faf8f5] px-6 py-24 sm:px-10 md:py-32 lg:px-16">
-        <div className="mx-auto grid max-w-[1450px] gap-7 md:grid-cols-3">
-          {t.facts.map(([title, description], index) => {
-            const Icon = factIcons[index];
-            return (
-              <article
-                key={title}
-                className="border border-[#e5e0d8] bg-white p-9 shadow-[0_12px_38px_rgba(37,39,43,.05)] md:p-11"
-              >
-                <span className="grid size-14 place-items-center rounded-full bg-[#f1ede7] text-[#9c8964]">
-                  <Icon className="size-6" strokeWidth={1.5} />
-                </span>
-                <h3 className="mt-8 text-2xl font-bold tracking-[-.03em]">{title}</h3>
-                <p className="mt-4 text-base leading-7 text-[#747579]">{description}</p>
-              </article>
-            );
-          })}
-        </div>
-      </section>
+      <VillaFeaturesSection t={siteCopy[language]} />
 
       <section className="relative flex min-h-[610px] items-center justify-center px-6 py-28 text-center text-white sm:px-10">
         <img

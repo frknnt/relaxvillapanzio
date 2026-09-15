@@ -44,11 +44,6 @@ export const secondaryCopy = {
       missionTitle: "Our mission",
       missionText:
         "To welcome one group at a time into a carefully prepared home, with clear direct booking and the freedom to enjoy every space in complete privacy.",
-      facts: [
-        ["One group", "Exclusive use of the complete property throughout your stay."],
-        ["Four bedrooms", "Every bedroom is included—none are booked separately."],
-        ["Direct booking", "Dates and payment steps are agreed directly with the host."],
-      ],
       promiseEyebrow: "A SIMPLE PROMISE",
       promiseTitle: "Privacy, space and one complete stay",
       promiseText:
@@ -221,11 +216,6 @@ export const secondaryCopy = {
       missionTitle: "Unsere Mission",
       missionText:
         "Jeweils eine Gruppe in einem sorgfältig vorbereiteten Zuhause willkommen zu heißen – mit klarer Direktbuchung und der Freiheit, jeden Bereich vollkommen privat zu genießen.",
-      facts: [
-        ["Eine Gruppe", "Exklusive Nutzung der gesamten Unterkunft während Ihres Aufenthalts."],
-        ["Vier Schlafzimmer", "Alle Schlafzimmer sind enthalten und werden nie einzeln vermietet."],
-        ["Direkte Buchung", "Reisedaten und Zahlungsschritte werden direkt abgestimmt."],
-      ],
       promiseEyebrow: "EIN EINFACHES VERSPRECHEN",
       promiseTitle: "Privatsphäre, Raum und ein kompletter Aufenthalt",
       promiseText:
@@ -398,11 +388,6 @@ export const secondaryCopy = {
       missionTitle: "Küldetésünk",
       missionText:
         "Egyszerre egy társaságot fogadni gondosan előkészített otthonunkban, átlátható közvetlen foglalással és azzal a szabadsággal, hogy minden teret teljesen privát módon élvezhessenek.",
-      facts: [
-        ["Egy társaság", "A teljes ingatlan kizárólagos használata a tartózkodás alatt."],
-        ["Négy hálószoba", "Minden hálószoba a foglalás része, külön nem bérelhetők."],
-        ["Közvetlen foglalás", "Az időpont és a fizetés lépései közvetlenül egyeztethetők."],
-      ],
       promiseEyebrow: "EGYSZERŰ ÍGÉRET",
       promiseTitle: "Privát tér, kényelem és egy teljes pihenés",
       promiseText:

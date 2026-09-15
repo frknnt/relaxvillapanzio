@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUp,
-  BedDouble,
   Building2,
   CalendarDays,
   Check,
@@ -21,6 +20,7 @@ import {
 import { useLanguage } from "@/components/site/language-provider";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
+import { VillaFeaturesSection } from "@/components/site/villa-features-section";
 import {
   Dialog,
   DialogContent,
@@ -43,8 +43,6 @@ const localImages = [
   "/images/local-2.jpg",
   "/images/local-3.jpg",
 ];
-
-const facilityIcons = [Building2, BedDouble, CalendarDays, MessageCircle];
 
 function GuestCounter({
   value,
@@ -295,7 +293,7 @@ export default function Home() {
         </div>
       </section>
 
-      <FacilitiesSection t={t} />
+      <VillaFeaturesSection t={t} />
       <StorySection t={t} />
 
       <section
@@ -682,42 +680,6 @@ function MoodSection({ t }: { t: (typeof siteCopy)[Language] }) {
         <h2 className="mt-5 whitespace-pre-line text-balance text-[clamp(2.1rem,4.5vw,4.6rem)] font-extrabold uppercase leading-[1.06] tracking-[-.035em]">
           {t.moodTitle}
         </h2>
-      </div>
-    </section>
-  );
-}
-
-function FacilitiesSection({ t }: { t: (typeof siteCopy)[Language] }) {
-  return (
-    <section className="relative overflow-hidden bg-[#faf8f5] px-6 pb-40 pt-16 sm:px-10 lg:px-16">
-      <div className="mx-auto max-w-[1500px]">
-        <div className="text-center">
-          <p className="eyebrow">{t.facilitiesEyebrow}</p>
-          <h2 className="section-title mt-4">{t.facilitiesTitle}</h2>
-        </div>
-        <div className="mt-20 grid gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-0">
-          {t.facilities.map(([title, description], index) => {
-            const Icon = facilityIcons[index];
-            return (
-              <div
-                key={title}
-                className="px-8 text-center lg:border-r lg:border-[#e5e0d8] lg:last:border-0"
-              >
-                <Icon strokeWidth={1.3} className="mx-auto size-11 text-[#a08f6d]" />
-                <h3 className="mt-6 text-lg font-bold">{title}</h3>
-                <p className="mx-auto mt-3 max-w-xs text-sm leading-6 text-[#77787b]">
-                  {description}
-                </p>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[clamp(4rem,10vw,11rem)] font-extrabold tracking-[-.06em] text-[#f0ede8]"
-      >
-        Private Holiday Together
       </div>
     </section>
   );
