@@ -13,6 +13,7 @@ export function SiteFooter() {
     ["/", copy.navigation.home],
     ["/about", copy.navigation.about],
     ["/rooms", copy.navigation.rooms],
+    ["/blog", copy.navigation.blog],
     ["/contact", copy.navigation.contact],
   ] as const;
 

@@ -651,10 +651,10 @@ function TestimonialsSection({ t }: { t: (typeof siteCopy)[Language] }) {
         </h2>
         <div
           aria-live="polite"
-          className="mx-auto mt-9 grid max-w-[1010px] items-center gap-8 rounded-xl bg-[#25282e] px-7 py-10 text-left shadow-2xl sm:px-10 md:grid-cols-[235px_1fr] md:gap-10 md:px-12 md:py-14"
+          className="mx-auto mt-9 grid max-w-[850px] items-center gap-7 rounded-xl bg-[#25282e] px-7 py-8 text-left shadow-2xl sm:px-9 md:min-h-[200px] md:grid-cols-[195px_1fr] md:gap-8 md:px-10 md:py-10"
         >
-          <div className="flex items-center gap-5 md:border-r md:border-white/20 md:pr-10">
-            <span className="grid size-20 shrink-0 place-items-center rounded-full bg-[#e8dcc8] text-2xl font-bold text-[#25282e]">
+          <div className="flex items-center gap-4 md:border-r md:border-white/20 md:pr-7">
+            <span className="grid size-18 shrink-0 place-items-center rounded-full bg-[#e8dcc8] text-xl font-bold text-[#25282e]">
               {String(activeIndex + 1).padStart(2, "0")}
             </span>
             <div>
@@ -664,7 +664,7 @@ function TestimonialsSection({ t }: { t: (typeof siteCopy)[Language] }) {
               </p>
             </div>
           </div>
-          <blockquote className="text-balance text-xl italic leading-relaxed text-white md:text-2xl">
+          <blockquote className="text-balance text-xl font-normal italic leading-[1.6] text-white md:text-[1.35rem]">
             “{t.testimonials[activeIndex]}”
           </blockquote>
         </div>

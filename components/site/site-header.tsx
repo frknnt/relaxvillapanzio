@@ -13,6 +13,7 @@ const routes = [
   ["/", "home"],
   ["/about", "about"],
   ["/rooms", "rooms"],
+  ["/blog", "blog"],
   ["/contact", "contact"],
 ] as const;
 
