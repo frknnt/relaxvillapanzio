@@ -38,12 +38,6 @@ const roomImages = [
   "/images/gallery/bedroom-4-01.jpg",
 ];
 
-const localImages = [
-  "/images/local-1.jpg",
-  "/images/local-2.jpg",
-  "/images/local-3.jpg",
-];
-
 function GuestCounter({
   value,
   onChange,
@@ -294,56 +288,7 @@ export default function Home() {
       </section>
 
       <VillaFeaturesSection t={t} />
-      <StorySection t={t} />
-
-      <section
-        id="area"
-        className="scroll-mt-12 px-6 py-28 sm:px-10 md:py-36 lg:px-16"
-      >
-        <div className="mx-auto max-w-[1500px]">
-          <div className="mb-12">
-            <p className="eyebrow">{t.localEyebrow}</p>
-            <h2 className="section-title mt-4">{t.localTitle}</h2>
-          </div>
-          <div className="grid gap-7 md:grid-cols-3">
-            {t.localCards.map(([title, description], index) => (
-              <article
-                key={title}
-                className="group overflow-hidden rounded-[7px] bg-white shadow-[0_12px_35px_rgba(31,31,31,.09)]"
-              >
-                <div className="relative aspect-[1.55] overflow-hidden">
-                  <img
-                    src={localImages[index]}
-                    alt={title}
-                    className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                  />
-                  <span className="absolute bottom-0 left-5 bg-[#25282e] px-3 py-2 text-[10px] font-semibold uppercase tracking-[.16em] text-white">
-                    0{index + 1} · LOCAL
-                  </span>
-                </div>
-                <div className="grid min-h-56 grid-cols-[48px_1fr]">
-                  <div className="border-r border-[#ece8e2] py-6 text-center text-[9px] font-semibold uppercase tracking-[.2em] text-[#9b8b6d] [writing-mode:vertical-rl]">
-                    Badacsony
-                  </div>
-                  <div className="p-7">
-                    <h3 className="text-xl font-bold leading-7">{title}</h3>
-                    <p className="mt-3 text-sm leading-6 text-[#77787b]">
-                      {description}
-                    </p>
-                    <Link
-                      href={`/blog#${["slow-day", "pack-together", "shared-table"][index]}`}
-                      className="mt-6 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[.14em] text-[#9b8968]"
-                    >
-                      {t.read}
-                      <ArrowRight className="size-3.5" />
-                    </Link>
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
+      <TestimonialsSection t={t} />
 
       <section
         id="availability"
@@ -685,38 +630,63 @@ function MoodSection({ t }: { t: (typeof siteCopy)[Language] }) {
   );
 }
 
-function StorySection({ t }: { t: (typeof siteCopy)[Language] }) {
+function TestimonialsSection({ t }: { t: (typeof siteCopy)[Language] }) {
+  const [activeIndex, setActiveIndex] = useState(0);
+
   return (
-    <section className="relative flex min-h-[650px] items-center px-6 py-28 text-white sm:px-10 lg:px-16">
+    <section
+      id="testimonials"
+      className="relative mt-16 flex min-h-[640px] items-center px-6 py-20 text-white sm:px-10 md:mt-20 lg:px-16"
+    >
       <img
-        src="/images/story.jpg"
-        alt={t.imageAlt}
+        src="/images/gallery/outdoor-04.jpg"
+        alt=""
         className="absolute inset-0 h-full w-full object-cover"
       />
-      <div className="absolute inset-0 bg-[#172026]/58" />
+      <div className="absolute inset-0 bg-[#131a1e]/65" />
       <div className="relative mx-auto w-full max-w-[1230px] text-center">
-        <p className="eyebrow !text-[#decba5]">{t.storyEyebrow}</p>
-        <h2 className="mt-4 text-[clamp(2rem,3.5vw,3.6rem)] font-bold tracking-[-.035em]">
-          {t.storyTitle}
+        <p className="eyebrow !text-[#decba5]">{t.testimonialsEyebrow}</p>
+        <h2 className="mt-4 text-balance text-[clamp(2.4rem,4vw,3.7rem)] font-bold tracking-[-.035em]">
+          {t.testimonialsTitle}
         </h2>
-        <div className="mx-auto mt-10 grid max-w-[1050px] items-center gap-8 bg-[#24272e]/95 px-8 py-10 text-left shadow-2xl md:grid-cols-[230px_1fr] md:px-12 md:py-12">
-          <div className="flex items-center gap-4 md:border-r md:border-white/15 md:pr-8">
-            <span className="grid size-16 shrink-0 place-items-center rounded-full border border-[#bba884] text-[#d7c49d]">
-              <Building2 className="size-7" strokeWidth={1.4} />
+        <div
+          aria-live="polite"
+          className="mx-auto mt-9 grid max-w-[1010px] items-center gap-8 rounded-xl bg-[#25282e] px-7 py-10 text-left shadow-2xl sm:px-10 md:grid-cols-[235px_1fr] md:gap-10 md:px-12 md:py-14"
+        >
+          <div className="flex items-center gap-5 md:border-r md:border-white/20 md:pr-10">
+            <span className="grid size-20 shrink-0 place-items-center rounded-full bg-[#e8dcc8] text-2xl font-bold text-[#25282e]">
+              {String(activeIndex + 1).padStart(2, "0")}
             </span>
-            <span className="text-[10px] font-semibold uppercase leading-5 tracking-[.17em] text-white/65">
-              {t.storyMeta}
-            </span>
+            <div>
+              <p className="text-base font-semibold">{t.testimonialLabel}</p>
+              <p className="mt-1 text-sm text-white/65">
+                {t.testimonialMeta} {activeIndex + 1}
+              </p>
+            </div>
           </div>
-          <blockquote className="text-balance text-xl italic leading-8 text-white/90 md:text-2xl">
-            “{t.storyQuote}”
+          <blockquote className="text-balance text-xl italic leading-relaxed text-white md:text-2xl">
+            “{t.testimonials[activeIndex]}”
           </blockquote>
         </div>
-        <div className="mt-7 flex justify-center gap-2">
-          <span className="size-2 rounded-full bg-white" />
-          <span className="size-2 rounded-full border border-white/60" />
-          <span className="size-2 rounded-full border border-white/60" />
+        <div className="mt-5 flex justify-center gap-1" aria-label={t.testimonialNavigation}>
+          {t.testimonials.map((_, index) => (
+            <button
+              key={index}
+              type="button"
+              onClick={() => setActiveIndex(index)}
+              aria-label={`${t.testimonialShow} ${index + 1}`}
+              aria-current={index === activeIndex ? "true" : undefined}
+              className="grid size-11 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+            >
+              <span className={`grid size-5 place-items-center rounded-full border-2 ${index === activeIndex ? "border-white" : "border-white/55"}`}>
+                <span className={`size-2 rounded-full ${index === activeIndex ? "bg-white" : "bg-transparent"}`} />
+              </span>
+            </button>
+          ))}
         </div>
+        <p className="mx-auto mt-3 max-w-lg text-sm leading-6 text-white/75">
+          {t.testimonialNotice}
+        </p>
       </div>
     </section>
   );

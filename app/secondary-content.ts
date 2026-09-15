@@ -6,7 +6,6 @@ export const secondaryCopy = {
       home: "Home",
       about: "About",
       rooms: "Bedrooms & Gallery",
-      blog: "Journal",
       contact: "Contact",
       book: "Request to book",
       menu: "Open menu",
@@ -83,48 +82,6 @@ export const secondaryCopy = {
       openImage: "Open image",
       cta: "Request your dates",
     },
-    blog: {
-      eyebrow: "RELAX VILLA JOURNAL",
-      title: "Ideas for an easy villa stay",
-      intro:
-        "Simple notes for planning your time together, from the first shared breakfast to a slow day around Badacsonytomaj.",
-      read: "Read article",
-      articles: [
-        {
-          slug: "slow-day",
-          category: "LOCAL RHYTHM",
-          title: "A slow day in Badacsonytomaj",
-          excerpt:
-            "Leave space in the plan. Begin nearby, follow the mood of the group and return to the villa without watching the clock.",
-          paragraphs: [
-            "A good villa day does not need a long checklist. Start with an unhurried breakfast, decide together what everyone feels like doing and keep the route flexible.",
-            "The most useful plan is often a simple one: one place you would like to see, time for a meal and enough room in the day to enjoy the villa itself.",
-          ],
-        },
-        {
-          slug: "pack-together",
-          category: "STAY WELL",
-          title: "What to plan for a whole-villa stay",
-          excerpt:
-            "A little coordination before arrival makes the shared spaces feel effortless from the first evening.",
-          paragraphs: [
-            "Agree on arrival times, meal ideas and any essentials before the trip. It keeps the first hours relaxed and lets everyone settle in at their own pace.",
-            "Because the complete villa is yours, think in terms of shared moments as well as individual needs: breakfast together, quiet time and an evening around one table.",
-          ],
-        },
-        {
-          slug: "shared-table",
-          category: "AT THE VILLA",
-          title: "Meals made for one shared table",
-          excerpt:
-            "Keep the menu uncomplicated and make the meal itself part of the time you came to share.",
-          paragraphs: [
-            "Villa meals work best when they are easy to prepare together. Choose a few flexible dishes, divide small tasks and leave plenty of time for conversation.",
-            "The point is not a perfect menu. It is having everyone in one place, with nowhere else they need to be.",
-          ],
-        },
-      ],
-    },
     contactPage: {
       eyebrow: "CONTACT & BOOKING",
       title: "Plan your private villa stay",
@@ -178,7 +135,6 @@ export const secondaryCopy = {
       home: "Start",
       about: "Über uns",
       rooms: "Schlafzimmer & Galerie",
-      blog: "Journal",
       contact: "Kontakt",
       book: "Buchung anfragen",
       menu: "Menü öffnen",
@@ -255,48 +211,6 @@ export const secondaryCopy = {
       openImage: "Bild öffnen",
       cta: "Reisedaten anfragen",
     },
-    blog: {
-      eyebrow: "RELAX VILLA JOURNAL",
-      title: "Ideen für einen entspannten Villenaufenthalt",
-      intro:
-        "Einfache Anregungen für Ihre gemeinsame Zeit – vom ersten Frühstück bis zu einem ruhigen Tag rund um Badacsonytomaj.",
-      read: "Artikel lesen",
-      articles: [
-        {
-          slug: "slow-day",
-          category: "REGIONALER RHYTHMUS",
-          title: "Ein langsamer Tag in Badacsonytomaj",
-          excerpt:
-            "Lassen Sie Platz im Plan, starten Sie in der Nähe und kehren Sie ohne Blick auf die Uhr zur Villa zurück.",
-          paragraphs: [
-            "Ein guter Villentag braucht keine lange Checkliste. Beginnen Sie mit einem ruhigen Frühstück, entscheiden Sie gemeinsam nach Stimmung und halten Sie den Weg flexibel.",
-            "Oft genügt ein einfacher Plan: ein Ort, den Sie sehen möchten, Zeit für eine Mahlzeit und genug Raum, um auch die Villa selbst zu genießen.",
-          ],
-        },
-        {
-          slug: "pack-together",
-          category: "GUT ANKOMMEN",
-          title: "Was Sie für einen Villenaufenthalt planen können",
-          excerpt:
-            "Ein wenig Abstimmung vor der Anreise macht die gemeinsamen Räume vom ersten Abend an unkompliziert.",
-          paragraphs: [
-            "Stimmen Sie Ankunftszeiten, Essensideen und wichtige Dinge vor der Reise ab. So bleiben die ersten Stunden entspannt und jeder kann in Ruhe ankommen.",
-            "Da die ganze Villa Ihnen gehört, denken Sie an gemeinsame Momente ebenso wie an individuelle Bedürfnisse: Frühstück, Ruhezeit und einen Abend an einem Tisch.",
-          ],
-        },
-        {
-          slug: "shared-table",
-          category: "IN DER VILLA",
-          title: "Mahlzeiten an einem gemeinsamen Tisch",
-          excerpt:
-            "Halten Sie das Menü unkompliziert und machen Sie die Mahlzeit selbst zu einem Teil Ihrer gemeinsamen Zeit.",
-          paragraphs: [
-            "Villengerichte gelingen am besten, wenn sie gemeinsam einfach zuzubereiten sind. Wählen Sie flexible Speisen, verteilen Sie kleine Aufgaben und lassen Sie Zeit für Gespräche.",
-            "Es geht nicht um ein perfektes Menü, sondern darum, alle an einem Ort zu haben – ohne den nächsten Termin im Blick.",
-          ],
-        },
-      ],
-    },
     contactPage: {
       eyebrow: "KONTAKT & BUCHUNG",
       title: "Planen Sie Ihren privaten Villenaufenthalt",
@@ -350,7 +264,6 @@ export const secondaryCopy = {
       home: "Főoldal",
       about: "Rólunk",
       rooms: "Hálószobák és galéria",
-      blog: "Napló",
       contact: "Kapcsolat",
       book: "Foglalási kérés",
       menu: "Menü megnyitása",
@@ -426,48 +339,6 @@ export const secondaryCopy = {
       nextImage: "Következő fotó",
       openImage: "Kép megnyitása",
       cta: "Időpont kérése",
-    },
-    blog: {
-      eyebrow: "RELAX VILLA NAPLÓ",
-      title: "Ötletek egy könnyed villapihenéshez",
-      intro:
-        "Egyszerű gondolatok a közös idő megtervezéséhez, az első reggelitől egy nyugodt badacsonytomaji napig.",
-      read: "Cikk olvasása",
-      articles: [
-        {
-          slug: "slow-day",
-          category: "HELYI RITMUS",
-          title: "Egy lassú nap Badacsonytomajban",
-          excerpt:
-            "Hagyjanak helyet a tervben, induljanak a közelből, és térjenek vissza a villába az óra figyelése nélkül.",
-          paragraphs: [
-            "Egy jó villanaphoz nem kell hosszú programlista. Kezdjék egy ráérős reggelivel, döntsenek együtt az aznapi hangulat szerint, és maradjon rugalmas az útvonal.",
-            "Gyakran egy egyszerű terv a leghasznosabb: egy hely, amelyet szeretnének látni, idő egy közös étkezésre és elég tér magának a villának az élvezetéhez.",
-          ],
-        },
-        {
-          slug: "pack-together",
-          category: "KÖNNYŰ ÉRKEZÉS",
-          title: "Mire érdemes készülni egy teljes-villa pihenéshez",
-          excerpt:
-            "Egy kis egyeztetés indulás előtt már az első estétől könnyeddé teszi a közös tereket.",
-          paragraphs: [
-            "Egyeztessék az érkezési időt, az étkezési ötleteket és a fontos dolgokat még az utazás előtt. Így az első órák nyugodtak maradnak, és mindenki a saját tempójában érkezhet meg.",
-            "Mivel az egész villa az Önöké, az egyéni igények mellett gondoljanak a közös pillanatokra is: reggelire, csendes időre és egy estére egy asztal körül.",
-          ],
-        },
-        {
-          slug: "shared-table",
-          category: "A VILLÁBAN",
-          title: "Közös étkezések egy asztal körül",
-          excerpt:
-            "Legyen egyszerű a menü, és váljon maga az étkezés is a közösen töltött idő részévé.",
-          paragraphs: [
-            "A villában azok az ételek működnek a legjobban, amelyeket könnyű együtt elkészíteni. Válasszanak rugalmas fogásokat, osszák fel az apró feladatokat, és hagyjanak időt a beszélgetésre.",
-            "Nem a tökéletes menü a lényeg, hanem az, hogy mindenki egy helyen legyen, és sehová se kelljen sietni.",
-          ],
-        },
-      ],
     },
     contactPage: {
       eyebrow: "KAPCSOLAT ÉS FOGLALÁS",
