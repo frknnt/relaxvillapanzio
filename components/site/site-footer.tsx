@@ -31,7 +31,7 @@ export function SiteFooter() {
             <span className="grid size-12 place-items-center rounded-full border border-white/20 text-sm font-bold text-[#d6c29b]">
               RV
             </span>
-            <span className="text-sm font-semibold uppercase tracking-[.2em]">Relax Villa</span>
+            <span className="text-sm font-semibold uppercase tracking-[.2em]">Relax Villa Panzio</span>
           </div>
           <h3 className="text-sm font-bold">{copy.common.contact}</h3>
           <address className="mt-5 max-w-xs not-italic text-sm leading-7 text-white/65">
