@@ -50,20 +50,22 @@ function GuestCounter({
   value,
   onChange,
   label,
+  hero = false,
 }: {
   value: number;
   onChange: (value: number) => void;
   label: string;
+  hero?: boolean;
 }) {
   return (
-    <div className="flex min-w-0 items-center justify-between gap-4">
+    <div className={`flex min-w-0 flex-1 justify-between ${hero ? "flex-col items-start gap-1 lg:flex-row lg:items-center lg:gap-2 xl:gap-3" : "items-center gap-4"}`}>
       <span className="truncate text-sm font-medium text-[#2b2c30]">{label}</span>
-      <div className="flex items-center gap-3">
+      <div className={`flex items-center ${hero ? "gap-2 xl:gap-3" : "gap-3"}`}>
         <button
           type="button"
           aria-label={`Decrease ${label}`}
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="grid size-8 place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958]"
+          className={`grid place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958] ${hero ? "size-7 xl:size-8" : "size-8"}`}
         >
           <Minus className="size-3.5" />
         </button>
@@ -72,7 +74,7 @@ function GuestCounter({
           type="button"
           aria-label={`Increase ${label}`}
           onClick={() => onChange(Math.min(20, value + 1))}
-          className="grid size-8 place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958]"
+          className={`grid place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958] ${hero ? "size-7 xl:size-8" : "size-8"}`}
         >
           <Plus className="size-3.5" />
         </button>
@@ -182,7 +184,7 @@ export default function Home() {
 
   return (
     <main id="top" className="overflow-hidden bg-white text-[#26272b]">
-      <section className="relative h-[100svh] min-h-[760px] max-h-[920px] text-white">
+      <section className="relative min-h-[760px] text-white sm:min-h-[720px] lg:min-h-[680px]">
         <picture>
           <source media="(max-width: 640px)" srcSet="/images/hero-mobile.jpg" />
           <img
@@ -194,7 +196,7 @@ export default function Home() {
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,22,23,.58)_0%,rgba(18,20,21,.22)_42%,rgba(12,14,16,.68)_100%)]" />
         <SiteHeader overlay />
 
-        <div className="relative z-10 mx-auto flex h-[calc(100%-180px)] w-full max-w-[1250px] -translate-y-5 flex-col items-center justify-center px-5 text-center">
+        <div className="relative z-10 mx-auto flex min-h-[760px] w-full max-w-[1500px] flex-col items-center justify-center px-4 pb-16 pt-32 text-center sm:min-h-[720px] sm:px-10 sm:pb-20 sm:pt-36 lg:min-h-[680px] lg:pb-24">
           <p className="mb-5 max-w-full text-balance text-[10px] font-semibold uppercase leading-5 tracking-[.22em] text-[#d3c19f] sm:text-xs sm:tracking-[.36em]">
             {t.heroEyebrow}
           </p>
@@ -207,35 +209,39 @@ export default function Home() {
           <div className="hero-address mt-5 max-w-full break-words text-center text-[9px] uppercase leading-5 tracking-[.12em] text-white/70 sm:text-xs sm:tracking-[.18em]">
             8257 Badacsonytomaj, Füredi út 5
           </div>
-        </div>
 
-        <div className="absolute bottom-0 left-1/2 z-20 w-[calc(100%-2rem)] max-w-[1360px] -translate-x-1/2 translate-y-1/2 bg-white text-[#24262d] shadow-[0_20px_60px_rgba(24,24,27,.2)] sm:w-[calc(100%-4rem)]">
-          <div className="grid sm:grid-cols-2 xl:grid-cols-[1.1fr_1.1fr_.9fr_.9fr_auto]">
-            <DateField
-              label={t.arrival}
-              value={arrival}
-              min={today}
-              onChange={setArrival}
-            />
-            <DateField
-              label={t.departure}
-              value={departure}
-              min={arrival || today}
-              onChange={setDeparture}
-            />
-            <div className="min-h-20 border-b border-[#ebe8e2] px-5 py-5 xl:border-b-0 xl:border-r">
-              <GuestCounter value={adults} onChange={setAdults} label={t.guests} />
+          <div className="mt-9 w-full max-w-[1344px] rounded-[5px] bg-white p-1.5 text-[#24262d] shadow-[0_20px_55px_rgba(8,9,10,.32)] sm:mt-11">
+            <div className="grid grid-cols-2 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,.85fr)_minmax(0,.85fr)_minmax(190px,.72fr)]">
+              <div className="col-span-2 flex min-w-0 border-b border-[#e9e6e1] lg:col-span-1 lg:border-b-0 lg:border-r">
+                <HeroDateField
+                  label={t.arrival}
+                  value={arrival}
+                  min={today}
+                  onChange={setArrival}
+                />
+                <div className="my-3 w-px bg-[#e9e6e1]" aria-hidden="true" />
+                <HeroDateField
+                  label={t.departure}
+                  value={departure}
+                  min={arrival || today}
+                  onChange={setDeparture}
+                />
+              </div>
+              <div className="flex min-h-18 min-w-0 items-center border-r border-[#e9e6e1] px-3 sm:px-4 xl:px-5">
+                <GuestCounter value={adults} onChange={setAdults} label={t.guests} hero />
+              </div>
+              <div className="flex min-h-18 min-w-0 items-center px-3 lg:border-r lg:border-[#e9e6e1] xl:px-5">
+                <GuestCounter value={children} onChange={setChildren} label={t.children} hero />
+              </div>
+              <button
+                type="button"
+                onClick={() => scrollTo("availability")}
+                className="col-span-2 flex min-h-14 items-center justify-center gap-2 rounded-[3px] bg-[#30343a] px-4 text-xs font-semibold uppercase tracking-[.12em] text-white transition hover:bg-[#a08f6d] lg:col-span-1 lg:min-h-18"
+              >
+                <Search className="size-4" />
+                {t.availability}
+              </button>
             </div>
-            <div className="min-h-20 border-b border-[#ebe8e2] px-5 py-5 xl:border-b-0 xl:border-r">
-              <GuestCounter value={children} onChange={setChildren} label={t.children} />
-            </div>
-            <button
-              onClick={() => scrollTo("availability")}
-              className="m-2 flex min-h-16 items-center justify-center gap-3 bg-[#30343a] px-7 text-xs font-semibold uppercase tracking-[.14em] text-white transition hover:bg-[#a08f6d] sm:col-span-2 xl:col-span-1"
-            >
-              <Search className="size-4" />
-              {t.availability}
-            </button>
           </div>
         </div>
       </section>
@@ -578,6 +584,34 @@ function DateField({
   );
 }
 
+function HeroDateField({
+  label,
+  value,
+  min,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  min: string;
+  onChange: (value: string) => void;
+}) {
+  return (
+    <label className="flex min-h-18 min-w-0 flex-1 flex-col items-start justify-center gap-1 px-3 text-left sm:px-5">
+      <span className="text-[11px] font-semibold uppercase tracking-[.08em] text-[#8a7b60]">
+        {label}
+      </span>
+      <input
+        type="date"
+        value={value}
+        min={min}
+        onChange={(event) => onChange(event.target.value)}
+        aria-label={label}
+        className="w-full min-w-0 bg-transparent text-sm text-[#30343a] outline-none focus-visible:ring-2 focus-visible:ring-[#a08f6d]"
+      />
+    </label>
+  );
+}
+
 function OutlineAction({
   children,
   onClick,
@@ -600,7 +634,7 @@ function AboutSection({ t }: { t: (typeof siteCopy)[Language] }) {
   return (
     <section
       id="villa"
-      className="relative scroll-mt-0 px-6 pb-28 pt-64 sm:px-10 sm:pt-44 md:pb-36 lg:px-16 xl:pt-32"
+      className="relative scroll-mt-0 px-6 pb-28 pt-24 sm:px-10 sm:pt-32 md:pb-36 lg:px-16"
     >
       <div className="pointer-events-none absolute right-0 top-0 h-full w-1/2 bg-[radial-gradient(circle_at_90%_40%,rgba(160,143,109,.10),transparent_55%)]" />
       <div className="relative mx-auto grid min-h-[720px] w-full max-w-[1500px] items-center gap-20 lg:grid-cols-[.82fr_1.18fr]">
