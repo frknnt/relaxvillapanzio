@@ -1,23 +1,11 @@
 "use client";
 
-import Link from "next/link";
-import {
-  ArrowRight,
-  CalendarDays,
-  CheckCircle2,
-  Landmark,
-  Mail,
-  MapPin,
-  MessageCircle,
-  Send,
-  UsersRound,
-} from "lucide-react";
-import { useMemo, useState, type FormEvent, type ReactNode } from "react";
+import { ArrowRight, Mail, MapPin, MessageCircle, Send } from "lucide-react";
+import { useState, type FormEvent, type ReactNode } from "react";
 
 import { secondaryCopy } from "@/app/secondary-content";
 import { CONTACT_EMAIL, WHATSAPP_NUMBER } from "@/app/site-config";
 import { useLanguage } from "@/components/site/language-provider";
-import { PageHero } from "@/components/site/page-hero";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { Button } from "@/components/ui/button";
@@ -36,34 +24,23 @@ export function ContactPageContent() {
   const { language } = useLanguage();
   const copy = secondaryCopy[language];
   const t = copy.contactPage;
-  const today = useMemo(() => new Date().toISOString().slice(0, 10), []);
   const [formStatus, setFormStatus] = useState<{
     message: string;
     tone: "success" | "error";
   } | null>(null);
   const deliveryConfigured = Boolean(WHATSAPP_NUMBER || CONTACT_EMAIL);
+  const mapsUrl = "https://www.google.com/maps/search/?api=1&query=8257%20Badacsonytomaj%2C%20F%C3%BCredi%20%C3%BAt%205";
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormStatus(null);
 
     const data = new FormData(event.currentTarget);
-    const arrival = String(data.get("arrival") ?? "");
-    const departure = String(data.get("departure") ?? "");
-
-    if (arrival && departure && departure <= arrival) {
-      setFormStatus({ message: t.formDateError, tone: "error" });
-      return;
-    }
-
     const message = [
       "Relax Villa booking enquiry",
       `${t.formFields.name}: ${String(data.get("name") ?? "")}`,
       `${t.formFields.email}: ${String(data.get("email") ?? "")}`,
       `${t.formFields.whatsapp}: ${String(data.get("whatsapp") ?? "-")}`,
-      `${t.formFields.arrival}: ${arrival}`,
-      `${t.formFields.departure}: ${departure}`,
-      `${t.formFields.guests}: ${String(data.get("guests") ?? "")}`,
       `${t.formFields.language}: ${String(data.get("preferredLanguage") ?? language)}`,
       `${t.formFields.message}: ${String(data.get("message") ?? "")}`,
     ].join("\n");
@@ -95,50 +72,45 @@ export function ContactPageContent() {
   };
 
   return (
-    <main className="overflow-hidden bg-white text-[#26272b]">
+    <main className="overflow-x-clip bg-white text-[#26272b]">
       <div className="relative">
         <SiteHeader overlay />
-        <PageHero
-          image="/images/footer.jpg"
-          imageAlt="Relax Villa garden"
-          eyebrow={t.eyebrow}
-          title={t.title}
-          intro={t.intro}
-        />
+        <section className="relative flex min-h-[490px] items-center justify-center overflow-hidden px-6 pt-20 text-center text-white sm:min-h-[540px]">
+          <img
+            src="/images/gallery/outdoor-04.jpg"
+            alt="Relax Villa pool and outdoor area"
+            className="absolute inset-0 h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(19,24,27,.46),rgba(19,24,27,.64))]" />
+          <div className="relative mx-auto max-w-5xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[.3em] text-[#ddcaa5] sm:text-xs">
+              {t.eyebrow}
+            </p>
+            <h1 className="mt-5 text-[clamp(3.2rem,7vw,6.1rem)] font-extrabold uppercase leading-[.95] tracking-[-.055em]">
+              {t.title}
+            </h1>
+          </div>
+        </section>
       </div>
 
-      <section className="bg-[#faf8f5] px-6 py-24 sm:px-10 md:py-32 lg:px-16">
-        <div className="mx-auto grid max-w-[1450px] gap-14 lg:grid-cols-[.68fr_1.32fr] lg:gap-20">
-          <div className="max-w-lg">
-            <p className="eyebrow">{t.formEyebrow}</p>
-            <h2 className="section-title mt-5">{t.formTitle}</h2>
-            <p className="mt-7 text-base leading-7 text-[#707175]">{t.formIntro}</p>
-            <div className="mt-10 border-l-2 border-[#b6a27b] pl-6">
-              <p className="text-sm font-semibold leading-6 text-[#4d4f53]">{t.formTrust}</p>
-              <p className="mt-3 text-sm leading-6 text-[#87888a]">{t.formRequired}</p>
-            </div>
-            <div className="mt-10 flex items-center gap-4 text-[#7f6f53]">
-              <span className="grid size-12 place-items-center rounded-full border border-[#cabda7] bg-white">
-                <CheckCircle2 className="size-5" strokeWidth={1.5} />
-              </span>
-              <span className="text-sm font-semibold uppercase tracking-[.12em]">
-                {copy.common.wholeVilla}
-              </span>
-            </div>
-          </div>
-
+      <section className="px-6 py-20 sm:px-10 md:py-28 lg:px-16">
+        <div className="mx-auto grid max-w-[1360px] items-start gap-14 lg:grid-cols-[minmax(0,1.65fr)_minmax(320px,.8fr)] lg:gap-16">
           <form
             onSubmit={handleSubmit}
-            className="rounded-[8px] border border-[#e2ddd5] bg-white p-6 shadow-[0_20px_55px_rgba(34,35,38,.08)] sm:p-10"
+            className="min-w-0"
           >
-            <div className="grid gap-6 md:grid-cols-2">
+            <p className="eyebrow">{t.formEyebrow}</p>
+            <h2 className="section-title mt-4">{t.formTitle}</h2>
+            <p className="mt-5 max-w-2xl text-base leading-7 text-[#707175]">{t.formIntro}</p>
+            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#87888a]">{t.intro}</p>
+            <div className="mt-9 grid gap-6 md:grid-cols-2">
               <FormField id="contact-name" label={`${t.formFields.name} *`}>
                 <Input
                   id="contact-name"
                   name="name"
                   autoComplete="name"
                   required
-                  className="min-h-13 rounded-[3px] border-[#dcd6cd] bg-[#fcfbf9] px-4 text-base shadow-none"
+                  className="min-h-13 rounded-[3px] border-[#dedbd5] bg-white px-4 text-base shadow-none"
                 />
               </FormField>
               <FormField id="contact-email" label={`${t.formFields.email} *`}>
@@ -148,7 +120,7 @@ export function ContactPageContent() {
                   type="email"
                   autoComplete="email"
                   required
-                  className="min-h-13 rounded-[3px] border-[#dcd6cd] bg-[#fcfbf9] px-4 text-base shadow-none"
+                  className="min-h-13 rounded-[3px] border-[#dedbd5] bg-white px-4 text-base shadow-none"
                 />
               </FormField>
               <FormField id="contact-whatsapp" label={t.formFields.whatsapp}>
@@ -157,7 +129,7 @@ export function ContactPageContent() {
                   name="whatsapp"
                   type="tel"
                   autoComplete="tel"
-                  className="min-h-13 rounded-[3px] border-[#dcd6cd] bg-[#fcfbf9] px-4 text-base shadow-none"
+                  className="min-h-13 rounded-[3px] border-[#dedbd5] bg-white px-4 text-base shadow-none"
                 />
               </FormField>
               <div className="space-y-2.5">
@@ -167,7 +139,7 @@ export function ContactPageContent() {
                 <Select key={language} name="preferredLanguage" defaultValue={language}>
                   <SelectTrigger
                     id="contact-language"
-                    className="min-h-13 w-full rounded-[3px] border-[#dcd6cd] bg-[#fcfbf9] px-4 text-base shadow-none"
+                    className="min-h-13 w-full rounded-[3px] border-[#dedbd5] bg-white px-4 text-base shadow-none"
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -180,48 +152,6 @@ export function ContactPageContent() {
               </div>
             </div>
 
-            <div className="mt-6 grid gap-6 sm:grid-cols-3">
-              <FormField id="contact-arrival" label={`${t.formFields.arrival} *`}>
-                <div className="relative">
-                  <CalendarDays className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#9c8964]" />
-                  <Input
-                    id="contact-arrival"
-                    name="arrival"
-                    type="date"
-                    min={today}
-                    required
-                    className="min-h-13 rounded-[3px] border-[#dcd6cd] bg-[#fcfbf9] pl-11 text-base shadow-none"
-                  />
-                </div>
-              </FormField>
-              <FormField id="contact-departure" label={`${t.formFields.departure} *`}>
-                <div className="relative">
-                  <CalendarDays className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#9c8964]" />
-                  <Input
-                    id="contact-departure"
-                    name="departure"
-                    type="date"
-                    min={today}
-                    required
-                    className="min-h-13 rounded-[3px] border-[#dcd6cd] bg-[#fcfbf9] pl-11 text-base shadow-none"
-                  />
-                </div>
-              </FormField>
-              <FormField id="contact-guests" label={`${t.formFields.guests} *`}>
-                <div className="relative">
-                  <UsersRound className="pointer-events-none absolute left-4 top-1/2 size-4 -translate-y-1/2 text-[#9c8964]" />
-                  <Input
-                    id="contact-guests"
-                    name="guests"
-                    type="number"
-                    min={1}
-                    required
-                    className="min-h-13 rounded-[3px] border-[#dcd6cd] bg-[#fcfbf9] pl-11 text-base shadow-none"
-                  />
-                </div>
-              </FormField>
-            </div>
-
             <div className="mt-6 space-y-2.5">
               <Label htmlFor="contact-message" className="text-sm text-[#424449]">
                 {t.formFields.message} *
@@ -231,7 +161,7 @@ export function ContactPageContent() {
                 name="message"
                 required
                 placeholder={t.formPlaceholder}
-                className="min-h-36 resize-y rounded-[3px] border-[#dcd6cd] bg-[#fcfbf9] p-4 text-base leading-7 shadow-none"
+                className="min-h-36 resize-y rounded-[3px] border-[#dedbd5] bg-white p-4 text-base leading-7 shadow-none"
               />
             </div>
 
@@ -245,104 +175,93 @@ export function ContactPageContent() {
               </div>
               <Button
                 type="submit"
-                className="min-h-13 shrink-0 rounded-full bg-[#2d3036] px-7 text-xs font-semibold uppercase tracking-[.14em] text-white hover:bg-[#9c8964]"
+                className="min-h-13 shrink-0 rounded-full border border-[#9c8964] bg-transparent px-7 text-xs font-semibold uppercase tracking-[.14em] text-[#746448] hover:bg-[#9c8964] hover:text-white"
               >
                 <Send className="size-4" />
                 {deliveryConfigured ? t.formSubmit : t.formCopy}
               </Button>
             </div>
           </form>
-        </div>
-      </section>
 
-      <section className="px-6 py-24 sm:px-10 md:py-32 lg:px-16">
-        <div className="mx-auto grid max-w-[1450px] gap-8 lg:grid-cols-[1fr_1fr]">
-          <article className="relative min-h-[470px] overflow-hidden rounded-[8px] p-9 text-white shadow-[0_18px_50px_rgba(29,31,35,.13)] sm:p-12">
-            <img
-              src="/images/hero-mobile.jpg"
-              alt="Relax Villa in Badacsonytomaj"
-              className="absolute inset-0 h-full w-full object-cover"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(26,29,32,.42),rgba(25,28,31,.88))]" />
-            <div className="relative flex h-full min-h-[390px] flex-col justify-end">
-              <span className="grid size-14 place-items-center rounded-full border border-white/30 bg-black/10 backdrop-blur">
-                <MapPin className="size-6" strokeWidth={1.5} />
-              </span>
-              <p className="mt-8 text-[10px] font-semibold uppercase tracking-[.2em] text-[#decba5]">
-                {t.visit}
-              </p>
-              <address className="mt-3 max-w-xl text-3xl font-bold not-italic leading-tight tracking-[-.035em] sm:text-4xl">
-                {copy.common.address}
-              </address>
-              <a
-                href="https://www.google.com/maps/search/?api=1&query=8257%20Badacsonytomaj%2C%20F%C3%BCredi%20%C3%BAt%205"
-                target="_blank"
-                rel="noreferrer"
-                className="mt-8 inline-flex w-fit items-center gap-3 border-b border-[#d7c49d] pb-2 text-xs font-semibold uppercase tracking-[.14em] text-[#d7c49d]"
-              >
-                {t.map}
-                <ArrowRight className="size-4" />
-              </a>
+          <aside className="rounded-[7px] bg-white p-7 shadow-[0_18px_60px_rgba(32,33,35,.12)] ring-1 ring-[#eee8df] sm:p-10">
+            <div className="flex gap-5 border-b border-[#e9e4dc] pb-8">
+              <MapPin className="mt-1 size-6 shrink-0 text-[#9c8964]" strokeWidth={1.5} />
+              <div>
+                <h2 className="text-xl font-bold tracking-[-.03em]">{t.visit}</h2>
+                <address className="mt-3 text-base not-italic leading-7 text-[#747579]">
+                  {copy.common.address}
+                </address>
+                <a
+                  href={mapsUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-[#8b7855] hover:text-[#26272b]"
+                >
+                  {t.map}
+                  <ArrowRight className="size-4" />
+                </a>
+              </div>
             </div>
-          </article>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-1">
-            <article className="border border-[#e5e0d8] bg-[#faf8f5] p-9 sm:p-11">
-              <div className="flex items-start gap-5">
-                <span className="grid size-12 shrink-0 place-items-center rounded-full bg-white text-[#9c8964] shadow-sm">
-                  <MessageCircle className="size-5" strokeWidth={1.5} />
-                </span>
-                <div>
-                  <h2 className="text-2xl font-bold tracking-[-.03em]">{t.write}</h2>
-                  <p className="mt-3 text-base leading-7 text-[#747579]">{t.writeText}</p>
+            <div className="border-b border-[#e9e4dc] py-8">
+              <div className="flex gap-5">
+                <Mail className="mt-1 size-6 shrink-0 text-[#9c8964]" strokeWidth={1.5} />
+                <div className="min-w-0">
+                  <h2 className="text-xl font-bold tracking-[-.03em]">{t.formFields.email}</h2>
+                  {CONTACT_EMAIL ? (
+                    <a href={`mailto:${CONTACT_EMAIL}`} className="mt-3 block break-all text-base text-[#747579] hover:text-[#8b7855]">
+                      {CONTACT_EMAIL}
+                    </a>
+                  ) : (
+                    <p className="mt-3 text-base leading-7 text-[#747579]">{copy.common.contactPending}</p>
+                  )}
                 </div>
               </div>
-              <div className="mt-8 grid gap-3 border-t border-[#e2ddd4] pt-7 text-sm text-[#76777a] sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                <span className="flex items-center gap-3">
-                  <Mail className="size-4 text-[#9c8964]" />
-                  {copy.common.contactPending}
-                </span>
-                <span className="flex items-center gap-3">
-                  <MessageCircle className="size-4 text-[#9c8964]" />
-                  WhatsApp
-                </span>
-              </div>
-            </article>
+            </div>
 
-            <article className="bg-[#292c32] p-9 text-white sm:p-11">
-              <span className="grid size-12 place-items-center rounded-full border border-white/20 text-[#d4c198]">
-                <Landmark className="size-5" strokeWidth={1.5} />
-              </span>
-              <h2 className="mt-7 text-2xl font-bold tracking-[-.03em]">{t.noteTitle}</h2>
-              <p className="mt-4 max-w-xl text-base leading-7 text-white/65">{t.note}</p>
-            </article>
-          </div>
+            <div className="py-8">
+              <div className="flex gap-5">
+                <MessageCircle className="mt-1 size-6 shrink-0 text-[#9c8964]" strokeWidth={1.5} />
+                <div className="min-w-0">
+                  <h2 className="text-xl font-bold tracking-[-.03em]">WhatsApp</h2>
+                  {WHATSAPP_NUMBER ? (
+                    <a
+                      href={`https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-3 block text-base text-[#747579] hover:text-[#8b7855]"
+                    >
+                      {WHATSAPP_NUMBER}
+                    </a>
+                  ) : (
+                    <p className="mt-3 text-base leading-7 text-[#747579]">{t.writeText}</p>
+                  )}
+                </div>
+              </div>
+            </div>
+
+          </aside>
         </div>
       </section>
 
-      <section className="bg-[#faf8f5] px-6 py-24 sm:px-10 md:py-32 lg:px-16">
-        <div className="mx-auto max-w-[1450px]">
-          <p className="eyebrow">{t.processEyebrow}</p>
-          <h2 className="section-title mt-5">{t.processTitle}</h2>
-          <div className="mt-14 grid gap-px overflow-hidden border border-[#e5e0d8] bg-[#e5e0d8] lg:grid-cols-3">
-            {t.steps.map(([number, title, description]) => (
-              <article key={number} className="bg-white p-9 sm:p-11">
-                <span className="text-5xl font-extrabold tracking-[-.06em] text-[#e1d9cc]">{number}</span>
-                <h3 className="mt-7 text-2xl font-bold tracking-[-.03em]">{title}</h3>
-                <p className="mt-4 text-base leading-7 text-[#747579]">{description}</p>
-              </article>
-            ))}
-          </div>
-          <div className="mt-10 flex justify-end">
-            <Link
-              href="/#availability"
-              className="inline-flex min-h-13 items-center gap-3 rounded-full border border-[#2d2f33] px-7 text-xs font-semibold uppercase tracking-[.14em] transition hover:bg-[#2d2f33] hover:text-white"
-            >
-              {t.cta}
-              <ArrowRight className="size-4" />
-            </Link>
-          </div>
-        </div>
+      <section aria-label={t.visit} className="relative h-[390px] bg-[#ece9e2] sm:h-[480px]">
+        <iframe
+          src="https://www.google.com/maps?q=8257%20Badacsonytomaj%2C%20F%C3%BCredi%20%C3%BAt%205%2C%20Hungary&output=embed"
+          title={`${t.visit}: ${copy.common.address}`}
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          className="h-full w-full border-0"
+        />
+        <a
+          href={mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="absolute bottom-6 left-6 inline-flex items-center gap-3 rounded-[3px] bg-white px-5 py-4 text-xs font-semibold uppercase tracking-[.12em] text-[#292c32] shadow-[0_9px_25px_rgba(0,0,0,.15)] hover:text-[#8b7855] sm:bottom-10 sm:left-10"
+        >
+          <MapPin className="size-4 text-[#9c8964]" />
+          {t.map}
+          <ArrowRight className="size-4" />
+        </a>
       </section>
 
       <SiteFooter />

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Compass, Eye } from "lucide-react";
+import { ArrowRight, Bookmark, Compass, Eye } from "lucide-react";
 
 import { secondaryCopy } from "@/app/secondary-content";
 import { siteCopy } from "@/app/site-content";
@@ -10,6 +10,18 @@ import { PageHero } from "@/components/site/page-hero";
 import { SiteFooter } from "@/components/site/site-footer";
 import { SiteHeader } from "@/components/site/site-header";
 import { VillaFeaturesSection } from "@/components/site/villa-features-section";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
+const localPhotos = [
+  "/images/gallery/outdoor-02.jpg",
+  "/images/gallery/outdoor-05.jpg",
+  "/images/gallery/shared-03.jpg",
+];
 
 export function AboutPageContent() {
   const { language } = useLanguage();
@@ -17,7 +29,7 @@ export function AboutPageContent() {
   const t = copy.about;
 
   return (
-    <main className="overflow-hidden bg-white text-[#26272b]">
+    <main className="overflow-x-clip bg-white text-[#26272b]">
       <div className="relative">
         <SiteHeader overlay />
         <PageHero
@@ -59,6 +71,48 @@ export function AboutPageContent() {
         </div>
       </section>
 
+      <section className="px-6 py-20 sm:px-10 md:py-28 lg:px-16">
+        <div className="mx-auto grid max-w-[1500px] items-start gap-14 lg:grid-cols-[.88fr_1.12fr] lg:gap-20">
+          <div className="lg:sticky lg:top-10 lg:self-start">
+            <p className="eyebrow">{t.localEyebrow}</p>
+            <h2 className="section-title mt-5 max-w-[15ch]">{t.localTitle}</h2>
+            <p className="mt-6 max-w-[38rem] text-lg leading-8 text-[#595b60]">
+              {t.localIntro}
+            </p>
+            <div className="mt-7 space-y-5">
+              {t.localFeatures.map((feature) => (
+                <article key={feature.title} className="flex items-start gap-5">
+                  <Bookmark
+                    className="mt-1 size-9 shrink-0 text-[#9c8964]"
+                    strokeWidth={1.3}
+                    aria-hidden="true"
+                  />
+                  <div>
+                    <h3 className="text-xl font-semibold tracking-[-.03em] sm:text-2xl">
+                      {feature.title}
+                    </h3>
+                    <p className="mt-1.5 max-w-[37rem] text-base leading-7 text-[#66686c]">
+                      {feature.text}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+          </div>
+          <div className="space-y-5">
+            {localPhotos.map((photo, index) => (
+              <img
+                key={photo}
+                src={photo}
+                alt={t.localImageAlts[index]}
+                loading="lazy"
+                className="aspect-[1.5] w-full rounded-[8px] object-cover"
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
       <section className="bg-[#25282e] px-6 py-24 text-white sm:px-10 md:py-32 lg:px-16">
         <div className="mx-auto grid max-w-[1450px] gap-14 lg:grid-cols-[.56fr_1.44fr] lg:gap-24">
           <div className="max-w-lg">
@@ -95,26 +149,37 @@ export function AboutPageContent() {
 
       <VillaFeaturesSection t={siteCopy[language]} />
 
-      <section className="relative flex min-h-[610px] items-center justify-center px-6 py-28 text-center text-white sm:px-10">
-        <img
-          src="/images/mood.jpg"
-          alt="Relax Villa outdoor area"
-          className="absolute inset-0 h-full w-full object-cover"
-        />
-        <div className="absolute inset-0 bg-[#12171b]/65" />
-        <div className="relative max-w-4xl">
-          <p className="eyebrow !text-[#decba5]">{t.promiseEyebrow}</p>
-          <h2 className="mt-5 text-balance text-[clamp(2.4rem,5vw,5rem)] font-extrabold uppercase leading-[1.02] tracking-[-.045em]">
-            {t.promiseTitle}
-          </h2>
-          <p className="mx-auto mt-7 max-w-2xl text-lg leading-8 text-white/76">{t.promiseText}</p>
-          <Link
-            href="/rooms"
-            className="mt-10 inline-flex min-h-13 items-center gap-3 rounded-full border border-white/45 px-7 text-xs font-semibold uppercase tracking-[.14em] transition hover:bg-white hover:text-[#26272b]"
-          >
-            {t.cta}
-            <ArrowRight className="size-4" />
-          </Link>
+      <section className="bg-[#faf9f7] px-6 py-24 sm:px-10 md:py-32 lg:px-16">
+        <div className="mx-auto grid max-w-[1500px] items-start gap-12 lg:grid-cols-[.82fr_1.18fr] lg:gap-20">
+          <div className="max-w-lg">
+            <p className="eyebrow">{t.faqEyebrow}</p>
+            <h2 className="section-title mt-5">{t.faqTitle}</h2>
+            <p className="mt-7 text-lg leading-8 text-[#5d5f63]">{t.faqIntro}</p>
+            <Link
+              href="/contact"
+              className="mt-6 inline-flex items-center gap-3 text-base font-semibold text-[#8d7855] underline-offset-4 hover:underline"
+            >
+              {t.faqContact}
+              <ArrowRight className="size-5" aria-hidden="true" />
+            </Link>
+          </div>
+          <Accordion type="single" collapsible className="space-y-3">
+            {t.faqs.map((faq, index) => (
+              <AccordionItem
+                key={faq.question}
+                value={`faq-${index}`}
+                className="border-0 bg-white shadow-[0_10px_35px_rgba(35,35,35,.045)]"
+              >
+                <AccordionTrigger className="faq-trigger min-h-20 items-center rounded-none px-6 py-5 text-base font-semibold tracking-[-.02em] hover:no-underline sm:text-lg [&>svg]:hidden">
+                  {faq.question}
+                  <span className="faq-plus ml-auto shrink-0 text-2xl font-light leading-none text-[#9c8964]" aria-hidden="true" />
+                </AccordionTrigger>
+                <AccordionContent className="px-6 pb-6 text-base leading-7 text-[#616368]">
+                  {faq.answer}
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
         </div>
       </section>
 

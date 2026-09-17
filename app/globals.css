@@ -70,12 +70,12 @@
 html {
   scroll-behavior: smooth;
   background: #ffffff;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: var(--background);
   color: var(--foreground);
   font-family: "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -127,6 +127,14 @@ input[type="date"] {
   font-weight: 750;
   letter-spacing: -0.045em;
   line-height: 1.04;
+}
+
+.faq-plus::before {
+  content: "+";
+}
+
+.faq-trigger[data-state="open"] .faq-plus::before {
+  content: "−";
 }
 
 @media (max-width: 767px) {

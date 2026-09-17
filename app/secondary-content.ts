@@ -44,11 +44,65 @@ export const secondaryCopy = {
       missionTitle: "Our mission",
       missionText:
         "To welcome one group at a time into a carefully prepared home, with clear direct booking and the freedom to enjoy every space in complete privacy.",
-      promiseEyebrow: "A SIMPLE PROMISE",
-      promiseTitle: "Privacy, space and one complete stay",
-      promiseText:
-        "From arrival to departure, the villa remains your group's private base in Badacsonytomaj.",
-      cta: "Explore the bedrooms",
+      localEyebrow: "AROUND BADACSONYTOMAJ",
+      localTitle: "Local amenities",
+      localIntro:
+        "A villa day can stay beautifully simple: explore Badacsony and Lake Balaton, then return to your own pool, garden and shared table.",
+      localFeatures: [
+        {
+          title: "Local restaurants",
+          text: "Discover the area's restaurants, cafés and wine terraces, or keep dinner easy around the villa's own table.",
+        },
+        {
+          title: "Nature",
+          text: "Make time for Lake Balaton and Badacsony Hill's walking trails and viewpoints, then unwind back at the villa.",
+        },
+        {
+          title: "Art & culture",
+          text: "Explore the region's local heritage, museums and historic places at your own pace.",
+        },
+      ],
+      localImageAlts: [
+        "Relax Villa's private pool and terrace",
+        "Relax Villa's outdoor hot tub",
+        "The shared dining table and kitchen at Relax Villa",
+      ],
+      faqEyebrow: "RELAX VILLA FAQ",
+      faqTitle: "Frequently asked questions",
+      faqIntro: "Still have a question about your stay? Ask us directly.",
+      faqContact: "Contact us",
+      faqs: [
+        {
+          question: "Is the villa booked as a whole?",
+          answer:
+            "Yes. Every booking includes all four bedrooms and the shared spaces. Bedrooms are not rented separately.",
+        },
+        {
+          question: "Are pets allowed?",
+          answer:
+            "Yes, pets are welcome for an additional fee. Please mention the number and type of pets in your request so the host can confirm the details.",
+        },
+        {
+          question: "What is the cancellation policy?",
+          answer:
+            "The host will share the applicable cancellation terms before confirming your booking. Please ask for them in writing before making a transfer.",
+        },
+        {
+          question: "How does payment work?",
+          answer:
+            "Once the host confirms your dates, they will send the official IBAN and payment reference. Pay by bank transfer, then send the receipt through WhatsApp. Do not transfer money before receiving those details.",
+        },
+        {
+          question: "What are the check-in and check-out times?",
+          answer:
+            "Arrival and departure times are agreed directly with the host when your stay is confirmed. Please check them before you travel.",
+        },
+        {
+          question: "Is the villa suitable for guests with limited mobility?",
+          answer:
+            "Please tell the host about any accessibility requirements before booking so they can confirm whether the property meets your needs.",
+        },
+      ],
     },
     rooms: {
       eyebrow: "BEDROOMS & GALLERY",
@@ -127,17 +181,17 @@ export const secondaryCopy = {
     },
     contactPage: {
       eyebrow: "CONTACT & BOOKING",
-      title: "Plan your private villa stay",
+      title: "Contact us",
       intro:
         "Send your preferred dates for the complete villa. Availability and payment details are confirmed directly with the host.",
       formEyebrow: "BOOKING ENQUIRY",
-      formTitle: "Tell us about your stay",
+      formTitle: "Get in touch",
       formIntro:
         "All enquiries are for the complete four-bedroom villa. Complete the form and we will prepare your message for the host.",
       formFields: {
         name: "Full name",
         email: "Email address",
-        whatsapp: "WhatsApp number",
+        whatsapp: "Contact number",
         arrival: "Arrival",
         departure: "Departure",
         guests: "Number of guests",
@@ -145,8 +199,8 @@ export const secondaryCopy = {
         message: "Message",
       },
       formPlaceholder: "Tell us anything that will help us understand your stay.",
-      formSubmit: "Send booking enquiry",
-      formCopy: "Copy booking enquiry",
+      formSubmit: "Get support",
+      formCopy: "Get support",
       formRequired: "Required fields are marked with *.",
       formTrust:
         "Your request is not a confirmed booking until the host replies in writing.",
@@ -216,11 +270,65 @@ export const secondaryCopy = {
       missionTitle: "Unsere Mission",
       missionText:
         "Jeweils eine Gruppe in einem sorgfältig vorbereiteten Zuhause willkommen zu heißen – mit klarer Direktbuchung und der Freiheit, jeden Bereich vollkommen privat zu genießen.",
-      promiseEyebrow: "EIN EINFACHES VERSPRECHEN",
-      promiseTitle: "Privatsphäre, Raum und ein kompletter Aufenthalt",
-      promiseText:
-        "Von der Anreise bis zur Abreise bleibt die Villa der private Rückzugsort Ihrer Gruppe in Badacsonytomaj.",
-      cta: "Schlafzimmer entdecken",
+      localEyebrow: "RUND UM BADACSONYTOMAJ",
+      localTitle: "Angebote vor Ort",
+      localIntro:
+        "Ein Villentag darf einfach bleiben: Badacsony und den Balaton erkunden und danach an den eigenen Pool, in den Garten und an den gemeinsamen Tisch zurückkehren.",
+      localFeatures: [
+        {
+          title: "Restaurants in der Region",
+          text: "Entdecken Sie Restaurants, Cafés und Weinterrassen in der Umgebung – oder genießen Sie das Abendessen gemeinsam in der Villa.",
+        },
+        {
+          title: "Natur",
+          text: "Erleben Sie den Balaton sowie Wanderwege und Aussichtspunkte am Badacsony und entspannen Sie danach wieder in der Villa.",
+        },
+        {
+          title: "Kunst & Kultur",
+          text: "Entdecken Sie lokale Geschichte, Museen und historische Orte der Region in Ihrem eigenen Tempo.",
+        },
+      ],
+      localImageAlts: [
+        "Privater Pool und Terrasse der Relax Villa",
+        "Whirlpool im Außenbereich der Relax Villa",
+        "Gemeinsamer Esstisch und Küche in der Relax Villa",
+      ],
+      faqEyebrow: "RELAX VILLA FAQ",
+      faqTitle: "Häufige Fragen",
+      faqIntro: "Ihre Frage ist noch offen? Kontaktieren Sie uns direkt.",
+      faqContact: "Kontakt aufnehmen",
+      faqs: [
+        {
+          question: "Wird die Villa nur komplett gebucht?",
+          answer:
+            "Ja. Jede Buchung umfasst alle vier Schlafzimmer und die Gemeinschaftsbereiche. Die Schlafzimmer werden nicht einzeln vermietet.",
+        },
+        {
+          question: "Sind Haustiere erlaubt?",
+          answer:
+            "Ja, Haustiere sind gegen eine zusätzliche Gebühr willkommen. Bitte nennen Sie Anzahl und Art der Haustiere in Ihrer Anfrage, damit der Gastgeber die Details bestätigen kann.",
+        },
+        {
+          question: "Welche Stornierungsbedingungen gelten?",
+          answer:
+            "Der Gastgeber teilt Ihnen die geltenden Stornierungsbedingungen vor der Buchungsbestätigung mit. Bitte lassen Sie sich diese vor einer Überweisung schriftlich bestätigen.",
+        },
+        {
+          question: "Wie funktioniert die Zahlung?",
+          answer:
+            "Nach Bestätigung Ihrer Reisedaten erhalten Sie die offizielle IBAN und den Verwendungszweck. Zahlen Sie per Banküberweisung und senden Sie den Beleg über WhatsApp. Überweisen Sie erst nach Erhalt dieser Angaben.",
+        },
+        {
+          question: "Wann sind Check-in und Check-out?",
+          answer:
+            "An- und Abreisezeiten werden bei der Bestätigung Ihres Aufenthalts direkt mit dem Gastgeber vereinbart. Bitte klären Sie diese vor Ihrer Reise.",
+        },
+        {
+          question: "Ist die Villa für Gäste mit eingeschränkter Mobilität geeignet?",
+          answer:
+            "Teilen Sie dem Gastgeber besondere Anforderungen vor der Buchung mit, damit er bestätigen kann, ob die Unterkunft für Sie geeignet ist.",
+        },
+      ],
     },
     rooms: {
       eyebrow: "SCHLAFZIMMER & GALERIE",
@@ -299,17 +407,17 @@ export const secondaryCopy = {
     },
     contactPage: {
       eyebrow: "KONTAKT & BUCHUNG",
-      title: "Planen Sie Ihren privaten Villenaufenthalt",
+      title: "Kontakt",
       intro:
         "Senden Sie Ihre Wunschdaten für die komplette Villa. Verfügbarkeit und Zahlungsdaten werden direkt mit dem Gastgeber bestätigt.",
       formEyebrow: "BUCHUNGSANFRAGE",
-      formTitle: "Erzählen Sie uns von Ihrem Aufenthalt",
+      formTitle: "Kontaktieren Sie uns",
       formIntro:
         "Alle Anfragen gelten für die komplette Villa mit vier Schlafzimmern. Füllen Sie das Formular aus und wir bereiten Ihre Nachricht an den Gastgeber vor.",
       formFields: {
         name: "Vollständiger Name",
         email: "E-Mail-Adresse",
-        whatsapp: "WhatsApp-Nummer",
+        whatsapp: "Kontaktnummer",
         arrival: "Anreise",
         departure: "Abreise",
         guests: "Anzahl der Gäste",
@@ -317,8 +425,8 @@ export const secondaryCopy = {
         message: "Nachricht",
       },
       formPlaceholder: "Teilen Sie uns mit, was für Ihren Aufenthalt wichtig ist.",
-      formSubmit: "Buchungsanfrage senden",
-      formCopy: "Buchungsanfrage kopieren",
+      formSubmit: "Unterstützung erhalten",
+      formCopy: "Unterstützung erhalten",
       formRequired: "Pflichtfelder sind mit * gekennzeichnet.",
       formTrust:
         "Ihre Anfrage ist erst nach der schriftlichen Bestätigung durch den Gastgeber eine bestätigte Buchung.",
@@ -388,11 +496,65 @@ export const secondaryCopy = {
       missionTitle: "Küldetésünk",
       missionText:
         "Egyszerre egy társaságot fogadni gondosan előkészített otthonunkban, átlátható közvetlen foglalással és azzal a szabadsággal, hogy minden teret teljesen privát módon élvezhessenek.",
-      promiseEyebrow: "EGYSZERŰ ÍGÉRET",
-      promiseTitle: "Privát tér, kényelem és egy teljes pihenés",
-      promiseText:
-        "Az érkezéstől a távozásig a villa az Önök saját badacsonytomaji bázisa marad.",
-      cta: "Hálószobák megtekintése",
+      localEyebrow: "BADACSONYTOMAJ KÖRNYÉKÉN",
+      localTitle: "Helyi élmények",
+      localIntro:
+        "Egy villában töltött nap lehet igazán egyszerű: fedezzék fel Badacsonyt és a Balatont, majd térjenek vissza a saját medencéhez, kerthez és közös asztalhoz.",
+      localFeatures: [
+        {
+          title: "Helyi éttermek",
+          text: "Fedezzék fel a környék éttermeit, kávézóit és borteraszait, vagy vacsorázzanak együtt a villa saját asztalánál.",
+        },
+        {
+          title: "Természet",
+          text: "Élvezzék a Balatont, valamint a Badacsony túraútvonalait és kilátóhelyeit, majd pihenjenek újra a villában.",
+        },
+        {
+          title: "Művészet és kultúra",
+          text: "Ismerjék meg a térség helytörténetét, múzeumait és történelmi helyszíneit a saját tempójukban.",
+        },
+      ],
+      localImageAlts: [
+        "A Relax Villa privát medencéje és terasza",
+        "A Relax Villa kültéri jakuzzija",
+        "Közös étkezőasztal és konyha a Relax Villában",
+      ],
+      faqEyebrow: "RELAX VILLA GYIK",
+      faqTitle: "Gyakori kérdések",
+      faqIntro: "Nem találják a választ? Keressenek minket közvetlenül.",
+      faqContact: "Kapcsolatfelvétel",
+      faqs: [
+        {
+          question: "Csak az egész villa foglalható?",
+          answer:
+            "Igen. Minden foglalás mind a négy hálószobát és a közös tereket is tartalmazza. A hálószobák külön nem bérelhetők.",
+        },
+        {
+          question: "Hozható háziállat?",
+          answer:
+            "Igen, háziállat felár ellenében hozható. Kérjük, az érdeklődésben jelezzék a háziállatok számát és fajtáját, hogy a házigazda visszaigazolhassa a részleteket.",
+        },
+        {
+          question: "Mik a lemondási feltételek?",
+          answer:
+            "A házigazda a foglalás visszaigazolása előtt ismerteti az érvényes lemondási feltételeket. Átutalás előtt kérjék ezeket írásban.",
+        },
+        {
+          question: "Hogyan történik a fizetés?",
+          answer:
+            "Az időpont visszaigazolása után a házigazda elküldi a hivatalos IBAN-t és a közleményt. Banki átutalással fizethetnek, majd a bizonylatot WhatsAppon küldhetik el. Ezek megérkezése előtt ne utaljanak.",
+        },
+        {
+          question: "Mikor van a be- és kijelentkezés?",
+          answer:
+            "Az érkezési és távozási időpontot a foglalás visszaigazolásakor közvetlenül a házigazdával egyeztetik. Indulás előtt kérjük, ellenőrizzék az időpontokat.",
+        },
+        {
+          question: "Megfelelő a villa mozgásukban korlátozott vendégeknek?",
+          answer:
+            "Foglalás előtt jelezzék a házigazdának az akadálymentességgel kapcsolatos igényeiket, hogy visszaigazolhassa, megfelel-e az ingatlan az elvárásaiknak.",
+        },
+      ],
     },
     rooms: {
       eyebrow: "HÁLÓSZOBÁK ÉS GALÉRIA",
@@ -471,17 +633,17 @@ export const secondaryCopy = {
     },
     contactPage: {
       eyebrow: "KAPCSOLAT ÉS FOGLALÁS",
-      title: "Tervezzék meg privát villapihenésüket",
+      title: "Kapcsolat",
       intro:
         "Küldjék el a teljes villára vonatkozó kívánt időpontot. Az elérhetőséget és a fizetési adatokat közvetlenül a házigazda igazolja vissza.",
       formEyebrow: "FOGLALÁSI ÉRDEKLŐDÉS",
-      formTitle: "Meséljenek tervezett pihenésükről",
+      formTitle: "Lépjenek kapcsolatba velünk",
       formIntro:
         "Minden érdeklődés a teljes, négy hálószobás villára vonatkozik. Töltsék ki az űrlapot, mi pedig előkészítjük az üzenetet a házigazdának.",
       formFields: {
         name: "Teljes név",
         email: "E-mail-cím",
-        whatsapp: "WhatsApp-szám",
+        whatsapp: "Kapcsolattartási telefonszám",
         arrival: "Érkezés",
         departure: "Távozás",
         guests: "Vendégek száma",
@@ -489,8 +651,8 @@ export const secondaryCopy = {
         message: "Üzenet",
       },
       formPlaceholder: "Írják meg, mi segítene a pihenésük megtervezésében.",
-      formSubmit: "Foglalási érdeklődés küldése",
-      formCopy: "Foglalási érdeklődés másolása",
+      formSubmit: "Segítség kérése",
+      formCopy: "Segítség kérése",
       formRequired: "A kötelező mezőket * jelöli.",
       formTrust:
         "A kérés csak a házigazda írásos visszaigazolása után válik megerősített foglalássá.",

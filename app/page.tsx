@@ -5,7 +5,6 @@ import Link from "next/link";
 import {
   ArrowRight,
   ArrowUp,
-  Building2,
   CalendarDays,
   Check,
   ChevronLeft,
@@ -50,14 +49,14 @@ function GuestCounter({
   hero?: boolean;
 }) {
   return (
-    <div className={`flex min-w-0 flex-1 justify-between ${hero ? "flex-col items-start gap-1 lg:flex-row lg:items-center lg:gap-2 xl:gap-3" : "items-center gap-4"}`}>
+    <div className={`flex min-w-0 flex-1 justify-between ${hero ? "flex-col items-start gap-1 lg:flex-row lg:items-center lg:gap-2" : "items-center gap-2"}`}>
       <span className="truncate text-sm font-medium text-[#2b2c30]">{label}</span>
-      <div className={`flex items-center ${hero ? "gap-2 xl:gap-3" : "gap-3"}`}>
+      <div className="flex items-center gap-2">
         <button
           type="button"
           aria-label={`Decrease ${label}`}
           onClick={() => onChange(Math.max(0, value - 1))}
-          className={`grid place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958] ${hero ? "size-7 xl:size-8" : "size-8"}`}
+          className="grid size-7 place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958]"
         >
           <Minus className="size-3.5" />
         </button>
@@ -66,7 +65,7 @@ function GuestCounter({
           type="button"
           aria-label={`Increase ${label}`}
           onClick={() => onChange(Math.min(20, value + 1))}
-          className={`grid place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958] ${hero ? "size-7 xl:size-8" : "size-8"}`}
+          className="grid size-7 place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958]"
         >
           <Plus className="size-3.5" />
         </button>
@@ -125,6 +124,7 @@ export default function Home() {
   const [departure, setDeparture] = useState("");
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
+  const [pets, setPets] = useState(0);
   const [paymentOpen, setPaymentOpen] = useState(false);
   const [galleryImage, setGalleryImage] = useState<string | null>(null);
   const [transferComplete, setTransferComplete] = useState(false);
@@ -162,10 +162,11 @@ export default function Home() {
       `${t.arrival}: ${arrival || "-"}`,
       `${t.departure}: ${departure || "-"}`,
       `${t.guests}: ${adults + children}`,
+      `${t.pets}: ${pets}`,
     ].join("\n");
 
     return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
-  }, [arrival, departure, adults, children, t]);
+  }, [arrival, departure, adults, children, pets, t]);
 
   const copyIban = async () => {
     if (!BANK_IBAN) return;
@@ -203,7 +204,7 @@ export default function Home() {
           </div>
 
           <div className="mt-9 w-full max-w-[1344px] rounded-[5px] bg-white p-1.5 text-[#24262d] shadow-[0_20px_55px_rgba(8,9,10,.32)] sm:mt-11">
-            <div className="grid grid-cols-2 lg:grid-cols-[minmax(0,1.55fr)_minmax(0,.85fr)_minmax(0,.85fr)_minmax(190px,.72fr)]">
+            <div className="grid grid-cols-2 lg:grid-cols-[minmax(290px,1.05fr)_minmax(150px,.65fr)_minmax(160px,.7fr)_minmax(160px,.7fr)_minmax(170px,.72fr)]">
               <div className="col-span-2 flex min-w-0 border-b border-[#e9e6e1] lg:col-span-1 lg:border-b-0 lg:border-r">
                 <HeroDateField
                   label={t.arrival}
@@ -219,16 +220,19 @@ export default function Home() {
                   onChange={setDeparture}
                 />
               </div>
-              <div className="flex min-h-18 min-w-0 items-center border-r border-[#e9e6e1] px-3 sm:px-4 xl:px-5">
-                <GuestCounter value={adults} onChange={setAdults} label={t.guests} hero />
+              <div className="flex min-h-18 min-w-0 items-center border-r border-[#e9e6e1] px-3 lg:px-3">
+                <GuestCounter value={adults} onChange={setAdults} label={t.adults} hero />
               </div>
-              <div className="flex min-h-18 min-w-0 items-center px-3 lg:border-r lg:border-[#e9e6e1] xl:px-5">
+              <div className="flex min-h-18 min-w-0 items-center px-3 lg:border-r lg:border-[#e9e6e1]">
                 <GuestCounter value={children} onChange={setChildren} label={t.children} hero />
+              </div>
+              <div className="flex min-h-18 min-w-0 items-center border-r border-[#e9e6e1] px-3">
+                <GuestCounter value={pets} onChange={setPets} label={t.pets} hero />
               </div>
               <button
                 type="button"
                 onClick={() => scrollTo("availability")}
-                className="col-span-2 flex min-h-14 items-center justify-center gap-2 rounded-[3px] bg-[#30343a] px-4 text-xs font-semibold uppercase tracking-[.12em] text-white transition hover:bg-[#a08f6d] lg:col-span-1 lg:min-h-18"
+                className="flex min-h-18 items-center justify-center gap-2 rounded-[3px] bg-[#30343a] px-4 text-xs font-semibold uppercase tracking-[.12em] text-white transition hover:bg-[#a08f6d] lg:min-h-18"
               >
                 <Search className="size-4" />
                 {t.availability}
@@ -361,16 +365,15 @@ export default function Home() {
                   compact
                 />
               </div>
-              <div className="mt-3 grid gap-3 md:grid-cols-[1.3fr_1fr_1fr]">
-                <div className="flex min-h-16 items-center gap-3 rounded-[4px] bg-white px-5">
-                  <Building2 className="size-4 text-[#9a8866]" />
-                  <span className="text-sm font-medium">{t.entireVilla}</span>
-                </div>
-                <div className="rounded-[4px] bg-white px-4 py-4">
+              <div className="mt-3 grid gap-3 sm:grid-cols-3">
+                <div className="rounded-[4px] bg-white px-3 py-4">
                   <GuestCounter value={adults} onChange={setAdults} label={t.adults} />
                 </div>
-                <div className="rounded-[4px] bg-white px-4 py-4">
+                <div className="rounded-[4px] bg-white px-3 py-4">
                   <GuestCounter value={children} onChange={setChildren} label={t.children} />
+                </div>
+                <div className="rounded-[4px] bg-white px-3 py-4">
+                  <GuestCounter value={pets} onChange={setPets} label={t.pets} />
                 </div>
               </div>
             </div>
