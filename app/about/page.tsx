@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { AboutPageContent } from "./page-content";
 
 export const metadata: Metadata = {
-  title: "About Relax Villa | Badacsonytomaj",
+  title: "The Villa & Badacsony | Relax Villa Badacsonytomaj",
   description:
-    "Discover Relax Villa, a private four-bedroom villa reserved as one complete property in Badacsonytomaj.",
+    "Meet Relax Villa: a whole-house stay with four bedrooms, private wellness spaces and direct access to the rhythm of Badacsony and Lake Balaton.",
 };
 
 export default function AboutPage() {

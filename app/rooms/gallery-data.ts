@@ -1,10 +1,19 @@
 export type GalleryCategory = "bedrooms" | "shared" | "outdoors";
 
+export type LocalizedGalleryText = {
+  en: string;
+  de: string;
+  hu: string;
+};
+
 export type GalleryImage = {
+  id?: string;
   src: string;
   category: GalleryCategory;
   order: number;
   room?: 1 | 2 | 3 | 4;
+  alt?: LocalizedGalleryText;
+  caption?: LocalizedGalleryText;
 };
 
 export const galleryImages: readonly GalleryImage[] = [

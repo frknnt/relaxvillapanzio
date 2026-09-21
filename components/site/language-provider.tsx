@@ -20,18 +20,25 @@ const LanguageContext = createContext<LanguageContextValue | null>(null);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en");
+  const [storageReady, setStorageReady] = useState(false);
 
   useEffect(() => {
-    const savedLanguage = window.localStorage.getItem("relax-villa-language");
-    if (savedLanguage === "en" || savedLanguage === "de" || savedLanguage === "hu") {
-      setLanguage(savedLanguage);
-    }
+    const timer = window.setTimeout(() => {
+      const savedLanguage = window.localStorage.getItem("relax-villa-language");
+      if (savedLanguage === "en" || savedLanguage === "de" || savedLanguage === "hu") {
+        setLanguage(savedLanguage);
+      }
+      setStorageReady(true);
+    }, 0);
+
+    return () => window.clearTimeout(timer);
   }, []);
 
   useEffect(() => {
+    if (!storageReady) return;
     document.documentElement.lang = language;
     window.localStorage.setItem("relax-villa-language", language);
-  }, [language]);
+  }, [language, storageReady]);
 
   const value = useMemo(() => ({ language, setLanguage }), [language]);
 

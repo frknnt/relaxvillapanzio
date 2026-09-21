@@ -56,9 +56,9 @@ export function VillaFeaturesSection({ t }: { t: (typeof siteCopy)[Language] }) 
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-6 left-1/2 -translate-x-1/2 whitespace-nowrap text-[clamp(4rem,10vw,11rem)] font-extrabold tracking-[-.06em] text-[#f0ede8]"
+        className="pointer-events-none absolute -bottom-2 inset-x-3 whitespace-nowrap text-center text-[7vw] font-extrabold tracking-[-.06em] text-[#f0ede8] sm:-bottom-4 sm:inset-x-5 lg:-bottom-6 lg:text-[clamp(4rem,7vw,8rem)]"
       >
-        Private Holiday Together
+        {t.facilitiesBackdrop}
       </div>
     </section>
   );

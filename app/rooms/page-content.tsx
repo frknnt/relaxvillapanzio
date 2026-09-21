@@ -2,10 +2,11 @@
 
 import Link from "next/link";
 import { ArrowRight, ChevronLeft, ChevronRight, House, Maximize2 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { galleryImages, type GalleryImage } from "@/app/rooms/gallery-data";
 import { secondaryCopy } from "@/app/secondary-content";
+import type { Language } from "@/app/site-content";
 import { useLanguage } from "@/components/site/language-provider";
 import { PageHero } from "@/components/site/page-hero";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -18,54 +19,167 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { getSupabaseBrowserClient } from "@/lib/supabase/client";
+import { PUBLIC_GALLERY_IMAGE_COLUMNS } from "@/lib/supabase/public-columns";
+import type { GalleryImageRecord } from "@/lib/supabase/types";
 
-const bedroomImageGroups = ([1, 2, 3, 4] as const).map((room) =>
-  galleryImages.filter((image) => image.room === room),
-);
+function toGalleryImage(record: GalleryImageRecord): GalleryImage | null {
+  if (
+    record.category !== "bedrooms" &&
+    record.category !== "shared" &&
+    record.category !== "outdoors"
+  ) {
+    return null;
+  }
+
+  const src = record.public_url?.trim();
+  if (!src) return null;
+
+  const room =
+    record.room === 1 || record.room === 2 || record.room === 3 || record.room === 4
+      ? record.room
+      : undefined;
+
+  return {
+    id: record.id,
+    src,
+    category: record.category,
+    room,
+    order: Number.isFinite(record.sort_order) ? record.sort_order : 0,
+    alt: { en: record.alt_en, de: record.alt_de, hu: record.alt_hu },
+    caption: {
+      en: record.caption_en,
+      de: record.caption_de,
+      hu: record.caption_hu,
+    },
+  };
+}
+
+function mergeGalleryImages(remoteImages: GalleryImage[]) {
+  if (!remoteImages.length) return [...galleryImages];
+
+  const seenSources = new Set<string>();
+  return [...remoteImages, ...galleryImages].filter((image) => {
+    const sourceKey = image.src.trim().toLocaleLowerCase();
+    if (!sourceKey || seenSources.has(sourceKey)) return false;
+    seenSources.add(sourceKey);
+    return true;
+  });
+}
+
+function getLocalizedGalleryText(
+  image: GalleryImage,
+  field: "alt" | "caption",
+  language: Language,
+) {
+  const translations = image[field];
+  if (!translations) return "";
+
+  return (
+    translations[language]?.trim() ||
+    translations.en?.trim() ||
+    translations.de?.trim() ||
+    translations.hu?.trim() ||
+    ""
+  );
+}
 
 export function RoomsPageContent() {
   const { language } = useLanguage();
   const copy = secondaryCopy[language];
   const t = copy.rooms;
   const [activeImage, setActiveImage] = useState<GalleryImage | null>(null);
+  const [remoteImages, setRemoteImages] = useState<GalleryImage[]>([]);
+  const allGalleryImages = useMemo(() => mergeGalleryImages(remoteImages), [remoteImages]);
+  const bedroomImageGroups = useMemo(
+    () =>
+      ([1, 2, 3, 4] as const).map((room) =>
+        allGalleryImages.filter((image) => image.room === room),
+      ),
+    [allGalleryImages],
+  );
+
+  useEffect(() => {
+    let isActive = true;
+
+    async function loadGalleryImages() {
+      try {
+        const supabase = getSupabaseBrowserClient();
+        const { data, error } = await supabase
+          .from("gallery_images")
+          .select(PUBLIC_GALLERY_IMAGE_COLUMNS)
+          .eq("visible", true)
+          .in("category", ["bedrooms", "shared", "outdoors"])
+          .order("category", { ascending: true })
+          .order("sort_order", { ascending: true });
+
+        if (error) throw error;
+        if (isActive) {
+          setRemoteImages(
+            ((data ?? []) as GalleryImageRecord[])
+              .map(toGalleryImage)
+              .filter((image): image is GalleryImage => Boolean(image)),
+          );
+        }
+      } catch {
+        if (isActive) setRemoteImages([]);
+      }
+    }
+
+    void loadGalleryImages();
+    return () => {
+      isActive = false;
+    };
+  }, []);
 
   const getImageAlt = (image: GalleryImage) => {
+    const localizedAlt = getLocalizedGalleryText(image, "alt", language);
+    if (localizedAlt) return localizedAlt;
+
     if (image.room) {
       return `${t.bedroomNames[image.room - 1]} — ${t.photoLabel} ${image.order}`;
     }
 
     const category =
-      image.category === "shared" ? t.galleryTabs.shared : t.galleryTabs.outdoors;
+      image.category === "bedrooms"
+        ? t.galleryTabs.bedrooms
+        : image.category === "shared"
+          ? t.galleryTabs.shared
+          : t.galleryTabs.outdoors;
     return `${category} — ${t.photoLabel} ${image.order}`;
   };
 
+  const getImageCaption = (image: GalleryImage) =>
+    getLocalizedGalleryText(image, "caption", language);
+
   const showAdjacentImage = (direction: -1 | 1) => {
     if (!activeImage) return;
-    const currentIndex = galleryImages.findIndex((image) => image.src === activeImage.src);
-    const nextIndex = (currentIndex + direction + galleryImages.length) % galleryImages.length;
-    setActiveImage(galleryImages[nextIndex]);
+    const currentIndex = allGalleryImages.findIndex((image) => image.src === activeImage.src);
+    const nextIndex =
+      (currentIndex + direction + allGalleryImages.length) % allGalleryImages.length;
+    setActiveImage(allGalleryImages[nextIndex]);
   };
 
   const galleryTabs = [
-    { value: "all", label: t.galleryTabs.all, images: galleryImages },
+    { value: "all", label: t.galleryTabs.all, images: allGalleryImages },
     {
       value: "bedrooms",
       label: t.galleryTabs.bedrooms,
-      images: galleryImages.filter((image) => image.category === "bedrooms"),
+      images: allGalleryImages.filter((image) => image.category === "bedrooms"),
     },
     {
       value: "shared",
       label: t.galleryTabs.shared,
-      images: galleryImages.filter((image) => image.category === "shared"),
+      images: allGalleryImages.filter((image) => image.category === "shared"),
     },
     {
       value: "outdoors",
       label: t.galleryTabs.outdoors,
-      images: galleryImages.filter((image) => image.category === "outdoors"),
+      images: allGalleryImages.filter((image) => image.category === "outdoors"),
     },
   ] as const;
   const activeImageIndex = activeImage
-    ? galleryImages.findIndex((image) => image.src === activeImage.src)
+    ? allGalleryImages.findIndex((image) => image.src === activeImage.src)
     : -1;
 
   return (
@@ -172,33 +286,42 @@ export function RoomsPageContent() {
             {galleryTabs.map((tab) => (
               <TabsContent key={tab.value} value={tab.value} className="mt-10">
                 <div className="grid auto-rows-[155px] grid-cols-2 gap-3 sm:auto-rows-[210px] sm:gap-5 md:grid-cols-3 xl:grid-cols-4">
-                  {tab.images.map((image, index) => (
-                    <button
-                      key={image.src}
-                      type="button"
-                      onClick={() => setActiveImage(image)}
-                      aria-label={`${t.openImage}: ${getImageAlt(image)}`}
-                      className={`group relative overflow-hidden rounded-[7px] bg-[#ece8e1] text-left shadow-[0_10px_28px_rgba(31,31,31,.07)] outline-none transition focus-visible:ring-2 focus-visible:ring-[#a08f6d] focus-visible:ring-offset-4 ${
-                        index % 11 === 0
-                          ? "col-span-2 row-span-2"
-                          : index % 7 === 3
-                            ? "row-span-2"
-                            : ""
-                      }`}
-                    >
-                      <img
-                        src={image.src}
-                        alt={getImageAlt(image)}
-                        loading="lazy"
-                        decoding="async"
-                        className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
-                      />
-                      <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/20" />
-                      <span className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full bg-white/92 text-[#2d2f33] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
-                        <Maximize2 className="size-4" />
-                      </span>
-                    </button>
-                  ))}
+                  {tab.images.map((image, index) => {
+                    const caption = getImageCaption(image);
+
+                    return (
+                      <button
+                        key={image.id ?? image.src}
+                        type="button"
+                        onClick={() => setActiveImage(image)}
+                        aria-label={`${t.openImage}: ${getImageAlt(image)}`}
+                        className={`group relative overflow-hidden rounded-[7px] bg-[#ece8e1] text-left shadow-[0_10px_28px_rgba(31,31,31,.07)] outline-none transition focus-visible:ring-2 focus-visible:ring-[#a08f6d] focus-visible:ring-offset-4 ${
+                          index % 11 === 0
+                            ? "col-span-2 row-span-2"
+                            : index % 7 === 3
+                              ? "row-span-2"
+                              : ""
+                        }`}
+                      >
+                        <img
+                          src={image.src}
+                          alt={getImageAlt(image)}
+                          loading="lazy"
+                          decoding="async"
+                          className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                        />
+                        <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/35" />
+                        {caption ? (
+                          <span className="absolute bottom-4 left-4 max-w-[calc(100%-4.75rem)] translate-y-2 text-xs font-semibold leading-5 text-white opacity-0 drop-shadow transition group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100">
+                            {caption}
+                          </span>
+                        ) : null}
+                        <span className="absolute bottom-4 right-4 grid size-10 place-items-center rounded-full bg-white/92 text-[#2d2f33] opacity-0 shadow-sm transition group-hover:opacity-100 group-focus-visible:opacity-100">
+                          <Maximize2 className="size-4" />
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </TabsContent>
             ))}
@@ -248,8 +371,13 @@ export function RoomsPageContent() {
                 <ChevronRight className="size-5" />
               </button>
               <span className="absolute bottom-4 left-1/2 -translate-x-1/2 rounded-full bg-black/60 px-4 py-2 text-[11px] font-semibold tracking-[.12em] text-white backdrop-blur-sm">
-                {activeImageIndex + 1} / {galleryImages.length}
+                {activeImageIndex + 1} / {allGalleryImages.length}
               </span>
+              {getImageCaption(activeImage) ? (
+                <span className="absolute bottom-16 left-1/2 w-[calc(100%-2rem)] -translate-x-1/2 rounded bg-black/60 px-3 py-2 text-center text-xs leading-5 text-white backdrop-blur-sm sm:bottom-4 sm:left-4 sm:w-auto sm:max-w-[38%] sm:translate-x-0 sm:text-left">
+                  {getImageCaption(activeImage)}
+                </span>
+              ) : null}
             </div>
           ) : null}
         </DialogContent>

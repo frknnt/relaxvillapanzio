@@ -101,7 +101,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
             aria-label={copy.navigation.menu}
-            className={`grid size-11 place-items-center rounded-full border backdrop-blur-md transition ${subtleBorder} ${
+            className={`grid size-11 place-items-center rounded-full border backdrop-blur-md transition xl:hidden ${subtleBorder} ${
               overlay
                 ? "bg-black/10 hover:bg-white hover:text-[#27282c]"
                 : "bg-[#faf8f5] hover:bg-[#2d2f33] hover:text-white"
@@ -113,7 +113,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
       </div>
 
       {menuOpen ? (
-        <div className="absolute right-5 top-[5.5rem] w-[min(92vw,380px)] origin-top-right rounded-[3px] border border-white/10 bg-[#24262d]/[.98] p-7 text-white shadow-2xl backdrop-blur-xl sm:right-8 lg:top-24">
+        <div className="absolute right-5 top-[5.5rem] w-[min(92vw,380px)] origin-top-right rounded-[3px] border border-white/10 bg-[#24262d]/[.98] p-7 text-white shadow-2xl backdrop-blur-xl sm:right-8 lg:top-24 xl:hidden">
           <nav className="flex flex-col" aria-label="Menu navigation">
             {routes.map(([href, key]) => (
               <Link

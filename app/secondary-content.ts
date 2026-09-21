@@ -6,7 +6,7 @@ export const secondaryCopy = {
       home: "Home",
       about: "About",
       rooms: "Bedrooms & Gallery",
-      blog: "Journal",
+      blog: "Blog",
       contact: "Contact",
       book: "Request to book",
       menu: "Open menu",
@@ -18,48 +18,49 @@ export const secondaryCopy = {
       explore: "Explore",
       booking: "Booking & payment",
       bookingNote:
-        "Your dates are confirmed directly with the host. Payment is then made by bank transfer and the receipt is sent through WhatsApp.",
+        "The host confirms your dates in writing before sending the IBAN. After the transfer, share the receipt through WhatsApp.",
       contact: "Contact",
       contactPending: "Email and WhatsApp details will be added before launch.",
       availability: "Check availability",
       backHome: "Back to home",
     },
     about: {
-      eyebrow: "ABOUT US",
-      title: "About Relax Villa",
+      eyebrow: "BADACSONY, AT YOUR OWN PACE",
+      title: "A house to return to, not just sleep in",
       intro:
-        "Relax Villa is a four-bedroom home in Badacsonytomaj, reserved exclusively for one group at a time.",
-      storyEyebrow: "THE WHOLE PLACE IS YOURS",
-      storyTitle: "Designed around the way groups really stay",
+        "Relax Villa is a private four-bedroom base in Badacsonytomaj for families and friends who want the whole address to themselves.",
+      storyEyebrow: "ONE BOOKING, NO STRANGERS",
+      storyTitle: "Privacy changes the shape of a group trip",
       storyLead:
-        "Some trips are less about a schedule and more about having room to reconnect.",
+        "Everyone can follow the same plan without having to spend every hour in the same room.",
       storyBody:
-        "At Relax Villa, every bedroom and shared space belongs to the same booking. There are no separate room guests, no shared common areas and no need to split your group across different properties.",
+        "The four bedrooms, living areas, kitchen, garden, terrace, pool, hot tub and barrel sauna all belong to one reservation. There are no room-by-room bookings and no common areas shared with other guests.",
       secondBody:
-        "Start the morning around one table, find a quiet corner in the afternoon, then come back together in the evening. The villa gives everyone space without losing the feeling of being together.",
-      directionEyebrow: "OUR VISION & MISSION",
-      visionTitle: "Our vision",
+        "That makes the day easier to shape: breakfast together, separate plans around the lake or hill, then dinner back at your own table. The house gives the group a centre without turning the trip into a timetable.",
+      directionEyebrow: "GOOD TO KNOW",
+      directionTitle: "Simple from booking to check-out",
+      visionTitle: "The villa is only yours",
       visionText:
-        "To be the private villa guests remember as the place where their group could truly slow down, reconnect and enjoy Badacsony together.",
-      missionTitle: "Our mission",
+        "When you book Relax Villa, the four bedrooms, living areas, garden, pool, hot tub and sauna are reserved for your group. No other guests stay on the property.",
+      missionTitle: "You book directly with the host",
       missionText:
-        "To welcome one group at a time into a carefully prepared home, with clear direct booking and the freedom to enjoy every space in complete privacy.",
-      localEyebrow: "AROUND BADACSONYTOMAJ",
-      localTitle: "Local amenities",
+        "Dates and the total price are confirmed in writing. Payment is made by bank transfer only after you receive the official IBAN.",
+      localEyebrow: "AROUND BADACSONY",
+      localTitle: "Lake, hill or wine country?",
       localIntro:
-        "A villa day can stay beautifully simple: explore Badacsony and Lake Balaton, then return to your own pool, garden and shared table.",
+        "Badacsony puts walking trails, Lake Balaton and wine terraces within the same easy-going holiday. Choose one for the day, or combine them without rushing.",
       localFeatures: [
         {
-          title: "Local restaurants",
-          text: "Discover the area's restaurants, cafés and wine terraces, or keep dinner easy around the villa's own table.",
+          title: "Walk Badacsony Hill",
+          text: "Follow the marked paths through the basalt formations and continue to one of the viewpoints over Lake Balaton.",
         },
         {
-          title: "Nature",
-          text: "Make time for Lake Balaton and Badacsony Hill's walking trails and viewpoints, then unwind back at the villa.",
+          title: "Visit the local wine terraces",
+          text: "Spend an afternoon at the cellars around the hill and ask for Kéknyelű, one of Badacsony's bestknown local grape varieties.",
         },
         {
-          title: "Art & culture",
-          text: "Explore the region's local heritage, museums and historic places at your own pace.",
+          title: "Make time for the lake",
+          text: "Plan a beach day, visit a lakeside town or continue into the villages and markets of the Káli Basin.",
         },
       ],
       localImageAlts: [
@@ -68,8 +69,8 @@ export const secondaryCopy = {
         "The shared dining table and kitchen at Relax Villa",
       ],
       faqEyebrow: "RELAX VILLA FAQ",
-      faqTitle: "Frequently asked questions",
-      faqIntro: "Still have a question about your stay? Ask us directly.",
+      faqTitle: "Useful answers before you book",
+      faqIntro: "The practical details matter. If your question is not covered here, ask the host before transferring payment.",
       faqContact: "Contact us",
       faqs: [
         {
@@ -106,25 +107,25 @@ export const secondaryCopy = {
     },
     rooms: {
       eyebrow: "BEDROOMS & GALLERY",
-      title: "Four bedrooms, included in every stay",
+      title: "Four bedrooms. All yours.",
       intro:
-        "Explore the sleeping spaces and shared areas. The bedrooms are shown separately here, but they are always reserved together as part of the complete villa.",
-      notice: "One booking includes all four bedrooms and the villa's shared spaces.",
+        "Two double rooms, one twin room and one flexible family room—all included when you book the villa.",
+      notice: "Your booking includes the complete villa, all four bedrooms and every outdoor area.",
       bedroomNames: ["Bedroom One", "Bedroom Two", "Bedroom Three", "Bedroom Four"],
       bedroomNotes: [
-        "A bright double bedroom with a skylight, television and doors opening toward the balcony.",
-        "A calm double bedroom with bedside lighting, storage and direct balcony access.",
-        "A practical twin room with two separate single beds for family or friends travelling together.",
-        "A flexible room with one double and one single bed, plus balcony access and air conditioning.",
+        "Double room with a skylight, television and doors toward the balcony.",
+        "Double room with bedside lighting, storage and direct balcony access.",
+        "Twin room with two separate single beds for children, friends or guests who prefer their own bed.",
+        "Flexible room with one double and one single bed, balcony access and air conditioning.",
       ],
-      sharedEyebrow: "BEYOND THE BEDROOMS",
-      sharedTitle: "Spaces made to share",
+      sharedEyebrow: "BETWEEN PLANS",
+      sharedTitle: "The rooms that bring everyone back together",
       sharedText:
-        "The kitchen, dining areas and outdoor spaces are all part of the same private stay.",
-      galleryEyebrow: "FULL PHOTO TOUR",
-      galleryTitle: "See every space before you arrive",
+        "Kitchen, dining spaces, garden, terrace and wellness areas are not add-ons; they are the centre of a whole-villa stay.",
+      galleryEyebrow: "THE COMPLETE HOUSE",
+      galleryTitle: "A room-by-room look before you book",
       galleryText:
-        "Browse 38 recent photos of the bedrooms, living spaces, pool, hot tub, sauna and garden.",
+        "Browse 38 current photos of the bedrooms, living areas, pool, hot tub, barrel sauna, terrace and garden.",
       galleryTabs: {
         all: "All photos",
         bedrooms: "Bedrooms",
@@ -138,56 +139,56 @@ export const secondaryCopy = {
       cta: "Request your dates",
     },
     blog: {
-      eyebrow: "RELAX VILLA JOURNAL",
-      title: "Ideas for an easy villa stay",
+      eyebrow: "NOTES FROM BADACSONY",
+      title: "Badacsony without the generic guide",
       intro:
-        "Simple notes for planning your time together, from the first shared breakfast to a slow day around Badacsonytomaj.",
+        "Useful reading for groups who want to understand the place, plan less and use the villa well.",
       read: "Read article",
       articles: [
         {
           slug: "slow-day",
-          category: "LOCAL RHYTHM",
-          title: "A slow day in Badacsonytomaj",
+          category: "HILL & LAKE",
+          title: "Badacsony between lake and basalt",
           excerpt:
-            "Leave space in the plan. Begin nearby, follow the mood of the group and return to the villa without watching the clock.",
+            "The region makes more sense when you see the volcanic hill, the Balaton shore and the vineyards as one landscape.",
           paragraphs: [
-            "A good villa day does not need a long checklist. Start with an unhurried breakfast, decide together what everyone feels like doing and keep the route flexible.",
-            "The most useful plan is often a simple one: one place you would like to see, time for a meal and enough room in the day to enjoy the villa itself.",
+            "Badacsony is a volcanic remnant hill on the northern shore of Lake Balaton. Its basalt formations, viewpoints and vineyards are not separate attractions; they are different readings of the same terrain.",
+            "Choose one trail, cellar or stretch of lakeshore rather than collecting stops. Back at the villa, the pool and terrace leave enough of the day unplanned.",
           ],
         },
         {
           slug: "pack-together",
-          category: "STAY WELL",
-          title: "What to plan for a whole-villa stay",
+          category: "GROUP PLANNING",
+          title: "Four bedrooms, one group: plan the room mix first",
           excerpt:
-            "A little coordination before arrival makes the shared spaces feel effortless from the first evening.",
+            "Ten minutes of room planning before the drive can save an hour of negotiation at the door.",
           paragraphs: [
-            "Agree on arrival times, meal ideas and any essentials before the trip. It keeps the first hours relaxed and lets everyone settle in at their own pace.",
-            "Because the complete villa is yours, think in terms of shared moments as well as individual needs: breakfast together, quiet time and an evening around one table.",
+            "The villa has double, twin and flexible sleeping arrangements. Match them to couples, children and individual sleepers before arrival, and note who needs balcony access or air conditioning most.",
+            "Then agree only the essentials: arrival window, first breakfast and one shared dinner. A whole house works best when the group has a framework, not a minute-by-minute schedule.",
           ],
         },
         {
           slug: "shared-table",
-          category: "AT THE VILLA",
-          title: "Meals made for one shared table",
+          category: "AT THE HOUSE",
+          title: "Pool, sauna, dinner: a villa day with no timetable",
           excerpt:
-            "Keep the menu uncomplicated and make the meal itself part of the time you came to share.",
+            "Some days do not need a destination; the house already has enough ways to change pace.",
           paragraphs: [
-            "Villa meals work best when they are easy to prepare together. Choose a few flexible dishes, divide small tasks and leave plenty of time for conversation.",
-            "The point is not a perfect menu. It is having everyone in one place, with nowhere else they need to be.",
+            "Start outside while the weather is mild, move to the pool, and save the hot tub or barrel sauna for later. Because the spaces are private, the order is entirely yours.",
+            "For dinner, let local market produce or a nearby wine terrace set the tone. What matters is not a complicated menu, but having the table, terrace and evening to yourselves.",
           ],
         },
       ],
     },
     contactPage: {
-      eyebrow: "CONTACT & BOOKING",
-      title: "Contact us",
+      eyebrow: "DATES, DETAILS, DIRECT CONTACT",
+      title: "Ask about your dates",
       intro:
-        "Send your preferred dates for the complete villa. Availability and payment details are confirmed directly with the host.",
-      formEyebrow: "BOOKING ENQUIRY",
-      formTitle: "Get in touch",
+        "Tell us when you would like to stay and who is travelling. The host confirms availability, price and payment details directly.",
+      formEyebrow: "YOUR GROUP",
+      formTitle: "Tell us who is coming",
       formIntro:
-        "All enquiries are for the complete four-bedroom villa. Complete the form and we will prepare your message for the host.",
+        "Every enquiry is for the complete four-bedroom villa. Add the details that help the host answer properly the first time.",
       formFields: {
         name: "Full name",
         email: "Email address",
@@ -198,9 +199,10 @@ export const secondaryCopy = {
         language: "Preferred language",
         message: "Message",
       },
-      formPlaceholder: "Tell us anything that will help us understand your stay.",
-      formSubmit: "Get support",
-      formCopy: "Get support",
+      formPlaceholder: "Children's ages, pets, arrival plans or anything the host should know.",
+      formSubmit: "Send enquiry",
+      formSending: "Sending…",
+      formCopy: "Copy enquiry",
       formRequired: "Required fields are marked with *.",
       formTrust:
         "Your request is not a confirmed booking until the host replies in writing.",
@@ -208,18 +210,21 @@ export const secondaryCopy = {
       formCopied:
         "Online sending is not connected yet. Your message has not been sent; the enquiry details were copied.",
       formDestinationMissing:
-        "Online sending is not connected yet and copying failed. Your information has not been sent.",
-      formReady: "Your enquiry is ready. Please complete sending it in the opened app.",
+        "Your message could not be sent. Please try again or contact us directly by email or WhatsApp.",
+      formNameError: "Please enter your full name using at least 2 characters.",
+      formMessageError: "Please enter a message of at least 10 characters.",
+      formRateLimited: "Too many messages were sent with this email address. Please wait one hour and try again.",
+      formReady: "Your message has been received. We will reply using the contact details you provided.",
       visit: "Villa address",
       write: "Direct contact",
       writeText: "Email and WhatsApp details will appear here once confirmed.",
       map: "Open in maps",
-      processEyebrow: "HOW BOOKING WORKS",
-      processTitle: "A clear three-step booking",
+      processEyebrow: "FROM DATES TO ARRIVAL",
+      processTitle: "A direct booking in three steps",
       steps: [
-        ["01", "Request your dates", "Choose arrival, departure and the number of guests for the complete villa."],
-        ["02", "Receive confirmation", "The host confirms availability and shares the IBAN and payment reference."],
-        ["03", "Send the receipt", "Complete the bank transfer, then send the payment receipt through WhatsApp."],
+        ["01", "Send the essentials", "Choose dates, guest numbers and pets for the complete villa."],
+        ["02", "Get it in writing", "The host confirms availability, total price, IBAN and payment reference."],
+        ["03", "Transfer and keep the reference", "Pay by bank transfer, then send the receipt through WhatsApp."],
       ],
       noteTitle: "Before you transfer",
       note:
@@ -232,7 +237,7 @@ export const secondaryCopy = {
       home: "Start",
       about: "Über uns",
       rooms: "Schlafzimmer & Galerie",
-      blog: "Journal",
+      blog: "Blog",
       contact: "Kontakt",
       book: "Buchung anfragen",
       menu: "Menü öffnen",
@@ -244,48 +249,49 @@ export const secondaryCopy = {
       explore: "Entdecken",
       booking: "Buchung & Zahlung",
       bookingNote:
-        "Ihre Reisedaten werden direkt mit dem Gastgeber bestätigt. Anschließend zahlen Sie per Banküberweisung und senden den Beleg über WhatsApp.",
+        "Der Gastgeber bestätigt Ihre Reisedaten schriftlich, bevor er die IBAN sendet. Nach der Überweisung schicken Sie den Beleg per WhatsApp.",
       contact: "Kontakt",
       contactPending: "E-Mail- und WhatsApp-Daten werden vor dem Start ergänzt.",
       availability: "Verfügbarkeit prüfen",
       backHome: "Zur Startseite",
     },
     about: {
-      eyebrow: "ÜBER UNS",
-      title: "Über Relax Villa",
+      eyebrow: "BADACSONY IM EIGENEN TEMPO",
+      title: "Ein Haus zum Zurückkehren, nicht nur zum Übernachten",
       intro:
-        "Relax Villa ist ein Haus mit vier Schlafzimmern in Badacsonytomaj und wird immer exklusiv an eine Gruppe vermietet.",
-      storyEyebrow: "DIE GANZE VILLA GEHÖRT IHNEN",
-      storyTitle: "Für die Art gestaltet, wie Gruppen wirklich reisen",
+        "Die Relax Villa ist ein privates Haus mit vier Schlafzimmern in Badacsonytomaj – für Familien und Freunde, die eine Adresse ganz für sich möchten.",
+      storyEyebrow: "EINE BUCHUNG, KEINE FREMDEN GÄSTE",
+      storyTitle: "Privatsphäre verändert eine Gruppenreise",
       storyLead:
-        "Bei manchen Reisen geht es weniger um einen Zeitplan als um Raum für echte gemeinsame Zeit.",
+        "Alle können dieselbe Reise teilen, ohne jede Stunde im selben Raum verbringen zu müssen.",
       storyBody:
-        "In der Relax Villa gehören jedes Schlafzimmer und alle Gemeinschaftsbereiche zu derselben Buchung. Es gibt keine weiteren Zimmergäste, keine geteilten Bereiche und Ihre Gruppe muss nicht auf mehrere Unterkünfte verteilt werden.",
+        "Vier Schlafzimmer, Wohnräume, Küche, Garten, Terrasse, Pool, Whirlpool und Fasssauna gehören zu einer einzigen Reservierung. Es gibt keine Zimmerbuchungen und keine Gemeinschaftsflächen mit anderen Gästen.",
       secondBody:
-        "Beginnen Sie den Morgen an einem Tisch, finden Sie am Nachmittag einen ruhigen Platz und kommen Sie abends wieder zusammen. Die Villa bietet Freiraum, ohne das Gefühl der Gemeinschaft zu verlieren.",
-      directionEyebrow: "UNSERE VISION & MISSION",
-      visionTitle: "Unsere Vision",
+        "So lässt sich der Tag leicht gestalten: gemeinsames Frühstück, getrennte Pläne am See oder auf dem Berg und abends wieder am eigenen Tisch. Das Haus gibt der Gruppe einen Mittelpunkt, ohne einen festen Stundenplan vorzugeben.",
+      directionEyebrow: "GUT ZU WISSEN",
+      directionTitle: "Einfach von der Anfrage bis zur Abreise",
+      visionTitle: "Die Villa gehört nur Ihnen",
       visionText:
-        "Eine private Villa zu sein, an die sich Gäste als den Ort erinnern, an dem ihre Gruppe wirklich entschleunigen, sich wieder näherkommen und Badacsony gemeinsam genießen konnte.",
-      missionTitle: "Unsere Mission",
+        "Mit Ihrer Buchung sind vier Schlafzimmer, Wohnräume, Garten, Pool, Whirlpool und Sauna nur für Ihre Gruppe reserviert. Es wohnen keine weiteren Gäste auf dem Grundstück.",
+      missionTitle: "Sie buchen direkt beim Gastgeber",
       missionText:
-        "Jeweils eine Gruppe in einem sorgfältig vorbereiteten Zuhause willkommen zu heißen – mit klarer Direktbuchung und der Freiheit, jeden Bereich vollkommen privat zu genießen.",
-      localEyebrow: "RUND UM BADACSONYTOMAJ",
-      localTitle: "Angebote vor Ort",
+        "Reisedaten und Gesamtpreis werden schriftlich bestätigt. Die Überweisung erfolgt erst, nachdem Sie die offizielle IBAN erhalten haben.",
+      localEyebrow: "RUND UM BADACSONY",
+      localTitle: "See, Berg oder Weinregion?",
       localIntro:
-        "Ein Villentag darf einfach bleiben: Badacsony und den Balaton erkunden und danach an den eigenen Pool, in den Garten und an den gemeinsamen Tisch zurückkehren.",
+        "In Badacsony liegen Wanderwege, Balaton und Weinterrassen nah beieinander. Wählen Sie ein Ziel für den Tag oder verbinden Sie mehrere ohne Eile.",
       localFeatures: [
         {
-          title: "Restaurants in der Region",
-          text: "Entdecken Sie Restaurants, Cafés und Weinterrassen in der Umgebung – oder genießen Sie das Abendessen gemeinsam in der Villa.",
+          title: "Auf den Badacsony wandern",
+          text: "Folgen Sie den markierten Wegen durch die Basaltformationen bis zu einem der Aussichtspunkte über dem Balaton.",
         },
         {
-          title: "Natur",
-          text: "Erleben Sie den Balaton sowie Wanderwege und Aussichtspunkte am Badacsony und entspannen Sie danach wieder in der Villa.",
+          title: "Weinterrassen besuchen",
+          text: "Verbringen Sie einen Nachmittag in den Kellern am Berg und probieren Sie Kéknyelű, eine der bekanntesten Rebsorten Badacsonys.",
         },
         {
-          title: "Kunst & Kultur",
-          text: "Entdecken Sie lokale Geschichte, Museen und historische Orte der Region in Ihrem eigenen Tempo.",
+          title: "Zeit für den Balaton",
+          text: "Planen Sie einen Strandtag, besuchen Sie einen Ort am See oder fahren Sie weiter zu den Dörfern und Märkten im Káli-Becken.",
         },
       ],
       localImageAlts: [
@@ -294,8 +300,8 @@ export const secondaryCopy = {
         "Gemeinsamer Esstisch und Küche in der Relax Villa",
       ],
       faqEyebrow: "RELAX VILLA FAQ",
-      faqTitle: "Häufige Fragen",
-      faqIntro: "Ihre Frage ist noch offen? Kontaktieren Sie uns direkt.",
+      faqTitle: "Wichtige Antworten vor der Buchung",
+      faqIntro: "Die praktischen Details zählen. Ist Ihre Frage nicht dabei, klären Sie sie bitte vor der Überweisung direkt mit dem Gastgeber.",
       faqContact: "Kontakt aufnehmen",
       faqs: [
         {
@@ -332,25 +338,25 @@ export const secondaryCopy = {
     },
     rooms: {
       eyebrow: "SCHLAFZIMMER & GALERIE",
-      title: "Vier Schlafzimmer bei jedem Aufenthalt inklusive",
+      title: "Vier Schlafzimmer. Ganz für Sie.",
       intro:
-        "Entdecken Sie Schlaf- und Gemeinschaftsbereiche. Die Zimmer werden hier einzeln gezeigt, aber immer gemeinsam als komplette Villa reserviert.",
-      notice: "Eine Buchung umfasst alle vier Schlafzimmer und die Gemeinschaftsbereiche der Villa.",
+        "Zwei Doppelzimmer, ein Zweibettzimmer und ein flexibles Familienzimmer – alle in jeder Villenbuchung enthalten.",
+      notice: "Ihre Buchung umfasst die komplette Villa, alle vier Schlafzimmer und sämtliche Außenbereiche.",
       bedroomNames: ["Schlafzimmer 1", "Schlafzimmer 2", "Schlafzimmer 3", "Schlafzimmer 4"],
       bedroomNotes: [
-        "Ein helles Doppelzimmer mit Dachfenster, Fernseher und Türen zum Balkon.",
-        "Ein ruhiges Doppelzimmer mit Nachttischbeleuchtung, Stauraum und direktem Balkonzugang.",
-        "Ein praktisches Zweibettzimmer mit zwei getrennten Einzelbetten für gemeinsam reisende Familien oder Freunde.",
-        "Ein flexibles Zimmer mit einem Doppel- und einem Einzelbett, Balkonzugang und Klimaanlage.",
+        "Doppelzimmer mit Dachfenster, Fernseher und Türen in Richtung Balkon.",
+        "Doppelzimmer mit Nachttischbeleuchtung, Stauraum und direktem Balkonzugang.",
+        "Zweibettzimmer mit zwei getrennten Einzelbetten für Kinder, Freunde oder Gäste, die ein eigenes Bett bevorzugen.",
+        "Flexibles Zimmer mit Doppel- und Einzelbett, Balkonzugang und Klimaanlage.",
       ],
-      sharedEyebrow: "MEHR ALS SCHLAFZIMMER",
-      sharedTitle: "Räume für gemeinsame Zeit",
+      sharedEyebrow: "ZWISCHEN DEN PLÄNEN",
+      sharedTitle: "Räume, in denen alle wieder zusammenkommen",
       sharedText:
-        "Küche, Essbereiche und Außenbereiche gehören vollständig zu Ihrem privaten Aufenthalt.",
-      galleryEyebrow: "VOLLSTÄNDIGER FOTORUNDGANG",
-      galleryTitle: "Sehen Sie jeden Bereich vor Ihrer Anreise",
+        "Küche, Essbereiche, Garten, Terrasse und Wellnessbereiche sind keine Extras, sondern das Zentrum eines Aufenthalts im ganzen Haus.",
+      galleryEyebrow: "DAS KOMPLETTE HAUS",
+      galleryTitle: "Zimmer für Zimmer ansehen, bevor Sie buchen",
       galleryText:
-        "Entdecken Sie 38 aktuelle Fotos der Schlafzimmer, Wohnbereiche, des Pools, Whirlpools, der Sauna und des Gartens.",
+        "Entdecken Sie 38 aktuelle Fotos von Schlafzimmern, Wohnbereichen, Pool, Whirlpool, Fasssauna, Terrasse und Garten.",
       galleryTabs: {
         all: "Alle Fotos",
         bedrooms: "Schlafzimmer",
@@ -364,56 +370,56 @@ export const secondaryCopy = {
       cta: "Reisedaten anfragen",
     },
     blog: {
-      eyebrow: "RELAX VILLA JOURNAL",
-      title: "Ideen für einen entspannten Villenaufenthalt",
+      eyebrow: "NOTIZEN AUS BADACSONY",
+      title: "Badacsony ohne austauschbaren Reiseführer",
       intro:
-        "Einfache Anregungen für Ihre gemeinsame Zeit – vom ersten Frühstück bis zu einem ruhigen Tag rund um Badacsonytomaj.",
+        "Nützliche Hinweise für Gruppen, die den Ort verstehen, weniger verplanen und das Haus gut nutzen möchten.",
       read: "Artikel lesen",
       articles: [
         {
           slug: "slow-day",
-          category: "REGIONALER RHYTHMUS",
-          title: "Ein langsamer Tag in Badacsonytomaj",
+          category: "BERG & SEE",
+          title: "Badacsony zwischen Balaton und Basalt",
           excerpt:
-            "Lassen Sie Platz im Plan, starten Sie in der Nähe und kehren Sie ohne Blick auf die Uhr zur Villa zurück.",
+            "Die Region erschließt sich am besten, wenn Vulkanberg, Balatonufer und Weinberge als eine Landschaft gelesen werden.",
           paragraphs: [
-            "Ein guter Villentag braucht keine lange Checkliste. Beginnen Sie mit einem ruhigen Frühstück, entscheiden Sie gemeinsam nach Stimmung und halten Sie den Weg flexibel.",
-            "Oft genügt ein einfacher Plan: ein Ort, den Sie sehen möchten, Zeit für eine Mahlzeit und genug Raum, um auch die Villa selbst zu genießen.",
+            "Der Badacsony ist ein vulkanischer Zeugenberg am Nordufer des Balaton. Basaltformationen, Aussichtspunkte und Weinberge sind keine getrennten Attraktionen, sondern verschiedene Seiten desselben Geländes.",
+            "Wählen Sie lieber einen Weg, einen Weinkeller oder einen Abschnitt am See, statt möglichst viele Stopps zu sammeln. Pool und Terrasse lassen anschließend genug Raum für einen ungeplanten Nachmittag.",
           ],
         },
         {
           slug: "pack-together",
-          category: "GUT ANKOMMEN",
-          title: "Was Sie für einen Villenaufenthalt planen können",
+          category: "GRUPPENPLANUNG",
+          title: "Vier Schlafzimmer, eine Gruppe: zuerst die Zimmer verteilen",
           excerpt:
-            "Ein wenig Abstimmung vor der Anreise macht die gemeinsamen Räume vom ersten Abend an unkompliziert.",
+            "Zehn Minuten Zimmerplanung vor der Fahrt ersparen eine Stunde Diskussion an der Haustür.",
           paragraphs: [
-            "Stimmen Sie Ankunftszeiten, Essensideen und wichtige Dinge vor der Reise ab. So bleiben die ersten Stunden entspannt und jeder kann in Ruhe ankommen.",
-            "Da die ganze Villa Ihnen gehört, denken Sie an gemeinsame Momente ebenso wie an individuelle Bedürfnisse: Frühstück, Ruhezeit und einen Abend an einem Tisch.",
+            "Die Villa bietet Doppel-, Zweibett- und flexible Schlafmöglichkeiten. Ordnen Sie sie Paaren, Kindern und Einzelschläfern vorab zu und berücksichtigen Sie, wer Balkon oder Klimaanlage besonders schätzt.",
+            "Danach genügen die Eckpunkte: Ankunftsfenster, erstes Frühstück und ein gemeinsames Abendessen. Ein ganzes Haus funktioniert mit einem Rahmen besser als mit einem minutiösen Programm.",
           ],
         },
         {
           slug: "shared-table",
-          category: "IN DER VILLA",
-          title: "Mahlzeiten an einem gemeinsamen Tisch",
+          category: "IM HAUS",
+          title: "Pool, Sauna, Abendessen: ein Villentag ohne Zeitplan",
           excerpt:
-            "Halten Sie das Menü unkompliziert und machen Sie die Mahlzeit selbst zu einem Teil Ihrer gemeinsamen Zeit.",
+            "Manche Tage brauchen kein Ausflugsziel; das Haus bietet bereits genug Möglichkeiten für einen Tempowechsel.",
           paragraphs: [
-            "Villengerichte gelingen am besten, wenn sie gemeinsam einfach zuzubereiten sind. Wählen Sie flexible Speisen, verteilen Sie kleine Aufgaben und lassen Sie Zeit für Gespräche.",
-            "Es geht nicht um ein perfektes Menü, sondern darum, alle an einem Ort zu haben – ohne den nächsten Termin im Blick.",
+            "Beginnen Sie draußen, solange das Wetter mild ist, wechseln Sie an den Pool und heben Sie Whirlpool oder Fasssauna für später auf. Da alles privat ist, bestimmen Sie die Reihenfolge.",
+            "Für das Abendessen können Marktprodukte aus der Region oder eine nahe Weinterrasse den Ton angeben. Entscheidend ist nicht ein kompliziertes Menü, sondern Tisch, Terrasse und Abend für sich zu haben.",
           ],
         },
       ],
     },
     contactPage: {
-      eyebrow: "KONTAKT & BUCHUNG",
-      title: "Kontakt",
+      eyebrow: "TERMINE, DETAILS, DIREKTER KONTAKT",
+      title: "Wunschdaten anfragen",
       intro:
-        "Senden Sie Ihre Wunschdaten für die komplette Villa. Verfügbarkeit und Zahlungsdaten werden direkt mit dem Gastgeber bestätigt.",
-      formEyebrow: "BUCHUNGSANFRAGE",
-      formTitle: "Kontaktieren Sie uns",
+        "Nennen Sie uns Reisedaten und Gruppengröße. Der Gastgeber bestätigt Verfügbarkeit, Preis und Zahlungsdaten direkt.",
+      formEyebrow: "IHRE GRUPPE",
+      formTitle: "Wer reist mit?",
       formIntro:
-        "Alle Anfragen gelten für die komplette Villa mit vier Schlafzimmern. Füllen Sie das Formular aus und wir bereiten Ihre Nachricht an den Gastgeber vor.",
+        "Jede Anfrage gilt für die komplette Villa mit vier Schlafzimmern. Ergänzen Sie die Angaben, mit denen der Gastgeber gleich beim ersten Mal konkret antworten kann.",
       formFields: {
         name: "Vollständiger Name",
         email: "E-Mail-Adresse",
@@ -424,9 +430,10 @@ export const secondaryCopy = {
         language: "Bevorzugte Sprache",
         message: "Nachricht",
       },
-      formPlaceholder: "Teilen Sie uns mit, was für Ihren Aufenthalt wichtig ist.",
-      formSubmit: "Unterstützung erhalten",
-      formCopy: "Unterstützung erhalten",
+      formPlaceholder: "Alter der Kinder, Haustiere, Anreisepläne oder wichtige Hinweise für den Gastgeber.",
+      formSubmit: "Anfrage senden",
+      formSending: "Wird gesendet…",
+      formCopy: "Anfrage kopieren",
       formRequired: "Pflichtfelder sind mit * gekennzeichnet.",
       formTrust:
         "Ihre Anfrage ist erst nach der schriftlichen Bestätigung durch den Gastgeber eine bestätigte Buchung.",
@@ -434,18 +441,21 @@ export const secondaryCopy = {
       formCopied:
         "Der Online-Versand ist noch nicht eingerichtet. Ihre Nachricht wurde nicht gesendet; die Anfrage wurde kopiert.",
       formDestinationMissing:
-        "Der Online-Versand ist noch nicht eingerichtet und das Kopieren ist fehlgeschlagen. Ihre Angaben wurden nicht gesendet.",
-      formReady: "Ihre Anfrage ist vorbereitet. Bitte senden Sie sie in der geöffneten App ab.",
+        "Ihre Nachricht konnte nicht gesendet werden. Versuchen Sie es erneut oder kontaktieren Sie uns direkt per E-Mail oder WhatsApp.",
+      formNameError: "Bitte geben Sie Ihren vollständigen Namen mit mindestens 2 Zeichen ein.",
+      formMessageError: "Bitte geben Sie eine Nachricht mit mindestens 10 Zeichen ein.",
+      formRateLimited: "Mit dieser E-Mail-Adresse wurden zu viele Nachrichten gesendet. Bitte warten Sie eine Stunde und versuchen Sie es erneut.",
+      formReady: "Ihre Nachricht ist eingegangen. Wir antworten über die von Ihnen angegebenen Kontaktdaten.",
       visit: "Adresse der Villa",
       write: "Direkter Kontakt",
       writeText: "E-Mail- und WhatsApp-Daten erscheinen hier nach der Bestätigung.",
       map: "In Karten öffnen",
-      processEyebrow: "SO FUNKTIONIERT DIE BUCHUNG",
-      processTitle: "Drei klare Buchungsschritte",
+      processEyebrow: "VOM WUNSCHTERMIN ZUR ANREISE",
+      processTitle: "Direktbuchung in drei Schritten",
       steps: [
-        ["01", "Reisedaten anfragen", "Wählen Sie Anreise, Abreise und Gästezahl für die komplette Villa."],
-        ["02", "Bestätigung erhalten", "Der Gastgeber bestätigt die Verfügbarkeit und sendet IBAN und Verwendungszweck."],
-        ["03", "Beleg senden", "Überweisen Sie den Betrag und senden Sie den Zahlungsbeleg über WhatsApp."],
+        ["01", "Eckdaten senden", "Wählen Sie Reisedaten, Gästezahl und Haustiere für die komplette Villa."],
+        ["02", "Schriftliche Bestätigung", "Der Gastgeber bestätigt Verfügbarkeit, Gesamtpreis, IBAN und Verwendungszweck."],
+        ["03", "Überweisen und Referenz sichern", "Zahlen Sie per Banküberweisung und senden Sie den Beleg über WhatsApp."],
       ],
       noteTitle: "Vor der Überweisung",
       note:
@@ -458,7 +468,7 @@ export const secondaryCopy = {
       home: "Főoldal",
       about: "Rólunk",
       rooms: "Hálószobák és galéria",
-      blog: "Napló",
+      blog: "Blog",
       contact: "Kapcsolat",
       book: "Foglalási kérés",
       menu: "Menü megnyitása",
@@ -470,48 +480,49 @@ export const secondaryCopy = {
       explore: "Felfedezés",
       booking: "Foglalás és fizetés",
       bookingNote:
-        "Az időpontot közvetlenül a házigazda igazolja vissza. Ezután banki átutalással fizethet, a bizonylatot pedig WhatsAppon küldheti el.",
+        "Az időpontot a házigazda írásban visszaigazolja, és csak ezután küldi el az IBAN-t. Átutalás után a bizonylat WhatsAppon küldhető.",
       contact: "Kapcsolat",
       contactPending: "Az e-mail- és WhatsApp-adatok az indulás előtt kerülnek fel.",
       availability: "Szabad időpontok",
       backHome: "Vissza a főoldalra",
     },
     about: {
-      eyebrow: "RÓLUNK",
-      title: "A Relax Villáról",
+      eyebrow: "BADACSONY, A SAJÁT RITMUSUKBAN",
+      title: "Egy ház, ahová jó visszatérni",
       intro:
-        "A Relax Villa négy hálószobás ház Badacsonytomajban, amelyet egyszerre mindig csak egy társaság használ.",
-      storyEyebrow: "AZ EGÉSZ VILLA AZ ÖNÖKÉ",
-      storyTitle: "Olyan pihenéshez tervezve, ahogyan egy társaság igazán együtt van",
+        "A Relax Villa négy hálószobás, privát badacsonytomaji bázis családoknak és baráti társaságoknak, akik a teljes házat maguknak szeretnék.",
+      storyEyebrow: "EGY FOGLALÁS, NINCSENEK IDEGEN VENDÉGEK",
+      storyTitle: "A privát tér más ritmust ad a közös utazásnak",
       storyLead:
-        "Vannak utazások, amelyek nem a sűrű programról, hanem a zavartalan közös időről szólnak.",
+        "Ugyanazt az utazást élhetik meg úgy, hogy nem kell minden órát ugyanabban a helyiségben tölteni.",
       storyBody:
-        "A Relax Villában minden hálószoba és közös tér ugyanahhoz a foglaláshoz tartozik. Nincsenek más szobavendégek vagy megosztott helyiségek, és a társaságnak nem kell több szálláshely között oszlania.",
+        "A négy hálószoba, a nappali terek, a konyha, a kert, a terasz, a medence, a jacuzzi és a hordószauna egyetlen foglaláshoz tartozik. Nincs szobánkénti kiadás, és nincs más vendégekkel megosztott közös tér.",
       secondBody:
-        "Indítsák a reggelt egy asztalnál, délután találjanak egy csendes sarkot, este pedig legyenek újra együtt. A villa mindenkinek teret ad, miközben megőrzi az együttlét érzését.",
-      directionEyebrow: "JÖVŐKÉPÜNK ÉS KÜLDETÉSÜNK",
-      visionTitle: "Jövőképünk",
+        "Így könnyű alakítani a napot: közös reggeli, külön programok a tónál vagy a hegyen, majd vacsora a saját asztaluknál. A ház közös pontot ad, de nem kényszeríti menetrendbe a társaságot.",
+      directionEyebrow: "JÓ TUDNI",
+      directionTitle: "Egyszerűen az érdeklődéstől a távozásig",
+      visionTitle: "A villa csak az Önöké",
       visionText:
-        "Olyan privát villává válni, amelyre vendégeink úgy emlékeznek: itt társaságuk valóban lelassulhatott, újra egymásra találhatott, és együtt élvezhette Badacsony hangulatát.",
-      missionTitle: "Küldetésünk",
+        "Foglaláskor a négy hálószoba, a nappali terek, a kert, a medence, a jacuzzi és a szauna kizárólag az Önök társaságáé. Más vendég nem tartózkodik az ingatlanon.",
+      missionTitle: "Közvetlenül a házigazdánál foglalnak",
       missionText:
-        "Egyszerre egy társaságot fogadni gondosan előkészített otthonunkban, átlátható közvetlen foglalással és azzal a szabadsággal, hogy minden teret teljesen privát módon élvezhessenek.",
-      localEyebrow: "BADACSONYTOMAJ KÖRNYÉKÉN",
-      localTitle: "Helyi élmények",
+        "Az időpontot és a teljes árat írásban igazoljuk vissza. Átutalni csak a hivatalos IBAN megérkezése után kell.",
+      localEyebrow: "BADACSONY KÖRNYÉKÉN",
+      localTitle: "Tó, hegy vagy borvidék?",
       localIntro:
-        "Egy villában töltött nap lehet igazán egyszerű: fedezzék fel Badacsonyt és a Balatont, majd térjenek vissza a saját medencéhez, kerthez és közös asztalhoz.",
+        "Badacsonyban a túraútvonalak, a Balaton és a borteraszok közel vannak egymáshoz. Válasszanak egyet a napra, vagy kényelmesen kapcsolják össze őket.",
       localFeatures: [
         {
-          title: "Helyi éttermek",
-          text: "Fedezzék fel a környék éttermeit, kávézóit és borteraszait, vagy vacsorázzanak együtt a villa saját asztalánál.",
+          title: "Túra a Badacsony-hegyen",
+          text: "Kövessék a jelzett utakat a bazaltformák között, és menjenek fel a Balatonra néző kilátópontok egyikéhez.",
         },
         {
-          title: "Természet",
-          text: "Élvezzék a Balatont, valamint a Badacsony túraútvonalait és kilátóhelyeit, majd pihenjenek újra a villában.",
+          title: "Borteraszok és pincék",
+          text: "Töltsenek egy délutánt a hegy pincéinél, és kóstolják meg a Kéknyelűt, Badacsony egyik legismertebb helyi szőlőfajtáját.",
         },
         {
-          title: "Művészet és kultúra",
-          text: "Ismerjék meg a térség helytörténetét, múzeumait és történelmi helyszíneit a saját tempójukban.",
+          title: "Egy nap a Balatonnál",
+          text: "Tervezzék strandolással a napot, látogassanak meg egy tóparti települést, vagy induljanak tovább a Káli-medence falvai és piacai felé.",
         },
       ],
       localImageAlts: [
@@ -520,8 +531,9 @@ export const secondaryCopy = {
         "Közös étkezőasztal és konyha a Relax Villában",
       ],
       faqEyebrow: "RELAX VILLA GYIK",
-      faqTitle: "Gyakori kérdések",
-      faqIntro: "Nem találják a választ? Keressenek minket közvetlenül.",
+      faqTitle: "Hasznos válaszok foglalás előtt",
+      faqIntro:
+        "A gyakorlati részletek számítanak. Ha valamire itt nincs válasz, átutalás előtt kérdezzék meg közvetlenül a házigazdát.",
       faqContact: "Kapcsolatfelvétel",
       faqs: [
         {
@@ -558,25 +570,26 @@ export const secondaryCopy = {
     },
     rooms: {
       eyebrow: "HÁLÓSZOBÁK ÉS GALÉRIA",
-      title: "Négy hálószoba minden foglalásban",
+      title: "Négy hálószoba. Mind az Önöké.",
       intro:
-        "Tekintsék meg a háló- és közös tereket. A szobákat itt külön mutatjuk be, de mindig együtt, a teljes villa részeként foglalhatók.",
-      notice: "Egy foglalás mind a négy hálószobát és a villa közös tereit is tartalmazza.",
+        "Két franciaágyas szoba, egy kétágyas szoba és egy rugalmas családi szoba – mindegyik a villafoglalás része.",
+      notice:
+        "A foglalás a teljes villát, mind a négy hálószobát és minden kültéri teret tartalmazza.",
       bedroomNames: ["1. hálószoba", "2. hálószoba", "3. hálószoba", "4. hálószoba"],
       bedroomNotes: [
-        "Világos franciaágyas szoba tetőablakkal, televízióval és erkélyre nyíló ajtóval.",
-        "Nyugodt franciaágyas szoba éjjeli világítással, tárolóhellyel és közvetlen erkélykapcsolattal.",
-        "Praktikus kétágyas szoba két külön ággyal, együtt utazó családoknak vagy barátoknak.",
+        "Franciaágyas szoba tetőablakkal, televízióval és erkély felé nyíló ajtóval.",
+        "Franciaágyas szoba éjjeli világítással, tárolóhellyel és közvetlen erkélykapcsolattal.",
+        "Kétágyas szoba két külön ággyal gyerekeknek, barátoknak vagy külön ágyat választó vendégeknek.",
         "Rugalmas elrendezésű szoba egy franciaággyal és egy egyszemélyes ággyal, erkéllyel és légkondicionálóval.",
       ],
-      sharedEyebrow: "A HÁLÓSZOBÁKON TÚL",
-      sharedTitle: "Közös pillanatokhoz tervezett terek",
+      sharedEyebrow: "A PROGRAMOK KÖZÖTT",
+      sharedTitle: "Terek, ahol újra együtt van a társaság",
       sharedText:
-        "A konyha, az étkezők és a kültéri terek mind a privát pihenés részei.",
-      galleryEyebrow: "TELJES FOTÓGALÉRIA",
-      galleryTitle: "Nézzenek meg minden teret érkezés előtt",
+        "A konyha, az étkezők, a kert, a terasz és a wellness-terek nem kiegészítők, hanem a teljes-villa pihenés középpontjai.",
+      galleryEyebrow: "AZ EGÉSZ HÁZ",
+      galleryTitle: "Szobáról szobára, még foglalás előtt",
       galleryText:
-        "Böngésszenek 38 friss fotót a hálószobákról, közös terekről, medencéről, jakuzziról, szaunáról és a kertről.",
+        "Nézzenek meg 38 friss fotót a hálószobákról, nappali terekről, medencéről, jacuzziról, hordószaunáról, teraszról és kertről.",
       galleryTabs: {
         all: "Összes fotó",
         bedrooms: "Hálószobák",
@@ -590,56 +603,56 @@ export const secondaryCopy = {
       cta: "Időpont kérése",
     },
     blog: {
-      eyebrow: "RELAX VILLA NAPLÓ",
-      title: "Ötletek egy könnyed villapihenéshez",
+      eyebrow: "JEGYZETEK BADACSONYBÓL",
+      title: "Badacsony a sablonos útikalauzon túl",
       intro:
-        "Egyszerű gondolatok a közös idő megtervezéséhez, az első reggelitől egy nyugodt badacsonytomaji napig.",
+        "Hasznos olvasnivaló azoknak a társaságoknak, akik szeretnék érteni a helyet, kevesebbet tervezni és jól használni a villát.",
       read: "Cikk olvasása",
       articles: [
         {
           slug: "slow-day",
-          category: "HELYI RITMUS",
-          title: "Egy lassú nap Badacsonytomajban",
+          category: "HEGY ÉS TÓ",
+          title: "Badacsony a Balaton és a bazalt között",
           excerpt:
-            "Hagyjanak helyet a tervben, induljanak a közelből, és térjenek vissza a villába az óra figyelése nélkül.",
+            "A táj akkor áll össze, ha a vulkanikus hegyet, a Balaton-partot és a szőlőket egy egységként nézik.",
           paragraphs: [
-            "Egy jó villanaphoz nem kell hosszú programlista. Kezdjék egy ráérős reggelivel, döntsenek együtt az aznapi hangulat szerint, és maradjon rugalmas az útvonal.",
-            "Gyakran egy egyszerű terv a leghasznosabb: egy hely, amelyet szeretnének látni, idő egy közös étkezésre és elég tér magának a villának az élvezetéhez.",
+            "A Badacsony vulkanikus tanúhegy a Balaton északi partján. A bazaltformák, a kilátópontok és a szőlőterületek nem külön látnivalók, hanem ugyanannak a tájnak eltérő olvasatai.",
+            "Sok megálló helyett válasszanak egy útvonalat, pincét vagy partszakaszt. A villába visszatérve a medence és a terasz elég teret hagy a nap hátralévő, tervezetlen részének.",
           ],
         },
         {
           slug: "pack-together",
-          category: "KÖNNYŰ ÉRKEZÉS",
-          title: "Mire érdemes készülni egy teljes-villa pihenéshez",
+          category: "CSOPORTOS TERVEZÉS",
+          title: "Négy hálószoba, egy társaság: először a szobákat osszák el",
           excerpt:
-            "Egy kis egyeztetés indulás előtt már az első estétől könnyeddé teszi a közös tereket.",
+            "Tíz perc egyeztetés indulás előtt egyórás vitát spórolhat meg az ajtóban.",
           paragraphs: [
-            "Egyeztessék az érkezési időt, az étkezési ötleteket és a fontos dolgokat még az utazás előtt. Így az első órák nyugodtak maradnak, és mindenki a saját tempójában érkezhet meg.",
-            "Mivel az egész villa az Önöké, az egyéni igények mellett gondoljanak a közös pillanatokra is: reggelire, csendes időre és egy estére egy asztal körül.",
+            "A villában franciaágyas, kétágyas és rugalmas elrendezésű szobák vannak. Érkezés előtt rendeljék őket párokhoz, gyerekekhez és külön alvókhoz, és vegyék figyelembe, kinek fontosabb az erkély vagy a légkondicionálás.",
+            "Ezután elég a lényegben megegyezni: érkezési idősáv, első reggeli és egy közös vacsora. Egy teljes ház kerettel működik jól, nem percre pontos programmal.",
           ],
         },
         {
           slug: "shared-table",
           category: "A VILLÁBAN",
-          title: "Közös étkezések egy asztal körül",
+          title: "Medence, szauna, vacsora: egy villanap menetrend nélkül",
           excerpt:
-            "Legyen egyszerű a menü, és váljon maga az étkezés is a közösen töltött idő részévé.",
+            "Van, amikor nem kell úti cél; a ház önmagában is elég lehetőséget ad a ritmusváltásra.",
           paragraphs: [
-            "A villában azok az ételek működnek a legjobban, amelyeket könnyű együtt elkészíteni. Válasszanak rugalmas fogásokat, osszák fel az apró feladatokat, és hagyjanak időt a beszélgetésre.",
-            "Nem a tökéletes menü a lényeg, hanem az, hogy mindenki egy helyen legyen, és sehová se kelljen sietni.",
+            "Kezdjék kint, amíg kellemes az idő, folytassák a medencénél, a jacuzzit vagy a hordószaunát pedig hagyják későbbre. Mivel minden privát, a sorrend teljesen az Önöké.",
+            "A vacsora hangulatát adhatják helyi piaci alapanyagok vagy egy közeli borterasz. Nem a bonyolult menü a fontos, hanem hogy az asztal, a terasz és az este csak az Önöké.",
           ],
         },
       ],
     },
     contactPage: {
-      eyebrow: "KAPCSOLAT ÉS FOGLALÁS",
-      title: "Kapcsolat",
+      eyebrow: "IDŐPONTOK, RÉSZLETEK, KÖZVETLEN KAPCSOLAT",
+      title: "Kérdezzenek rá a kívánt időpontra",
       intro:
-        "Küldjék el a teljes villára vonatkozó kívánt időpontot. Az elérhetőséget és a fizetési adatokat közvetlenül a házigazda igazolja vissza.",
-      formEyebrow: "FOGLALÁSI ÉRDEKLŐDÉS",
-      formTitle: "Lépjenek kapcsolatba velünk",
+        "Írják meg, mikor érkeznének és kik utaznak. A házigazda közvetlenül igazolja vissza az elérhetőséget, az árat és a fizetési adatokat.",
+      formEyebrow: "A TÁRSASÁG",
+      formTitle: "Kik érkeznek?",
       formIntro:
-        "Minden érdeklődés a teljes, négy hálószobás villára vonatkozik. Töltsék ki az űrlapot, mi pedig előkészítjük az üzenetet a házigazdának.",
+        "Minden érdeklődés a teljes, négy hálószobás villára vonatkozik. Adják meg azokat a részleteket, amelyekkel a házigazda már elsőre pontos választ tud adni.",
       formFields: {
         name: "Teljes név",
         email: "E-mail-cím",
@@ -650,9 +663,11 @@ export const secondaryCopy = {
         language: "Kapcsolattartás nyelve",
         message: "Üzenet",
       },
-      formPlaceholder: "Írják meg, mi segítene a pihenésük megtervezésében.",
-      formSubmit: "Segítség kérése",
-      formCopy: "Segítség kérése",
+      formPlaceholder:
+        "Gyerekek életkora, háziállatok, érkezési terv vagy bármi, amit a házigazdának tudnia érdemes.",
+      formSubmit: "Érdeklődés elküldése",
+      formSending: "Küldés…",
+      formCopy: "Érdeklődés másolása",
       formRequired: "A kötelező mezőket * jelöli.",
       formTrust:
         "A kérés csak a házigazda írásos visszaigazolása után válik megerősített foglalássá.",
@@ -660,18 +675,21 @@ export const secondaryCopy = {
       formCopied:
         "Az online küldés még nincs beállítva. Az üzenetet nem küldtük el; a kérés adatait kimásoltuk.",
       formDestinationMissing:
-        "Az online küldés még nincs beállítva, és a másolás nem sikerült. Az adatokat nem küldtük el.",
-      formReady: "Az érdeklődés elkészült. Kérjük, küldjék el a megnyitott alkalmazásban.",
+        "Az üzenetet nem sikerült elküldeni. Próbálják újra, vagy keressék a szállásadót közvetlenül e-mailben vagy WhatsAppon.",
+      formNameError: "Kérjük, legalább 2 karakterrel adják meg a teljes nevüket.",
+      formMessageError: "Kérjük, legalább 10 karakteres üzenetet írjanak.",
+      formRateLimited: "Ezzel az e-mail-címmel túl sok üzenetet küldtek. Kérjük, várjanak egy órát, majd próbálják újra.",
+      formReady: "Az üzenet megérkezett. A megadott elérhetőségek egyikén válaszolunk.",
       visit: "A villa címe",
       write: "Közvetlen kapcsolat",
       writeText: "A megerősített e-mail- és WhatsApp-adatok itt jelennek majd meg.",
       map: "Megnyitás térképen",
-      processEyebrow: "A FOGLALÁS MENETE",
-      processTitle: "Három átlátható lépés",
+      processEyebrow: "AZ IDŐPONTTÓL AZ ÉRKEZÉSIG",
+      processTitle: "Közvetlen foglalás három lépésben",
       steps: [
-        ["01", "Időpont kérése", "Válasszák ki az érkezést, távozást és a vendégek számát a teljes villához."],
-        ["02", "Visszaigazolás", "A házigazda megerősíti az elérhetőséget, majd elküldi az IBAN-t és a közleményt."],
-        ["03", "Bizonylat küldése", "Az átutalás után küldjék el a fizetési bizonylatot WhatsAppon."],
+        ["01", "A lényeg elküldése", "Válasszák ki az időpontot, a vendégek és a háziállatok számát a teljes villához."],
+        ["02", "Írásos visszaigazolás", "A házigazda megerősíti az elérhetőséget, a teljes árat, az IBAN-t és a közleményt."],
+        ["03", "Átutalás és hivatkozás", "Fizessenek banki átutalással, majd küldjék el a bizonylatot WhatsAppon."],
       ],
       noteTitle: "Átutalás előtt",
       note:

@@ -1,7 +1,7 @@
 "use client";
 
-import { ArrowRight, Mail, MapPin, MessageCircle, Send } from "lucide-react";
-import { useState, type FormEvent, type ReactNode } from "react";
+import { ArrowRight, LoaderCircle, Mail, MapPin, MessageCircle, Send } from "lucide-react";
+import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 
 import { secondaryCopy } from "@/app/secondary-content";
 import { CONTACT_EMAIL, WHATSAPP_NUMBER } from "@/app/site-config";
@@ -19,6 +19,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  getSupabaseBrowserClient,
+  isSupabaseConfigured,
+} from "@/lib/supabase/client";
 
 export function ContactPageContent() {
   const { language } = useLanguage();
@@ -28,46 +32,96 @@ export function ContactPageContent() {
     message: string;
     tone: "success" | "error";
   } | null>(null);
-  const deliveryConfigured = Boolean(WHATSAPP_NUMBER || CONTACT_EMAIL);
+  const [submitting, setSubmitting] = useState(false);
+  const [effectiveWhatsapp, setEffectiveWhatsapp] = useState(WHATSAPP_NUMBER);
+  const [effectiveEmail, setEffectiveEmail] = useState(CONTACT_EMAIL);
   const mapsUrl = "https://www.google.com/maps/search/?api=1&query=8257%20Badacsonytomaj%2C%20F%C3%BCredi%20%C3%BAt%205";
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+
+    let active = true;
+    void getSupabaseBrowserClient()
+      .from("booking_settings")
+      .select("whatsapp_number, contact_email")
+      .eq("id", 1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (active && data?.whatsapp_number) {
+          setEffectiveWhatsapp(String(data.whatsapp_number));
+        }
+        if (active && data?.contact_email) {
+          setEffectiveEmail(String(data.contact_email));
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormStatus(null);
+    const formElement = event.currentTarget;
 
-    const data = new FormData(event.currentTarget);
-    const message = [
-      "Relax Villa booking enquiry",
-      `${t.formFields.name}: ${String(data.get("name") ?? "")}`,
-      `${t.formFields.email}: ${String(data.get("email") ?? "")}`,
-      `${t.formFields.whatsapp}: ${String(data.get("whatsapp") ?? "-")}`,
-      `${t.formFields.language}: ${String(data.get("preferredLanguage") ?? language)}`,
-      `${t.formFields.message}: ${String(data.get("message") ?? "")}`,
-    ].join("\n");
+    const data = new FormData(formElement);
+    const website = String(data.get("website") ?? "");
+    const name = String(data.get("name") ?? "").trim();
+    const email = String(data.get("email") ?? "").trim().toLowerCase();
+    const phone = String(data.get("whatsapp") ?? "").trim();
+    const preferredLanguage = String(data.get("preferredLanguage") ?? language);
+    const message = String(data.get("message") ?? "").trim();
 
-    if (WHATSAPP_NUMBER) {
-      window.open(
-        `https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`,
-        "_blank",
-        "noopener,noreferrer",
-      );
-      setFormStatus({ message: t.formReady, tone: "success" });
+    if (name.length < 2) {
+      setFormStatus({ message: t.formNameError, tone: "error" });
+      const nameField = formElement.elements.namedItem("name");
+      if (nameField instanceof HTMLElement) nameField.focus();
       return;
     }
 
-    if (CONTACT_EMAIL) {
-      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
-        "Relax Villa booking enquiry",
-      )}&body=${encodeURIComponent(message)}`;
-      setFormStatus({ message: t.formReady, tone: "success" });
+    if (message.length < 10) {
+      setFormStatus({ message: t.formMessageError, tone: "error" });
+      const messageField = formElement.elements.namedItem("message");
+      if (messageField instanceof HTMLElement) messageField.focus();
       return;
     }
 
     try {
-      await navigator.clipboard.writeText(message);
-      setFormStatus({ message: t.formCopied, tone: "success" });
-    } catch {
-      setFormStatus({ message: t.formDestinationMissing, tone: "error" });
+      if (!isSupabaseConfigured()) throw new Error("SUPABASE_NOT_CONFIGURED");
+      setSubmitting(true);
+      const { error } = await getSupabaseBrowserClient().rpc("create_support_request", {
+        p_name: name,
+        p_email: email,
+        p_phone: phone,
+        p_language: preferredLanguage,
+        p_message: message,
+        p_website: website,
+      });
+      if (error) {
+        if (website.trim() && error.message.includes("INVALID_REQUEST")) {
+          formElement.reset();
+          setFormStatus({ message: t.formReady, tone: "success" });
+          return;
+        }
+        throw error;
+      }
+
+      formElement.reset();
+      setFormStatus({ message: t.formReady, tone: "success" });
+    } catch (caught) {
+      const message =
+        caught && typeof caught === "object" && "message" in caught
+          ? String(caught.message)
+          : "";
+      setFormStatus({
+        message: message.includes("RATE_LIMITED")
+          ? t.formRateLimited
+          : t.formDestinationMissing,
+        tone: "error",
+      });
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -99,6 +153,10 @@ export function ContactPageContent() {
             onSubmit={handleSubmit}
             className="min-w-0"
           >
+            <div className="sr-only" aria-hidden="true">
+              <Label htmlFor="contact-website">Website</Label>
+              <Input id="contact-website" name="website" tabIndex={-1} autoComplete="off" />
+            </div>
             <p className="eyebrow">{t.formEyebrow}</p>
             <h2 className="section-title mt-4">{t.formTitle}</h2>
             <p className="mt-5 max-w-2xl text-base leading-7 text-[#707175]">{t.formIntro}</p>
@@ -110,6 +168,8 @@ export function ContactPageContent() {
                   name="name"
                   autoComplete="name"
                   required
+                  minLength={2}
+                  maxLength={120}
                   className="min-h-13 rounded-[3px] border-[#dedbd5] bg-white px-4 text-base shadow-none"
                 />
               </FormField>
@@ -120,6 +180,7 @@ export function ContactPageContent() {
                   type="email"
                   autoComplete="email"
                   required
+                  maxLength={254}
                   className="min-h-13 rounded-[3px] border-[#dedbd5] bg-white px-4 text-base shadow-none"
                 />
               </FormField>
@@ -129,6 +190,7 @@ export function ContactPageContent() {
                   name="whatsapp"
                   type="tel"
                   autoComplete="tel"
+                  maxLength={40}
                   className="min-h-13 rounded-[3px] border-[#dedbd5] bg-white px-4 text-base shadow-none"
                 />
               </FormField>
@@ -160,6 +222,8 @@ export function ContactPageContent() {
                 id="contact-message"
                 name="message"
                 required
+                minLength={10}
+                maxLength={4000}
                 placeholder={t.formPlaceholder}
                 className="min-h-36 resize-y rounded-[3px] border-[#dedbd5] bg-white p-4 text-base leading-7 shadow-none"
               />
@@ -175,10 +239,11 @@ export function ContactPageContent() {
               </div>
               <Button
                 type="submit"
+                disabled={submitting}
                 className="min-h-13 shrink-0 rounded-full border border-[#9c8964] bg-transparent px-7 text-xs font-semibold uppercase tracking-[.14em] text-[#746448] hover:bg-[#9c8964] hover:text-white"
               >
-                <Send className="size-4" />
-                {deliveryConfigured ? t.formSubmit : t.formCopy}
+                {submitting ? <LoaderCircle className="size-4 animate-spin" /> : <Send className="size-4" />}
+                {submitting ? t.formSending : t.formSubmit}
               </Button>
             </div>
           </form>
@@ -208,9 +273,9 @@ export function ContactPageContent() {
                 <Mail className="mt-1 size-6 shrink-0 text-[#9c8964]" strokeWidth={1.5} />
                 <div className="min-w-0">
                   <h2 className="text-xl font-bold tracking-[-.03em]">{t.formFields.email}</h2>
-                  {CONTACT_EMAIL ? (
-                    <a href={`mailto:${CONTACT_EMAIL}`} className="mt-3 block break-all text-base text-[#747579] hover:text-[#8b7855]">
-                      {CONTACT_EMAIL}
+                  {effectiveEmail ? (
+                    <a href={`mailto:${effectiveEmail}`} className="mt-3 block break-all text-base text-[#747579] hover:text-[#8b7855]">
+                      {effectiveEmail}
                     </a>
                   ) : (
                     <p className="mt-3 text-base leading-7 text-[#747579]">{copy.common.contactPending}</p>
@@ -224,14 +289,14 @@ export function ContactPageContent() {
                 <MessageCircle className="mt-1 size-6 shrink-0 text-[#9c8964]" strokeWidth={1.5} />
                 <div className="min-w-0">
                   <h2 className="text-xl font-bold tracking-[-.03em]">WhatsApp</h2>
-                  {WHATSAPP_NUMBER ? (
+                  {effectiveWhatsapp ? (
                     <a
-                      href={`https://wa.me/${WHATSAPP_NUMBER.replace(/\D/g, "")}`}
+                      href={`https://wa.me/${effectiveWhatsapp.replace(/\D/g, "")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="mt-3 block text-base text-[#747579] hover:text-[#8b7855]"
                     >
-                      {WHATSAPP_NUMBER}
+                      {effectiveWhatsapp}
                     </a>
                   ) : (
                     <p className="mt-3 text-base leading-7 text-[#747579]">{t.writeText}</p>

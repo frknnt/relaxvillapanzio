@@ -2,13 +2,21 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { secondaryCopy } from "@/app/secondary-content";
+import { CONTACT_EMAIL, WHATSAPP_NUMBER } from "@/app/site-config";
 import { useLanguage } from "@/components/site/language-provider";
+import {
+  getSupabaseBrowserClient,
+  isSupabaseConfigured,
+} from "@/lib/supabase/client";
 
 export function SiteFooter() {
   const { language } = useLanguage();
   const copy = secondaryCopy[language];
+  const [whatsappNumber, setWhatsappNumber] = useState(WHATSAPP_NUMBER);
+  const [contactEmail, setContactEmail] = useState(CONTACT_EMAIL);
   const links = [
     ["/", copy.navigation.home],
     ["/about", copy.navigation.about],
@@ -16,6 +24,29 @@ export function SiteFooter() {
     ["/blog", copy.navigation.blog],
     ["/contact", copy.navigation.contact],
   ] as const;
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+
+    let active = true;
+    void getSupabaseBrowserClient()
+      .from("booking_settings")
+      .select("whatsapp_number, contact_email")
+      .eq("id", 1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (active && data?.whatsapp_number) {
+          setWhatsappNumber(String(data.whatsapp_number));
+        }
+        if (active && data?.contact_email) {
+          setContactEmail(String(data.contact_email));
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <footer className="relative min-h-[510px] px-6 py-28 text-white sm:px-10 lg:px-16">
@@ -37,7 +68,15 @@ export function SiteFooter() {
           <address className="mt-5 max-w-xs not-italic text-sm leading-7 text-white/65">
             {copy.common.address}
             <br />
-            {copy.common.contactPending}
+            {whatsappNumber || copy.common.contactPending}
+            {contactEmail ? (
+              <>
+                <br />
+                <a href={`mailto:${contactEmail}`} className="break-all transition hover:text-white">
+                  {contactEmail}
+                </a>
+              </>
+            ) : null}
           </address>
         </div>
         <div>

@@ -3,9 +3,9 @@ import { LanguageProvider } from "@/components/site/language-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Relax Villa | Private Villa in Badacsonytomaj",
+  title: "Relax Villa Badacsonytomaj | Private 4-Bedroom Villa",
   description:
-    "Reserve the complete four-bedroom Relax Villa in Badacsonytomaj for your group.",
+    "A private four-bedroom villa in Badacsonytomaj for one group, with pool, outdoor hot tub, barrel sauna, garden and direct booking.",
   icons: {
     icon: "/favicon.svg",
     shortcut: "/favicon.svg",

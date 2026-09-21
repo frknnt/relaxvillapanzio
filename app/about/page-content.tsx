@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Bookmark, Compass, Eye } from "lucide-react";
+import { ArrowRight, Bookmark, House, MessageCircle } from "lucide-react";
 
 import { secondaryCopy } from "@/app/secondary-content";
 import { siteCopy } from "@/app/site-content";
@@ -113,35 +113,26 @@ export function AboutPageContent() {
         </div>
       </section>
 
-      <section className="bg-[#25282e] px-6 py-24 text-white sm:px-10 md:py-32 lg:px-16">
-        <div className="mx-auto grid max-w-[1450px] gap-14 lg:grid-cols-[.56fr_1.44fr] lg:gap-24">
-          <div className="max-w-lg">
-            <p className="eyebrow !text-[#d6c29b]">{t.directionEyebrow}</p>
-            <h2 className="mt-5 text-balance text-[clamp(2.6rem,4.6vw,5rem)] font-extrabold uppercase leading-[.98] tracking-[-.05em]">
-              {t.visionTitle}
-              <span className="block text-white/32">&amp; {t.missionTitle}</span>
-            </h2>
+      <section className="bg-[#f3efe9] px-6 py-20 sm:px-10 md:py-24 lg:px-16">
+        <div className="mx-auto max-w-[1320px]">
+          <div className="max-w-3xl">
+            <p className="eyebrow">{t.directionEyebrow}</p>
+            <h2 className="section-title mt-5">{t.directionTitle}</h2>
           </div>
-          <div className="grid gap-px overflow-hidden border border-white/12 bg-white/12 md:grid-cols-2">
-            <article className="bg-[#292c32] p-9 sm:p-12">
-              <div className="flex items-center justify-between">
-                <span className="grid size-14 place-items-center rounded-full border border-white/15 text-[#d6c29b]">
-                  <Eye className="size-6" strokeWidth={1.4} />
-                </span>
-                <span className="text-5xl font-extrabold tracking-[-.06em] text-white/10">01</span>
-              </div>
-              <h3 className="mt-12 text-3xl font-bold tracking-[-.035em]">{t.visionTitle}</h3>
-              <p className="mt-5 text-base leading-8 text-white/65">{t.visionText}</p>
+          <div className="mt-12 grid gap-5 md:grid-cols-2">
+            <article className="border border-[#ded7cc] bg-white p-7 sm:p-9">
+              <span className="grid size-12 place-items-center rounded-full bg-[#f1ece4] text-[#9c8964]">
+                <House className="size-5" strokeWidth={1.5} aria-hidden="true" />
+              </span>
+              <h3 className="mt-7 text-2xl font-bold tracking-[-.035em]">{t.visionTitle}</h3>
+              <p className="mt-4 max-w-[34rem] text-base leading-7 text-[#66686c]">{t.visionText}</p>
             </article>
-            <article className="bg-[#292c32] p-9 sm:p-12">
-              <div className="flex items-center justify-between">
-                <span className="grid size-14 place-items-center rounded-full border border-white/15 text-[#d6c29b]">
-                  <Compass className="size-6" strokeWidth={1.4} />
-                </span>
-                <span className="text-5xl font-extrabold tracking-[-.06em] text-white/10">02</span>
-              </div>
-              <h3 className="mt-12 text-3xl font-bold tracking-[-.035em]">{t.missionTitle}</h3>
-              <p className="mt-5 text-base leading-8 text-white/65">{t.missionText}</p>
+            <article className="border border-[#ded7cc] bg-white p-7 sm:p-9">
+              <span className="grid size-12 place-items-center rounded-full bg-[#f1ece4] text-[#9c8964]">
+                <MessageCircle className="size-5" strokeWidth={1.5} aria-hidden="true" />
+              </span>
+              <h3 className="mt-7 text-2xl font-bold tracking-[-.035em]">{t.missionTitle}</h3>
+              <p className="mt-4 max-w-[34rem] text-base leading-7 text-[#66686c]">{t.missionText}</p>
             </article>
           </div>
         </div>
