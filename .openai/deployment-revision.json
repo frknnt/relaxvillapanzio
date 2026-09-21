@@ -1,0 +1,4 @@
+{
+  "revision": 2,
+  "purpose": "Embed the production Supabase publishable configuration in the browser bundle."
+}
