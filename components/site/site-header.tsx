@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import type { Language } from "@/app/site-content";
 import { secondaryCopy } from "@/app/secondary-content";
@@ -25,6 +24,21 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
   const textTone = overlay ? "text-white" : "text-[#26272b]";
   const subtleBorder = overlay ? "border-white/20" : "border-[#ded8cf]";
 
+  useEffect(() => {
+    setMenuOpen(false);
+  }, [pathname]);
+
+  useEffect(() => {
+    if (!menuOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+    };
+  }, [menuOpen]);
+
   return (
     <header
       className={`${
@@ -32,7 +46,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
       } z-40 ${textTone}`}
     >
       <div className="mx-auto flex min-h-24 w-full max-w-[1630px] items-center justify-between px-5 sm:px-8 lg:min-h-28">
-        <Link href="/" aria-label="Relax Villa home" className="group flex items-center gap-3">
+        <a href="/" aria-label="Relax Villa home" className="group flex items-center gap-3">
           <span className="relative grid h-12 w-16 place-items-center" aria-hidden="true">
             <span
               className={`absolute left-0 h-8 w-12 -skew-x-12 rounded-full border-[9px] ${
@@ -46,11 +60,11 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
             <br />
             Villa
           </span>
-        </Link>
+        </a>
 
-        <nav className="hidden items-center gap-7 xl:flex" aria-label="Main navigation">
+        <nav className="hidden items-center gap-4 lg:flex xl:gap-7" aria-label="Main navigation">
           {routes.map(([href, key]) => (
-            <Link
+            <a
               key={href}
               href={href}
               className={`border-b py-2 text-[11px] font-semibold uppercase tracking-[.12em] transition ${
@@ -60,7 +74,7 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
               }`}
             >
               {copy.navigation[key]}
-            </Link>
+            </a>
           ))}
         </nav>
 
@@ -90,18 +104,19 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
               </button>
             ))}
           </div>
-          <Link
+          <a
             href="/#availability"
-            className="hidden min-h-11 items-center rounded-full bg-[#aa9771] px-6 text-xs font-semibold uppercase tracking-[.14em] text-white transition hover:bg-[#95825f] sm:inline-flex"
+            className="hidden min-h-11 items-center rounded-full bg-[#aa9771] px-4 text-xs font-semibold uppercase tracking-[.14em] text-white transition hover:bg-[#95825f] sm:inline-flex xl:px-6"
           >
             {copy.navigation.book}
-          </Link>
+          </a>
           <button
             type="button"
             onClick={() => setMenuOpen((open) => !open)}
             aria-expanded={menuOpen}
+            aria-controls="mobile-site-menu"
             aria-label={copy.navigation.menu}
-            className={`grid size-11 place-items-center rounded-full border backdrop-blur-md transition xl:hidden ${subtleBorder} ${
+            className={`relative z-[60] grid size-11 place-items-center rounded-full border backdrop-blur-md transition lg:hidden ${subtleBorder} ${
               overlay
                 ? "bg-black/10 hover:bg-white hover:text-[#27282c]"
                 : "bg-[#faf8f5] hover:bg-[#2d2f33] hover:text-white"
@@ -113,44 +128,53 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
       </div>
 
       {menuOpen ? (
-        <div className="absolute right-5 top-[5.5rem] w-[min(92vw,380px)] origin-top-right rounded-[3px] border border-white/10 bg-[#24262d]/[.98] p-7 text-white shadow-2xl backdrop-blur-xl sm:right-8 lg:top-24 xl:hidden">
-          <nav className="flex flex-col" aria-label="Menu navigation">
-            {routes.map(([href, key]) => (
-              <Link
-                key={href}
-                href={href}
-                onClick={() => setMenuOpen(false)}
-                className="border-b border-white/10 py-4 text-left text-sm font-semibold uppercase tracking-[.13em] text-white/75 transition hover:pl-2 hover:text-white"
+        <>
+          <button
+            type="button"
+            aria-label={copy.navigation.menu}
+            onClick={() => setMenuOpen(false)}
+            className="fixed inset-0 z-40 bg-black/45 backdrop-blur-[2px] lg:hidden"
+          />
+          <div
+            id="mobile-site-menu"
+            className="fixed inset-x-4 top-20 z-50 max-h-[calc(100dvh-6rem)] origin-top overflow-y-auto rounded-[3px] border border-white/10 bg-[#24262d]/[.98] p-7 text-white shadow-2xl backdrop-blur-xl sm:right-8 sm:left-auto sm:w-[380px] lg:hidden"
+          >
+            <nav className="flex flex-col" aria-label="Menu navigation">
+              {routes.map(([href, key]) => (
+                <a
+                  key={href}
+                  href={href}
+                  className="border-b border-white/10 py-4 text-left text-sm font-semibold uppercase tracking-[.13em] text-white/75 transition hover:pl-2 hover:text-white"
+                >
+                  {copy.navigation[key]}
+                </a>
+              ))}
+              <a
+                href="/#availability"
+                className="mt-5 flex min-h-12 items-center justify-center rounded-full bg-[#aa9771] px-6 text-center text-xs font-semibold uppercase tracking-[.14em] text-white transition hover:bg-[#95825f]"
               >
-                {copy.navigation[key]}
-              </Link>
-            ))}
-            <Link
-              href="/#availability"
-              onClick={() => setMenuOpen(false)}
-              className="mt-5 flex min-h-12 items-center justify-center rounded-full bg-[#aa9771] px-6 text-center text-xs font-semibold uppercase tracking-[.14em] text-white transition hover:bg-[#95825f]"
-            >
-              {copy.navigation.book}
-            </Link>
-          </nav>
-          <div className="mt-6 flex gap-2 md:hidden">
-            {(["en", "de", "hu"] as Language[]).map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => {
-                  setLanguage(item);
-                  setMenuOpen(false);
-                }}
-                className={`flex-1 rounded-full border border-white/20 py-2 text-xs uppercase ${
-                  language === item ? "bg-white text-[#24262d]" : "text-white"
-                }`}
-              >
-                {item}
-              </button>
-            ))}
+                {copy.navigation.book}
+              </a>
+            </nav>
+            <div className="mt-6 flex gap-2 md:hidden">
+              {(["en", "de", "hu"] as Language[]).map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => {
+                    setLanguage(item);
+                    setMenuOpen(false);
+                  }}
+                  className={`flex-1 rounded-full border border-white/20 py-2 text-xs uppercase ${
+                    language === item ? "bg-white text-[#24262d]" : "text-white"
+                  }`}
+                >
+                  {item}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       ) : null}
     </header>
   );

@@ -1,4 +1,4 @@
 {
-  "revision": 2,
-  "purpose": "Embed the production Supabase publishable configuration in the browser bundle."
+  "revision": 3,
+  "purpose": "Fix mobile and desktop navigation across responsive breakpoints."
 }
