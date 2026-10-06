@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type MouseEvent } from "react";
 
 import { secondaryCopy } from "@/app/secondary-content";
 import { professionalCopy } from "@/app/professional-copy";
@@ -13,6 +13,12 @@ import {
   getSupabaseBrowserClient,
   isSupabaseConfigured,
 } from "@/lib/supabase/client";
+
+function navigateReliably(event: MouseEvent<HTMLAnchorElement>) {
+  if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  window.location.assign(event.currentTarget.href);
+}
 
 export function SiteFooter() {
   const { language } = useLanguage();
@@ -88,11 +94,11 @@ export function SiteFooter() {
           <h3 className="text-sm font-bold">{copy.common.explore}</h3>
           <nav className="mt-5 flex flex-col gap-3 text-sm text-white/65">
             {links.map(([href, label]) => (
-              <Link key={href} href={href} className="w-fit transition hover:text-white">
+              <Link key={href} href={href} onClick={navigateReliably} className="w-fit transition hover:text-white">
                 {label}
               </Link>
             ))}
-            <Link href="/reservation-status" className="w-fit transition hover:text-white">{professional.trackBooking}</Link>
+            <Link href="/reservation-status" onClick={navigateReliably} className="w-fit transition hover:text-white">{professional.trackBooking}</Link>
           </nav>
         </div>
         <div>
@@ -102,6 +108,7 @@ export function SiteFooter() {
           </p>
           <Link
             href="/#availability"
+            onClick={navigateReliably}
             className="mt-7 inline-flex items-center gap-3 border-b border-[#d2bd92] pb-2 text-xs font-semibold uppercase tracking-[.15em] text-[#d2bd92]"
           >
             {copy.common.availability}
@@ -110,9 +117,9 @@ export function SiteFooter() {
           <div className="mt-8 border-t border-white/15 pt-6">
             <p className="text-xs font-semibold uppercase tracking-[.14em] text-white/45">{professional.policies}</p>
             <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-white/65">
-              <Link href="/privacy" className="hover:text-white">{professional.privacy}</Link>
-              <Link href="/booking-terms" className="hover:text-white">{professional.bookingTerms}</Link>
-              <Link href="/cancellation-policy" className="hover:text-white">{professional.cancellation}</Link>
+              <Link href="/privacy" onClick={navigateReliably} className="hover:text-white">{professional.privacy}</Link>
+              <Link href="/booking-terms" onClick={navigateReliably} className="hover:text-white">{professional.bookingTerms}</Link>
+              <Link href="/cancellation-policy" onClick={navigateReliably} className="hover:text-white">{professional.cancellation}</Link>
             </div>
           </div>
         </div>

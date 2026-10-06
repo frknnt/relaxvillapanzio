@@ -87,7 +87,7 @@ export const secondaryCopy = {
         {
           question: "What is the cancellation policy?",
           answer:
-            "We share the applicable cancellation terms before confirming your reservation. You can review them before making a payment.",
+            "To cancel or change a reservation, contact us as soon as possible and include your reservation reference. We will review your request and confirm the next steps directly.",
         },
         {
           question: "How does payment work?",
@@ -319,7 +319,7 @@ export const secondaryCopy = {
         {
           question: "Welche Stornierungsbedingungen gelten?",
           answer:
-            "Wir teilen Ihnen die geltenden Stornierungsbedingungen vor der Buchungsbestätigung mit. Sie können diese vor der Zahlung in Ruhe prüfen.",
+            "Für eine Stornierung oder Änderung kontaktieren Sie uns bitte möglichst früh und nennen Sie Ihre Reservierungsreferenz. Wir prüfen Ihre Anfrage und bestätigen Ihnen die nächsten Schritte direkt.",
         },
         {
           question: "Wie funktioniert die Zahlung?",
@@ -552,7 +552,7 @@ export const secondaryCopy = {
         {
           question: "Mik a lemondási feltételek?",
           answer:
-            "A foglalás megerősítése előtt megosztjuk az érvényes lemondási feltételeket. Fizetés előtt nyugodtan áttekinthetik őket.",
+            "Lemondáshoz vagy módosításhoz mielőbb lépjen velünk kapcsolatba, és adja meg a foglalási hivatkozást. Ellenőrizzük a kérést, majd közvetlenül visszajelzünk a további lépésekről.",
         },
         {
           question: "Hogyan történik a fizetés?",
@@ -787,7 +787,7 @@ export const secondaryCopy = {
         {
           question: "İptal koşulları nelerdir?",
           answer:
-            "Rezervasyonunuzu onaylamadan önce geçerli iptal koşullarını sizinle paylaşırız. Ödeme yapmadan önce koşulları kontrol edebilirsiniz.",
+            "İptal veya değişiklik için en kısa sürede bizimle iletişime geçin ve rezervasyon referansınızı paylaşın. Talebinizi inceleyip sonraki adımları size doğrudan bildiririz.",
         },
         {
           question: "Ödeme nasıl yapılır?",

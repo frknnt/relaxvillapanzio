@@ -65,8 +65,8 @@ export function PolicyPage({ kind }: { kind: PolicyKind }) {
           [copy.accuracyTitle, copy.accuracyText],
         ]
       : [
-          [copy.freeCancellationTitle, `${copy.freeCancellationText} ${settings.cancellation_free_days} ${language === "tr" ? "gün" : language === "de" ? "Tage" : language === "hu" ? "nap" : "days"}.`],
-          [copy.lateCancellationTitle, `${copy.lateCancellationText} %${settings.late_cancellation_refund_percent}.`],
+          [copy.freeCancellationTitle, copy.freeCancellationText],
+          [copy.lateCancellationTitle, copy.lateCancellationText],
           [copy.refundTitle, copy.refundText],
           [copy.ownerCancellationTitle, copy.ownerCancellationText],
         ];

@@ -609,14 +609,6 @@ export default function Home() {
 
           <div className="min-w-0">
             <div className="rounded-[8px] bg-[#f1ede7] p-4 shadow-[0_16px_45px_rgba(38,39,43,.07)] sm:p-7">
-              <ol className="mb-4 grid grid-cols-3 gap-2 rounded-[5px] bg-[#25282e] p-3 text-white" aria-label={professional.bookingProgress.join(", ")}>
-                {professional.bookingProgress.map((step, index) => (
-                  <li key={step} className={`flex min-w-0 items-center gap-2 rounded px-2 py-2 text-[11px] font-semibold ${index === 0 ? "bg-white/12 text-white" : "text-white/55"}`}>
-                    <span className={`grid size-6 shrink-0 place-items-center rounded-full ${index === 0 ? "bg-[#b19a6c] text-white" : "border border-white/25"}`}>{index + 1}</span>
-                    <span className="hidden truncate sm:block">{step}</span>
-                  </li>
-                ))}
-              </ol>
               <div className="mb-4 rounded-[5px] bg-white p-4 sm:p-5">
                 <button
                   type="button"

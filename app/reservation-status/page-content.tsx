@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { AlertCircle, CalendarDays, CheckCircle2, Clock3, Loader2 } from "lucide-react";
 
 import { professionalCopy } from "@/app/professional-copy";
@@ -19,17 +19,6 @@ export default function ReservationStatusContent() {
   const [result, setResult] = useState<PublicReservationStatus | null>(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const timer = window.setTimeout(() => {
-      try {
-        const saved = JSON.parse(window.sessionStorage.getItem("relax-villa-last-booking") || "null") as { reference?: string; email?: string } | null;
-        setReference(saved?.reference ?? "");
-        setEmail(saved?.email ?? "");
-      } catch { /* ignore invalid device-local state */ }
-    }, 0);
-    return () => window.clearTimeout(timer);
-  }, []);
 
   async function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -67,14 +56,14 @@ export default function ReservationStatusContent() {
             <p className="mt-5 text-base leading-8 text-[#68696d]">{copy.statusIntro}</p>
           </div>
           <section className="rounded-2xl border border-[#e0dbd2] bg-white p-5 shadow-[0_20px_60px_rgba(37,39,42,.08)] sm:p-8">
-            <form onSubmit={submit} className="grid gap-4">
+            <form onSubmit={submit} autoComplete="off" className="grid gap-4">
               <label className="grid gap-2 text-sm font-semibold text-[#45464a]">
                 {copy.reference}
                 <input value={reference} onChange={(event) => setReference(event.target.value.toUpperCase())} required minLength={10} maxLength={40} autoComplete="off" className="min-h-12 rounded-lg border border-[#dcd6cc] px-4 font-mono font-normal uppercase outline-none focus:border-[#78633e] focus:ring-2 focus:ring-[#78633e]/15" />
               </label>
               <label className="grid gap-2 text-sm font-semibold text-[#45464a]">
                 {copy.email}
-                <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required maxLength={254} autoComplete="email" className="min-h-12 rounded-lg border border-[#dcd6cc] px-4 font-normal outline-none focus:border-[#78633e] focus:ring-2 focus:ring-[#78633e]/15" />
+                <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required maxLength={254} autoComplete="off" className="min-h-12 rounded-lg border border-[#dcd6cc] px-4 font-normal outline-none focus:border-[#78633e] focus:ring-2 focus:ring-[#78633e]/15" />
               </label>
               <button disabled={loading} className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#303238] px-6 text-sm font-semibold text-white transition hover:bg-[#78633e] disabled:cursor-wait disabled:opacity-60">
                 {loading ? <Loader2 className="size-4 animate-spin" /> : <CheckCircle2 className="size-4" />}{copy.checkStatus}
