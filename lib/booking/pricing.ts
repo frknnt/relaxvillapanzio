@@ -4,6 +4,7 @@ import type {
   AvailabilityRange,
   BookingSettings,
   MonthlyRate,
+  RoomMonthlyRate,
 } from "@/lib/supabase/types";
 
 export type BookingQuote = {
@@ -24,28 +25,61 @@ export function monthKey(date: Date) {
   return format(date, "yyyy-MM-01");
 }
 
-export function isBlockedDate(date: Date, ranges: AvailabilityRange[]) {
+export function isBlockedDate(
+  date: Date,
+  ranges: AvailabilityRange[],
+  roomIds: number[],
+) {
   const key = dateKey(date);
   return ranges.some(
-    (range) => key >= range.start_date && key < range.end_date,
+    (range) =>
+      roomIds.includes(range.room_id) &&
+      key >= range.start_date &&
+      key < range.end_date,
   );
 }
 
-export function hasRateForDate(date: Date, rates: MonthlyRate[]) {
-  return rates.some((rate) => rate.active && rate.month === monthKey(date));
+export function isWholeVillaSelection(roomIds: number[]) {
+  return (
+    roomIds.length === 4 &&
+    [1, 2, 3, 4].every((roomId) => roomIds.includes(roomId))
+  );
+}
+
+export function hasRateForDate(
+  date: Date,
+  rates: MonthlyRate[],
+  roomRates: RoomMonthlyRate[],
+  roomIds: number[],
+) {
+  const month = monthKey(date);
+  if (isWholeVillaSelection(roomIds)) {
+    return rates.some((rate) => rate.active && rate.month === month);
+  }
+
+  return (
+    roomIds.length > 0 &&
+    roomIds.every((roomId) =>
+      roomRates.some(
+        (rate) =>
+          rate.active && rate.room_id === roomId && rate.month === month,
+      ),
+    )
+  );
 }
 
 export function rangeContainsBlockedDate(
   arrival: string,
   departure: string,
   ranges: AvailabilityRange[],
+  roomIds: number[],
 ) {
   if (!arrival || !departure || departure <= arrival) return false;
 
   let cursor = parseISO(arrival);
   const end = parseISO(departure);
   while (cursor < end) {
-    if (isBlockedDate(cursor, ranges)) return true;
+    if (isBlockedDate(cursor, ranges, roomIds)) return true;
     cursor = addDays(cursor, 1);
   }
   return false;
@@ -56,15 +90,27 @@ export function calculateBookingQuote({
   departure,
   pets,
   rates,
+  roomRates,
+  roomIds,
   settings,
 }: {
   arrival: string;
   departure: string;
   pets: number;
   rates: MonthlyRate[];
+  roomRates: RoomMonthlyRate[];
+  roomIds: number[];
   settings: BookingSettings | null;
 }): BookingQuote | null {
-  if (!arrival || !departure || departure <= arrival || !settings) return null;
+  if (
+    !arrival ||
+    !departure ||
+    departure <= arrival ||
+    !settings ||
+    roomIds.length === 0
+  ) {
+    return null;
+  }
 
   const from = parseISO(arrival);
   const to = parseISO(departure);
@@ -75,22 +121,49 @@ export function calculateBookingQuote({
   let minimumNights = 1;
   let complete = true;
   let cursor = from;
+  const wholeVilla = isWholeVillaSelection(roomIds);
 
   while (cursor < to) {
-    const rate = rates.find(
-      (candidate) => candidate.active && candidate.month === monthKey(cursor),
-    );
-
-    if (!rate) {
-      complete = false;
-      cursor = addDays(cursor, 1);
-      continue;
-    }
-
     const isoDay = Number(format(cursor, "i"));
     const weekend = settings.weekend_days.includes(isoDay);
-    subtotal += weekend ? rate.weekend_rate : rate.weekday_rate;
-    minimumNights = Math.max(minimumNights, rate.minimum_nights);
+    const month = monthKey(cursor);
+
+    if (wholeVilla) {
+      const rate = rates.find(
+        (candidate) => candidate.active && candidate.month === month,
+      );
+
+      if (!rate) {
+        complete = false;
+        cursor = addDays(cursor, 1);
+        continue;
+      }
+
+      subtotal += weekend ? rate.weekend_rate : rate.weekday_rate;
+      minimumNights = Math.max(minimumNights, rate.minimum_nights);
+    } else {
+      const selectedRates = roomIds.map((roomId) =>
+        roomRates.find(
+          (candidate) =>
+            candidate.active &&
+            candidate.room_id === roomId &&
+            candidate.month === month,
+        ),
+      );
+
+      if (selectedRates.some((rate) => !rate)) {
+        complete = false;
+        cursor = addDays(cursor, 1);
+        continue;
+      }
+
+      for (const rate of selectedRates) {
+        if (!rate) continue;
+        subtotal += weekend ? rate.weekend_rate : rate.weekday_rate;
+        minimumNights = Math.max(minimumNights, rate.minimum_nights);
+      }
+    }
+
     cursor = addDays(cursor, 1);
   }
 
@@ -112,6 +185,7 @@ export function formatMoney(value: number, currency = "HUF", locale = "en") {
     en: "en-GB",
     de: "de-DE",
     hu: "hu-HU",
+    tr: "tr-TR",
   } as const;
 
   return new Intl.NumberFormat(localeMap[locale as keyof typeof localeMap] ?? "en-GB", {

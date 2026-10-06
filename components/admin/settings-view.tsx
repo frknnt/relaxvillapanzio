@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import { Banknote, Clock3, CreditCard, Mail, MessageCircle, RefreshCw, Save, Users } from "lucide-react";
+import { Banknote, Building2, CheckCircle2, Clock3, CreditCard, Mail, MessageCircle, RefreshCw, Save, ShieldCheck, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { BookingSettings } from "@/lib/supabase/types";
@@ -33,6 +33,11 @@ type SettingsForm = {
   maxGuests: string;
   checkInTime: string;
   checkOutTime: string;
+  cancellationFreeDays: string;
+  lateCancellationRefundPercent: string;
+  privacyRetentionMonths: string;
+  legalOperatorName: string;
+  legalOperatorAddress: string;
 };
 
 const defaultForm: SettingsForm = {
@@ -50,6 +55,11 @@ const defaultForm: SettingsForm = {
   maxGuests: "12",
   checkInTime: "15:00",
   checkOutTime: "10:00",
+  cancellationFreeDays: "14",
+  lateCancellationRefundPercent: "0",
+  privacyRetentionMonths: "24",
+  legalOperatorName: "Relax Villa Panzió",
+  legalOperatorAddress: "8257 Badacsonytomaj, Füredi út 5",
 };
 
 const days = [
@@ -105,6 +115,11 @@ export function SettingsView({ userId }: { userId: string }) {
         maxGuests: String(settings.max_guests),
         checkInTime: timeValue(settings.check_in_time),
         checkOutTime: timeValue(settings.check_out_time),
+        cancellationFreeDays: String(settings.cancellation_free_days ?? 14),
+        lateCancellationRefundPercent: String(settings.late_cancellation_refund_percent ?? 0),
+        privacyRetentionMonths: String(settings.privacy_retention_months ?? 24),
+        legalOperatorName: settings.legal_operator_name || "Relax Villa Panzió",
+        legalOperatorAddress: settings.legal_operator_address || "8257 Badacsonytomaj, Füredi út 5",
       });
       setLastUpdated(settings.updated_at);
     } catch (caught) {
@@ -137,12 +152,20 @@ export function SettingsView({ userId }: { userId: string }) {
       const petFee = Number(form.petFee);
       const maxGuests = Number(form.maxGuests);
       const currency = form.currency.trim().toUpperCase();
+      const cancellationFreeDays = Number(form.cancellationFreeDays);
+      const lateCancellationRefundPercent = Number(form.lateCancellationRefundPercent);
+      const privacyRetentionMonths = Number(form.privacyRetentionMonths);
 
       if (!/^[A-Z]{3}$/.test(currency)) throw new Error("Para birimi üç harfli ISO kodu olmalı (örn. HUF). ");
       if (paymentHoldHours < 1 || paymentHoldHours > 336) throw new Error("Ödeme bekleme süresi 1 ile 336 saat arasında olmalı.");
       if (petFee < 0) throw new Error("Evcil hayvan ücreti negatif olamaz.");
       if (maxGuests < 1 || maxGuests > 30) throw new Error("Maksimum misafir sayısı 1 ile 30 arasında olmalı.");
       if (form.weekendDays.length === 0) throw new Error("En az bir hafta sonu günü seçin.");
+      if (cancellationFreeDays < 0 || cancellationFreeDays > 365) throw new Error("Ücretsiz iptal süresi 0 ile 365 gün arasında olmalı.");
+      if (lateCancellationRefundPercent < 0 || lateCancellationRefundPercent > 100) throw new Error("Geç iptal iade oranı %0 ile %100 arasında olmalı.");
+      if (privacyRetentionMonths < 1 || privacyRetentionMonths > 120) throw new Error("Veri saklama süresi 1 ile 120 ay arasında olmalı.");
+      if (form.legalOperatorName.trim().length < 2) throw new Error("İşletmeci adını girin.");
+      if (form.legalOperatorAddress.trim().length < 5) throw new Error("İşletmeci adresini girin.");
       if (form.contactEmail.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.contactEmail.trim())) {
         throw new Error("Geçerli bir iletişim e-posta adresi girin.");
       }
@@ -166,6 +189,11 @@ export function SettingsView({ userId }: { userId: string }) {
             max_guests: maxGuests,
             check_in_time: form.checkInTime,
             check_out_time: form.checkOutTime,
+            cancellation_free_days: cancellationFreeDays,
+            late_cancellation_refund_percent: lateCancellationRefundPercent,
+            privacy_retention_months: privacyRetentionMonths,
+            legal_operator_name: form.legalOperatorName.trim(),
+            legal_operator_address: form.legalOperatorAddress.trim(),
             updated_by: userId,
           },
           { onConflict: "id" },
@@ -201,6 +229,17 @@ export function SettingsView({ userId }: { userId: string }) {
         <BusyState label="Rezervasyon ayarları yükleniyor…" />
       ) : (
         <form onSubmit={save} className="space-y-5">
+          <div className={`flex items-start gap-3 rounded-2xl border p-4 ${form.iban && form.bankBeneficiary && form.contactEmail && form.whatsappNumber ? "border-emerald-200 bg-emerald-50 text-emerald-900" : "border-amber-200 bg-amber-50 text-amber-950"}`}>
+            <CheckCircle2 className="mt-0.5 size-5 shrink-0" />
+            <div>
+              <p className="text-sm font-semibold">Rezervasyon yayına hazırlık kontrolü</p>
+              <p className="mt-1 text-xs leading-5">
+                {form.iban && form.bankBeneficiary && form.contactEmail && form.whatsappNumber
+                  ? "Ödeme ve iletişim için gerekli temel alanlar tamamlandı."
+                  : "Yayına almadan önce IBAN, hesap sahibi, iletişim e-postası ve WhatsApp numarasını tamamlayın."}
+              </p>
+            </div>
+          </div>
           <SettingsSection icon={CreditCard} title="Banka ve havale bilgileri" description="Rezervasyon sonrası müşteriye gösterilecek hesap bilgileri.">
             <div className="grid gap-4 lg:grid-cols-2">
               <Field label="Hesap sahibi / lehtar">
@@ -237,6 +276,31 @@ export function SettingsView({ userId }: { userId: string }) {
               </Field>
               <Field label="Çıkış saati">
                 <input type="time" value={form.checkOutTime} onChange={(event) => setForm((current) => ({ ...current, checkOutTime: event.target.value }))} required className={adminInputClass} />
+              </Field>
+            </div>
+          </SettingsSection>
+
+          <SettingsSection icon={ShieldCheck} title="İptal ve gizlilik kuralları" description="Müşterinin rezervasyon öncesinde göreceği açık koşullar.">
+            <div className="grid gap-4 sm:grid-cols-3">
+              <Field label="Ücretsiz iptal (gün)" hint="Varıştan kaç gün öncesine kadar tam iade yapılır.">
+                <input type="number" min="0" max="365" step="1" inputMode="numeric" value={form.cancellationFreeDays} onChange={(event) => setForm((current) => ({ ...current, cancellationFreeDays: event.target.value }))} required className={adminInputClass} />
+              </Field>
+              <Field label="Geç iptal iadesi (%)" hint="Ücretsiz iptal süresi geçtikten sonraki iade oranı.">
+                <input type="number" min="0" max="100" step="1" inputMode="numeric" value={form.lateCancellationRefundPercent} onChange={(event) => setForm((current) => ({ ...current, lateCancellationRefundPercent: event.target.value }))} required className={adminInputClass} />
+              </Field>
+              <Field label="Veri saklama (ay)" hint="Rezervasyon ve destek kayıtlarının saklama süresi.">
+                <input type="number" min="1" max="120" step="1" inputMode="numeric" value={form.privacyRetentionMonths} onChange={(event) => setForm((current) => ({ ...current, privacyRetentionMonths: event.target.value }))} required className={adminInputClass} />
+              </Field>
+            </div>
+          </SettingsSection>
+
+          <SettingsSection icon={Building2} title="Yasal işletmeci bilgileri" description="Gizlilik ve rezervasyon koşullarında gösterilecek işletme bilgileri.">
+            <div className="grid gap-4 lg:grid-cols-2">
+              <Field label="İşletmeci adı">
+                <input type="text" minLength={2} maxLength={160} value={form.legalOperatorName} onChange={(event) => setForm((current) => ({ ...current, legalOperatorName: event.target.value }))} required className={adminInputClass} />
+              </Field>
+              <Field label="İşletmeci adresi">
+                <input type="text" minLength={5} maxLength={300} value={form.legalOperatorAddress} onChange={(event) => setForm((current) => ({ ...current, legalOperatorAddress: event.target.value }))} required className={adminInputClass} />
               </Field>
             </div>
           </SettingsSection>

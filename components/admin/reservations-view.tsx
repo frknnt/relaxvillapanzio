@@ -19,6 +19,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -86,6 +96,15 @@ function localDateString(date = new Date()) {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
+function roomSelectionLabel(reservation: Reservation) {
+  const roomIds = reservation.room_ids?.length
+    ? reservation.room_ids
+    : [1, 2, 3, 4];
+  return reservation.booking_scope === "whole_villa" || roomIds.length === 4
+    ? "Tüm villa · 4 oda"
+    : roomIds.map((roomId) => `Oda ${roomId}`).join(", ");
+}
+
 export function ReservationsView() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
@@ -96,6 +115,7 @@ export function ReservationsView() {
   const [selected, setSelected] = useState<Reservation | null>(null);
   const [actionNote, setActionNote] = useState("");
   const [actionStatus, setActionStatus] = useState<ReservationStatus | null>(null);
+  const [pendingStatus, setPendingStatus] = useState<ReservationStatus | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -116,6 +136,7 @@ export function ReservationsView() {
         tone: "error",
         message: getErrorMessage(caught, "Rezervasyonlar yüklenemedi."),
       });
+      setPendingStatus(null);
     } finally {
       setLoading(false);
     }
@@ -198,6 +219,7 @@ export function ReservationsView() {
       <section className={`${panelClass} p-4 sm:p-5`}>
         <div className="grid gap-3 lg:grid-cols-[minmax(16rem,1fr)_13rem_13rem_auto]">
           <label className="relative block">
+            <span className="sr-only">Rezervasyonlarda ara</span>
             <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-[#929397]" />
             <input
               type="search"
@@ -207,14 +229,14 @@ export function ReservationsView() {
               className={`${adminInputClass} pl-9`}
             />
           </label>
-          <select value={status} onChange={(event) => setStatus(event.target.value as typeof status)} className={adminInputClass}>
+          <select aria-label="Rezervasyon durumuna göre filtrele" value={status} onChange={(event) => setStatus(event.target.value as typeof status)} className={adminInputClass}>
             <option value="all">Tüm durumlar</option>
             <option value="payment_pending">Ödeme bekleyen</option>
             <option value="confirmed">Onaylı</option>
             <option value="cancelled">İptal</option>
             <option value="expired">Süresi dolan</option>
           </select>
-          <select value={timing} onChange={(event) => setTiming(event.target.value as typeof timing)} className={adminInputClass}>
+          <select aria-label="Tarihe göre filtrele" value={timing} onChange={(event) => setTiming(event.target.value as typeof timing)} className={adminInputClass}>
             <option value="all">Tüm tarihler</option>
             <option value="upcoming">Yaklaşan / aktif</option>
             <option value="past">Geçmiş</option>
@@ -257,6 +279,10 @@ export function ReservationsView() {
                   <CalendarDays className="size-4 text-[#9a855f]" />
                   {formatDate(item.check_in)} – {formatDate(item.check_out)}
                 </div>
+                <div className="mt-2 flex items-center gap-2 text-xs font-medium text-[#7b6948]">
+                  <BedDouble className="size-3.5" />
+                  {roomSelectionLabel(item)}
+                </div>
                 <div className="mt-3 flex items-end justify-between gap-3 border-t border-[#eeeae4] pt-3">
                   <p className="text-xs text-[#85868a]">{item.adults + item.children} misafir{item.pets ? ` · ${item.pets} evcil hayvan` : ""}</p>
                   <p className="font-semibold">{formatMoney(item.total_price, item.currency)}</p>
@@ -287,6 +313,7 @@ export function ReservationsView() {
                     <TableCell>
                       <p className="font-medium">{formatDate(item.check_in)}</p>
                       <p className="mt-1 text-xs text-[#85868a]">{formatDate(item.check_out)} çıkış</p>
+                      <p className="mt-1 text-xs font-medium text-[#846f4b]">{roomSelectionLabel(item)}</p>
                     </TableCell>
                     <TableCell>{item.adults + item.children}{item.pets ? <span className="ml-1 text-xs text-[#8b7652]">+{item.pets} 🐾</span> : null}</TableCell>
                     <TableCell className="font-semibold">{formatMoney(item.total_price, item.currency)}</TableCell>
@@ -315,8 +342,9 @@ export function ReservationsView() {
               </DialogHeader>
 
               <div className="grid gap-6 px-5 py-5 sm:px-6">
-                <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
                   <InfoCard icon={CalendarDays} label="Tarihler" value={`${formatDate(selected.check_in)} – ${formatDate(selected.check_out)}`} />
+                  <InfoCard icon={BedDouble} label="Oda seçimi" value={roomSelectionLabel(selected)} />
                   <InfoCard icon={Users} label="Misafir" value={`${selected.adults} yetişkin · ${selected.children} çocuk`} />
                   <InfoCard icon={PawPrint} label="Evcil hayvan" value={selected.pets ? `${selected.pets} adet` : "Yok"} />
                   <InfoCard icon={WalletCards} label="Ödeme" value={PAYMENT_LABELS[selected.payment_status]} />
@@ -389,19 +417,19 @@ export function ReservationsView() {
 
               <DialogFooter className="border-t border-[#e9e5de] px-5 py-4 sm:px-6">
                 {selected.status !== "payment_pending" ? (
-                  <Button variant="outline" onClick={() => void changeStatus("payment_pending")} disabled={Boolean(actionStatus)}>
+                  <Button variant="outline" onClick={() => setPendingStatus("payment_pending")} disabled={Boolean(actionStatus)}>
                     {actionStatus === "payment_pending" ? <InlineSpinner /> : <RotateCcw className="size-4" />}
                     Yeniden aç
                   </Button>
                 ) : null}
                 {selected.status !== "cancelled" ? (
-                  <Button variant="outline" className="border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800" onClick={() => void changeStatus("cancelled")} disabled={Boolean(actionStatus)}>
+                  <Button variant="outline" className="border-red-200 text-red-700 hover:bg-red-50 hover:text-red-800" onClick={() => setPendingStatus("cancelled")} disabled={Boolean(actionStatus)}>
                     {actionStatus === "cancelled" ? <InlineSpinner /> : <Ban className="size-4" />}
                     İptal et
                   </Button>
                 ) : null}
                 {selected.status !== "confirmed" ? (
-                  <Button className="bg-emerald-700 hover:bg-emerald-800" onClick={() => void changeStatus("confirmed")} disabled={Boolean(actionStatus)}>
+                  <Button className="bg-emerald-700 hover:bg-emerald-800" onClick={() => setPendingStatus("confirmed")} disabled={Boolean(actionStatus)}>
                     {actionStatus === "confirmed" ? <InlineSpinner /> : <CheckCircle2 className="size-4" />}
                     Ödemeyi onayla
                   </Button>
@@ -411,6 +439,26 @@ export function ReservationsView() {
           ) : null}
         </DialogContent>
       </Dialog>
+
+      <AlertDialog open={Boolean(pendingStatus)} onOpenChange={(open) => !open && setPendingStatus(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {pendingStatus === "confirmed" ? "Ödemeyi onayla" : pendingStatus === "cancelled" ? "Rezervasyonu iptal et" : "Rezervasyonu yeniden aç"}
+            </AlertDialogTitle>
+            <AlertDialogDescription className="leading-6">
+              {selected ? `${selected.reference_code} · ${selected.guest_name} · ${formatDate(selected.check_in)}–${formatDate(selected.check_out)} · ${formatMoney(selected.total_price, selected.currency)}. ` : ""}
+              {pendingStatus === "confirmed" ? "Banka hesabında ödeme alındığını doğruladıysanız devam edin." : pendingStatus === "cancelled" ? "Bu işlem seçilen odaları tekrar müsait duruma getirir." : "Bu işlem odaları yeniden ödeme bekleyen talep için ayırır."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Vazgeç</AlertDialogCancel>
+            <AlertDialogAction variant={pendingStatus === "cancelled" ? "destructive" : "default"} onClick={() => pendingStatus && void changeStatus(pendingStatus)}>
+              {pendingStatus === "confirmed" ? "Ödemeyi onayla" : pendingStatus === "cancelled" ? "İptali onayla" : "Yeniden aç"}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -27,12 +27,12 @@
   --secondary-foreground: #26272b;
   --muted: #f1ede7;
   --muted-foreground: #747579;
-  --accent: #a08f6d;
+  --accent: #806c45;
   --accent-foreground: #ffffff;
   --destructive: #b42318;
   --border: #e5e0d8;
   --input: #ded8cf;
-  --ring: #a08f6d;
+  --ring: #806c45;
   --radius: 0.5rem;
 }
 
@@ -107,12 +107,12 @@ input[type="date"] {
 }
 
 ::selection {
-  background: #a08f6d;
+  background: #806c45;
   color: white;
 }
 
 .eyebrow {
-  color: #9c8964;
+  color: #6f5b38;
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.28em;

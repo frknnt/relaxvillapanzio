@@ -2,9 +2,11 @@
 
 import {
   BedDouble,
+  Bath,
   Droplets,
   Flame,
   House,
+  Mountain,
   Sofa,
   Trees,
   UtensilsCrossed,
@@ -22,6 +24,8 @@ const featureIcons = [
   Droplets,
   Flame,
   Trees,
+  Mountain,
+  Bath,
 ];
 
 export function VillaFeaturesSection({ t }: { t: (typeof siteCopy)[Language] }) {
@@ -35,13 +39,13 @@ export function VillaFeaturesSection({ t }: { t: (typeof siteCopy)[Language] }) 
           </h2>
         </div>
 
-        <div className="mt-16 grid gap-y-12 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4 lg:gap-y-14">
+        <div className="mt-16 grid gap-y-12 sm:grid-cols-2 lg:mt-20 lg:grid-cols-5 lg:gap-y-14">
           {t.facilities.map(([title, description], index) => {
             const Icon = featureIcons[index];
             return (
               <article
                 key={title}
-                className={`px-4 text-center sm:px-7 lg:px-8 ${index % 4 !== 3 ? "lg:border-r lg:border-[#e5e0d8]" : ""}`}
+                className={`px-4 text-center sm:px-7 lg:px-6 ${index % 5 !== 4 ? "lg:border-r lg:border-[#e5e0d8]" : ""}`}
               >
                 <Icon strokeWidth={1.3} className="mx-auto size-11 text-[#a08f6d]" />
                 <h3 className="mt-6 text-lg font-bold">{title}</h3>

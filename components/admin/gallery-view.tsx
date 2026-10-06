@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { GalleryImageRecord } from "@/lib/supabase/types";
+import { ConfirmDeleteDialog } from "@/components/admin/confirm-delete-dialog";
 import {
   adminInputClass,
   adminTextareaClass,
@@ -37,9 +38,11 @@ type GalleryForm = {
   alt_en: string;
   alt_de: string;
   alt_hu: string;
+  alt_tr: string;
   caption_en: string;
   caption_de: string;
   caption_hu: string;
+  caption_tr: string;
   sort_order: string;
   visible: boolean;
 };
@@ -57,9 +60,11 @@ const emptyForm: GalleryForm = {
   alt_en: "",
   alt_de: "",
   alt_hu: "",
+  alt_tr: "",
   caption_en: "",
   caption_de: "",
   caption_hu: "",
+  caption_tr: "",
   sort_order: "0",
   visible: true,
 };
@@ -86,6 +91,7 @@ export function GalleryView({ userId }: { userId: string }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<GalleryImageRecord | null>(null);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [filter, setFilter] = useState<"all" | GalleryCategory>("all");
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -144,9 +150,11 @@ export function GalleryView({ userId }: { userId: string }) {
       alt_en: image.alt_en,
       alt_de: image.alt_de,
       alt_hu: image.alt_hu,
+      alt_tr: image.alt_tr,
       caption_en: image.caption_en,
       caption_de: image.caption_de,
       caption_hu: image.caption_hu,
+      caption_tr: image.caption_tr,
       sort_order: String(image.sort_order),
       visible: image.visible,
     });
@@ -196,9 +204,11 @@ export function GalleryView({ userId }: { userId: string }) {
         alt_en: form.alt_en.trim(),
         alt_de: form.alt_de.trim(),
         alt_hu: form.alt_hu.trim(),
+        alt_tr: form.alt_tr.trim(),
         caption_en: form.caption_en.trim(),
         caption_de: form.caption_de.trim(),
         caption_hu: form.caption_hu.trim(),
+        caption_tr: form.caption_tr.trim(),
         sort_order: Number(form.sort_order) || 0,
         visible: form.visible,
       };
@@ -241,7 +251,6 @@ export function GalleryView({ userId }: { userId: string }) {
   }
 
   async function remove(image: GalleryImageRecord) {
-    if (!window.confirm("Bu görseli galeriden ve depolama alanından kalıcı olarak silmek istiyor musunuz?")) return;
     setDeletingId(image.id);
     setFeedback(null);
     const supabase = getSupabaseBrowserClient();
@@ -256,6 +265,7 @@ export function GalleryView({ userId }: { userId: string }) {
           ? `Galeri kaydı silindi ancak depolama dosyası kaldı: ${storageError.message}`
           : "Görsel galeriden silindi.",
       });
+      setDeleteTarget(null);
     } catch (caught) {
       setFeedback({ tone: "error", message: getErrorMessage(caught, "Görsel silinemedi.") });
     } finally {
@@ -268,7 +278,7 @@ export function GalleryView({ userId }: { userId: string }) {
       <SectionHeading
         eyebrow="Medya yönetimi"
         title="Galeri"
-        description="Villa görsellerini güvenli depolama alanına yükleyin; oda, sıralama ve üç dilde alternatif metin bilgilerini yönetin."
+        description="Villa görsellerini güvenli depolama alanına yükleyin; oda, sıralama ve dört dilde alternatif metin bilgilerini yönetin."
         action={<Button onClick={openCreate} className="w-full sm:w-auto"><ImagePlus className="size-4" />Görsel yükle</Button>}
       />
 
@@ -304,12 +314,12 @@ export function GalleryView({ userId }: { userId: string }) {
                 {!image.visible ? <Badge variant="secondary" className="absolute top-3 left-3 bg-white/90">Gizli</Badge> : null}
               </div>
               <div className="p-4">
-                <p className="line-clamp-2 min-h-10 text-sm leading-5 text-[#55565a]">{image.alt_en || "Alternatif metin eklenmedi."}</p>
+                <p className="line-clamp-2 min-h-10 text-sm leading-5 text-[#55565a]">{image.alt_tr || image.alt_en || "Alternatif metin eklenmedi."}</p>
                 <div className="mt-3 flex items-center justify-between gap-3 border-t border-[#eeeae4] pt-3">
                   <span className="truncate text-[0.65rem] text-[#999a9d]">{image.storage_path.split("/").pop()}</span>
                   <div className="flex shrink-0 gap-1">
                     <Button variant="ghost" size="icon-sm" onClick={() => openEdit(image)} aria-label="Görsel bilgilerini düzenle"><Edit3 className="size-4" /></Button>
-                    <Button variant="ghost" size="icon-sm" onClick={() => void remove(image)} disabled={deletingId === image.id} className="text-red-600 hover:bg-red-50 hover:text-red-700" aria-label="Görseli sil">
+                    <Button variant="ghost" size="icon-sm" onClick={() => setDeleteTarget(image)} disabled={deletingId === image.id} className="text-red-600 hover:bg-red-50 hover:text-red-700" aria-label="Görseli sil">
                       {deletingId === image.id ? <InlineSpinner /> : <Trash2 className="size-4" />}
                     </Button>
                   </div>
@@ -363,16 +373,18 @@ export function GalleryView({ userId }: { userId: string }) {
                 </Field>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <Field label="Alt metin · EN"><textarea rows={3} value={form.alt_en} onChange={(event) => setForm((current) => ({ ...current, alt_en: event.target.value }))} className={adminTextareaClass} /></Field>
                 <Field label="Alt metin · DE"><textarea rows={3} value={form.alt_de} onChange={(event) => setForm((current) => ({ ...current, alt_de: event.target.value }))} className={adminTextareaClass} /></Field>
                 <Field label="Alt metin · HU"><textarea rows={3} value={form.alt_hu} onChange={(event) => setForm((current) => ({ ...current, alt_hu: event.target.value }))} className={adminTextareaClass} /></Field>
+                <Field label="Alt metin · TR"><textarea rows={3} value={form.alt_tr} onChange={(event) => setForm((current) => ({ ...current, alt_tr: event.target.value }))} className={adminTextareaClass} /></Field>
               </div>
 
-              <div className="grid gap-4 sm:grid-cols-3">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <Field label="Açıklama · EN"><textarea rows={3} value={form.caption_en} onChange={(event) => setForm((current) => ({ ...current, caption_en: event.target.value }))} className={adminTextareaClass} /></Field>
                 <Field label="Açıklama · DE"><textarea rows={3} value={form.caption_de} onChange={(event) => setForm((current) => ({ ...current, caption_de: event.target.value }))} className={adminTextareaClass} /></Field>
                 <Field label="Açıklama · HU"><textarea rows={3} value={form.caption_hu} onChange={(event) => setForm((current) => ({ ...current, caption_hu: event.target.value }))} className={adminTextareaClass} /></Field>
+                <Field label="Açıklama · TR"><textarea rows={3} value={form.caption_tr} onChange={(event) => setForm((current) => ({ ...current, caption_tr: event.target.value }))} className={adminTextareaClass} /></Field>
               </div>
 
               <label className="flex items-center justify-between gap-4 rounded-xl border border-[#e5e0d8] bg-[#faf8f5] p-4">
@@ -387,6 +399,14 @@ export function GalleryView({ userId }: { userId: string }) {
           </form>
         </DialogContent>
       </Dialog>
+      <ConfirmDeleteDialog
+        open={Boolean(deleteTarget)}
+        title="Galeri görselini sil"
+        description="Görsel hem galeriden hem de depolama alanından kalıcı olarak silinecek. Bu işlem geri alınamaz."
+        busy={Boolean(deletingId)}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        onConfirm={() => deleteTarget && void remove(deleteTarget)}
+      />
     </div>
   );
 }

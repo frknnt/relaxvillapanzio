@@ -41,24 +41,26 @@ join auth.users au on au.id = admins.user_id;
 `/admin/login` adresinden giriş yaptıktan sonra şu sırayı izleyin:
 
 1. **Rezervasyon ayarları:** IBAN, hesap sahibi, banka adı, WhatsApp numarası,
-   evcil hayvan ücreti, maksimum kapasite ve ödeme bekleme süresi.
-2. **Dönemsel fiyatlar:** Rezervasyona açılacak her ay için hafta içi ve hafta sonu
-   gecelik fiyatı ile minimum gece sayısı.
+   evcil hayvan ücreti, maksimum kapasite, ödeme bekleme süresi, iptal koşulları,
+   veri saklama süresi ve işletmeci bilgileri.
+2. **Dönemsel fiyatlar:** Rezervasyona açılacak her ay için tüm villa ve dört
+   odanın ayrı hafta içi/hafta sonu gecelik fiyatı ile minimum gece sayısı.
 3. **Kapalı tarihler:** Bakım veya özel kullanım günleri.
-4. **Blog yazıları:** Kapak görselini doğrudan yükleyin; EN/DE/HU içerikleri
+4. **Blog yazıları:** Kapak görselini doğrudan yükleyin; EN/DE/HU/TR içerikleri
    taslak veya yayında olarak yönetin.
-5. **Galeri:** Görselleri yükleyin, kategori/oda/sıra ve üç dilde açıklama ekleyin.
+5. **Galeri:** Görselleri yükleyin, kategori/oda/sıra ve dört dilde açıklama ekleyin.
 
 Fiyat tanımlanmayan aylar müşteri takviminde seçilemez. Bu davranış eksik fiyatla
 yanlış rezervasyon alınmasını önlemek içindir.
 
 ## 4. Canlı ortama değişkenleri ekleyin
 
-`.env.example` içindeki iki değişkeni hosting servisinde tanımlayın:
+`.env.example` içindeki üç değişkeni hosting servisinde tanımlayın:
 
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+NEXT_PUBLIC_SITE_URL
 ```
 
 Yalnızca publishable key kullanılır. `service_role` anahtarını hiçbir zaman
@@ -66,7 +68,7 @@ tarayıcıya, `.env.local` dışındaki dosyalara veya GitHub'a koymayın.
 
 ## Rezervasyon akışı
 
-1. Misafir fiyatı tanımlı ve boş tarihleri seçer.
+1. Misafir fiyatı tanımlı oda veya odaları ve yalnızca o odalar için boş tarihleri seçer.
 2. Sistem geceleri hafta içi/hafta sonu olarak hesaplar ve varsa evcil hayvan
    ücretini bir kez ekler.
 3. Talep `Ödeme bekleniyor` durumunda oluşur ve tarihler geçici olarak kapanır.

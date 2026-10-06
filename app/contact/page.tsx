@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { ContactPageContent } from "./page-content";
 
 export const metadata: Metadata = {
-  title: "Availability & Direct Booking | Relax Villa Badacsonytomaj",
+  title: "Contact & Questions | Relax Villa Badacsonytomaj",
   description:
-    "Ask about dates and pricing for the complete four-bedroom Relax Villa in Badacsonytomaj. Direct confirmation and payment by bank transfer.",
+    "Ask the host about Relax Villa's rooms, amenities, accessibility, location or booking process in Badacsonytomaj.",
 };
 
 export default function ContactPage() {

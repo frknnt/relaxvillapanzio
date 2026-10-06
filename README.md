@@ -5,8 +5,8 @@
 Badacsonytomaj, Macaristan'da bulunan dört yatak odalı özel bir villa için
 geliştirilen çok dilli tanıtım, rezervasyon ve içerik yönetim sistemi.
 
-Villa oda bazında değil, tek rezervasyonla mülkün tamamı olarak kiralanır.
-Ziyaretçiler uygun tarihleri ve güncel fiyatı görüntüleyebilir, rezervasyon
+Villa tek oda, birden fazla oda veya dört odanın tamamı seçilerek kiralanabilir.
+Ziyaretçiler oda bazında uygun tarihleri ve güncel fiyatı görüntüleyebilir, rezervasyon
 talebi oluşturabilir ve banka havalesinden sonra ödeme dekontunu WhatsApp
 üzerinden iletebilir.
 
@@ -14,13 +14,15 @@ talebi oluşturabilir ve banka havalesinden sonra ödeme dekontunu WhatsApp
 
 ### Ziyaretçi sitesi
 
-- İngilizce, Almanca ve Macarca dil desteği
+- İngilizce, Almanca, Macarca ve Türkçe dil desteği
 - Mobil, tablet ve masaüstü uyumlu tasarım
 - Villa, odalar, ortak alanlar ve çevre galerisi
 - Tarih aralığı, yetişkin, çocuk ve evcil hayvan seçimi
 - Canlı müsaitlik takvimi
 - Hafta içi ve hafta sonuna göre otomatik fiyat hesaplama
 - IBAN ile ödeme ve WhatsApp dekont yönlendirmesi
+- Açık rezervasyon, iptal ve gizlilik politikaları
+- Referans kodu ve e-posta ile güvenli rezervasyon durumu sorgulama
 - Çok dilli blog ve SEO uyumlu yazı sayfaları
 - Hakkımızda, galeri, blog ve iletişim sayfaları
 
@@ -29,12 +31,14 @@ talebi oluşturabilir ve banka havalesinden sonra ödeme dekontunu WhatsApp
 - Mobil uyumlu yönetici arayüzü
 - Rezervasyon ve ödeme durumu yönetimi
 - Aylık hafta içi/hafta sonu fiyatlandırması
+- Tüm villa ve her oda için ayrı fiyat, önceki ayı kopyalama ve toplu oran güncelleme
 - Minimum konaklama süresi tanımlama
 - Bakım veya özel kullanım için tarih kapatma
 - Çok dilli blog yazısı oluşturma ve yayınlama
 - İletişim formundan gelen destek taleplerini görüntüleme ve durum takibi
 - Galeri görsellerini yükleme, sıralama ve kategorilendirme
 - Hesap sahibi, hesap numarası, IBAN, BIC/SWIFT, e-posta, WhatsApp, kapasite ve evcil hayvan ücreti ayarları
+- İptal, veri saklama ve yasal işletmeci ayarları
 
 ## Teknolojiler
 
@@ -56,6 +60,10 @@ talebi oluşturabilir ve banka havalesinden sonra ödeme dekontunu WhatsApp
 | `/blog` | Blog yazıları |
 | `/blog/[slug]` | Blog yazısı detay sayfası |
 | `/contact` | İletişim ve rezervasyon talep formu |
+| `/reservation-status` | Referans ve e-posta ile rezervasyon durumu |
+| `/privacy` | Gizlilik bildirimi |
+| `/booking-terms` | Rezervasyon koşulları |
+| `/cancellation-policy` | İptal ve iade politikası |
 | `/admin/login` | Yönetici girişi |
 | `/admin` | Yönetim paneli |
 
@@ -92,6 +100,7 @@ Copy-Item .env.example .env.local
 ```env
 NEXT_PUBLIC_SUPABASE_URL=https://your-project-ref.supabase.co
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=sb_publishable_your_key
+NEXT_PUBLIC_SITE_URL=https://alan-adiniz.example
 ```
 
 Geliştirme sunucusunu başlatın:
@@ -117,6 +126,11 @@ Supabase Dashboard içindeki **SQL Editor** bölümünde aşağıdaki dosyaları
 7. `supabase/security_hardening.sql`
 8. `supabase/move_public_definers_to_private.sql`
 9. `supabase/harden_support_rpc.sql`
+10. `supabase/flexible_room_booking_and_turkish.sql`
+11. `supabase/complete_room_pricing_workflow.sql`
+12. `supabase/fix_room_availability_security.sql`
+13. `supabase/private_property_and_turkish_blog.sql`
+14. `supabase/professional_booking_trust_and_safety.sql`
 
 Ana şema aşağıdaki kaynakları oluşturur:
 
@@ -161,8 +175,8 @@ Daha ayrıntılı yönetici kurulum rehberi için
 
 ## Rezervasyon akışı
 
-1. Yönetici ilgili ay için hafta içi ve hafta sonu fiyatlarını tanımlar.
-2. Misafir müsait tarihleri, kişi sayısını ve varsa evcil hayvan sayısını seçer.
+1. Yönetici ilgili ay için tüm villa ve dört odanın hafta içi/hafta sonu fiyatlarını tanımlar.
+2. Misafir oda veya odaları, müsait tarihleri, kişi sayısını ve varsa evcil hayvan sayısını seçer.
 3. Sistem toplam tutarı ve minimum gece kuralını otomatik hesaplar.
 4. Rezervasyon `Ödeme bekleniyor` durumunda oluşturulur ve tarihler geçici olarak kapanır.
 5. Misafir ödemeyi IBAN'a gönderir ve dekontu WhatsApp üzerinden iletir.
@@ -180,6 +194,7 @@ fiyatla rezervasyon oluşturulmasını önler.
 | `npm run build` | Üretim derlemesini oluşturur |
 | `npm run start` | Üretim derlemesini yerel olarak çalıştırır |
 | `npm run lint` | ESLint kontrollerini çalıştırır |
+| `npm test` | Fiyatlandırma ve oda müsaitliği birim testlerini çalıştırır |
 | `npm run install:ci` | Kilit dosyasına göre CI bağımlılık kurulumu yapar |
 
 ## Proje yapısı
@@ -227,6 +242,7 @@ Hosting servisinde aşağıdaki ortam değişkenlerini tanımlayın:
 ```text
 NEXT_PUBLIC_SUPABASE_URL
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY
+NEXT_PUBLIC_SITE_URL
 ```
 
 Ardından üretim derlemesini doğrulayın:

@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/dialog";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { BlogPost, BlogStatus, SupportedLanguage } from "@/lib/supabase/types";
+import { ConfirmDeleteDialog } from "@/components/admin/confirm-delete-dialog";
 import {
   adminInputClass,
   adminTextareaClass,
@@ -36,15 +37,19 @@ type BlogForm = {
   category_en: string;
   category_de: string;
   category_hu: string;
+  category_tr: string;
   title_en: string;
   title_de: string;
   title_hu: string;
+  title_tr: string;
   excerpt_en: string;
   excerpt_de: string;
   excerpt_hu: string;
+  excerpt_tr: string;
   content_en: string;
   content_de: string;
   content_hu: string;
+  content_tr: string;
 };
 
 type LanguageField = "category" | "title" | "excerpt" | "content";
@@ -53,6 +58,7 @@ const languages: Array<{ id: SupportedLanguage; label: string; name: string }> =
   { id: "en", label: "EN", name: "English" },
   { id: "de", label: "DE", name: "Deutsch" },
   { id: "hu", label: "HU", name: "Magyar" },
+  { id: "tr", label: "TR", name: "Türkçe" },
 ];
 
 const emptyForm: BlogForm = {
@@ -62,15 +68,19 @@ const emptyForm: BlogForm = {
   category_en: "Travel",
   category_de: "Reise",
   category_hu: "Utazás",
+  category_tr: "Seyahat",
   title_en: "",
   title_de: "",
   title_hu: "",
+  title_tr: "",
   excerpt_en: "",
   excerpt_de: "",
   excerpt_hu: "",
+  excerpt_tr: "",
   content_en: "",
   content_de: "",
   content_hu: "",
+  content_tr: "",
 };
 
 function slugify(value: string) {
@@ -103,6 +113,7 @@ export function BlogView({ userId }: { userId: string }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<BlogPost | null>(null);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [query, setQuery] = useState("");
   const [filter, setFilter] = useState<"all" | BlogStatus>("all");
@@ -139,7 +150,7 @@ export function BlogView({ userId }: { userId: string }) {
     return posts.filter((post) => {
       const matchesQuery =
         !normalized ||
-        [post.title_en, post.title_de, post.title_hu, post.slug]
+        [post.title_en, post.title_de, post.title_hu, post.title_tr, post.slug]
           .join(" ")
           .toLowerCase()
           .includes(normalized);
@@ -164,15 +175,19 @@ export function BlogView({ userId }: { userId: string }) {
       category_en: post.category_en,
       category_de: post.category_de,
       category_hu: post.category_hu,
+      category_tr: post.category_tr,
       title_en: post.title_en,
       title_de: post.title_de,
       title_hu: post.title_hu,
+      title_tr: post.title_tr,
       excerpt_en: post.excerpt_en,
       excerpt_de: post.excerpt_de,
       excerpt_hu: post.excerpt_hu,
+      excerpt_tr: post.excerpt_tr,
       content_en: post.content_en,
       content_de: post.content_de,
       content_hu: post.content_hu,
+      content_tr: post.content_tr,
     });
     setCoverFile(null);
     setLanguage("en");
@@ -198,8 +213,24 @@ export function BlogView({ userId }: { userId: string }) {
     try {
       const normalizedSlug = slugify(form.slug || form.title_en);
       if (!normalizedSlug) throw new Error("Geçerli bir URL kısa adı girin.");
-      if (!form.title_en.trim() || !form.title_de.trim() || !form.title_hu.trim()) {
-        throw new Error("Her üç dil için de yazı başlığı girilmelidir.");
+      if (
+        !form.title_en.trim() ||
+        !form.title_de.trim() ||
+        !form.title_hu.trim() ||
+        !form.title_tr.trim()
+      ) {
+        throw new Error("Dört dilin tamamı için yazı başlığı girilmelidir.");
+      }
+      if (form.status === "published") {
+        const incomplete = languages.filter((item) =>
+          !form[`category_${item.id}`].trim() ||
+          !form[`title_${item.id}`].trim() ||
+          !form[`excerpt_${item.id}`].trim() ||
+          !form[`content_${item.id}`].trim(),
+        );
+        if (incomplete.length) {
+          throw new Error(`Yayınlamak için tüm dil içeriklerini tamamlayın: ${incomplete.map((item) => item.label).join(", ")}.`);
+        }
       }
 
       let coverUrl = form.cover_url.trim();
@@ -266,7 +297,6 @@ export function BlogView({ userId }: { userId: string }) {
   }
 
   async function remove(post: BlogPost) {
-    if (!window.confirm(`“${post.title_en}” yazısını kalıcı olarak silmek istiyor musunuz?`)) return;
     setDeletingId(post.id);
     setFeedback(null);
     try {
@@ -274,6 +304,7 @@ export function BlogView({ userId }: { userId: string }) {
       if (error) throw error;
       await load();
       setFeedback({ tone: "success", message: "Blog yazısı silindi." });
+      setDeleteTarget(null);
     } catch (caught) {
       setFeedback({ tone: "error", message: getErrorMessage(caught, "Blog yazısı silinemedi.") });
     } finally {
@@ -286,7 +317,7 @@ export function BlogView({ userId }: { userId: string }) {
       <SectionHeading
         eyebrow="İçerik yönetimi"
         title="Blog yazıları"
-        description="İngilizce, Almanca ve Macarca içerikleri tek kayıtta düzenleyip taslak veya yayınlanmış olarak yönetin."
+        description="İngilizce, Almanca, Macarca ve Türkçe içerikleri tek kayıtta düzenleyip taslak veya yayınlanmış olarak yönetin."
         action={<Button onClick={openCreate} className="w-full sm:w-auto"><Plus className="size-4" />Yeni yazı</Button>}
       />
 
@@ -327,9 +358,9 @@ export function BlogView({ userId }: { userId: string }) {
                 </Badge>
               </div>
               <div className="p-5">
-                <p className="text-[0.65rem] font-bold tracking-[0.16em] text-[#9a855f] uppercase">{post.category_en}</p>
-                <h2 className="mt-2 line-clamp-2 min-h-12 text-lg leading-6 font-semibold tracking-[-0.025em]">{post.title_en}</h2>
-                <p className="mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-[#77787b]">{post.excerpt_en || "Henüz özet eklenmedi."}</p>
+                <p className="text-[0.65rem] font-bold tracking-[0.16em] text-[#9a855f] uppercase">{post.category_tr || post.category_en}</p>
+                <h2 className="mt-2 line-clamp-2 min-h-12 text-lg leading-6 font-semibold tracking-[-0.025em]">{post.title_tr || post.title_en}</h2>
+                <p className="mt-2 line-clamp-2 min-h-10 text-sm leading-5 text-[#77787b]">{post.excerpt_tr || post.excerpt_en || "Henüz özet eklenmedi."}</p>
                 <div className="mt-4 flex items-center justify-between gap-3 border-t border-[#eeeae4] pt-4">
                   <div>
                     <p className="font-mono text-[0.65rem] text-[#999a9d]">/{post.slug}</p>
@@ -340,7 +371,7 @@ export function BlogView({ userId }: { userId: string }) {
                       <Button asChild variant="ghost" size="icon-sm"><a href={`/blog/${encodeURIComponent(post.slug)}`} target="_blank" rel="noreferrer" aria-label="Yazıyı aç"><ExternalLink className="size-4" /></a></Button>
                     ) : null}
                     <Button variant="ghost" size="icon-sm" onClick={() => openEdit(post)} aria-label="Yazıyı düzenle"><Edit3 className="size-4" /></Button>
-                    <Button variant="ghost" size="icon-sm" onClick={() => void remove(post)} disabled={deletingId === post.id} className="text-red-600 hover:bg-red-50 hover:text-red-700" aria-label="Yazıyı sil">
+                    <Button variant="ghost" size="icon-sm" onClick={() => setDeleteTarget(post)} disabled={deletingId === post.id} className="text-red-600 hover:bg-red-50 hover:text-red-700" aria-label="Yazıyı sil">
                       {deletingId === post.id ? <InlineSpinner /> : <Trash2 className="size-4" />}
                     </Button>
                   </div>
@@ -398,7 +429,7 @@ export function BlogView({ userId }: { userId: string }) {
               <div className="flex gap-1 rounded-xl bg-[#f0ede7] p-1" role="tablist" aria-label="İçerik dili">
                 {languages.map((item) => (
                   <button key={item.id} type="button" role="tab" aria-selected={language === item.id} onClick={() => setLanguage(item.id)} className={cn("flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition sm:text-sm", language === item.id ? "bg-white text-[#2d2f33] shadow-sm" : "text-[#7f8083] hover:text-[#46474a]")}>
-                    {item.label} <span className="hidden font-normal text-[#999a9d] sm:inline">· {item.name}</span>
+                    {item.label} <span aria-label={form[`category_${item.id}`].trim() && form[`title_${item.id}`].trim() && form[`excerpt_${item.id}`].trim() && form[`content_${item.id}`].trim() ? "Tamamlandı" : "Eksik alan var"} className={cn("ml-1 inline-block size-2 rounded-full", form[`category_${item.id}`].trim() && form[`title_${item.id}`].trim() && form[`excerpt_${item.id}`].trim() && form[`content_${item.id}`].trim() ? "bg-emerald-600" : "bg-amber-500")} /> <span className="hidden font-normal text-[#999a9d] sm:inline">· {item.name}</span>
                   </button>
                 ))}
               </div>
@@ -419,7 +450,7 @@ export function BlogView({ userId }: { userId: string }) {
               </div>
 
               <p className="rounded-xl bg-[#f7f4ef] px-4 py-3 text-xs leading-5 text-[#747579]">
-                Yayına almadan önce EN, DE ve HU sekmelerindeki başlıkları kontrol edin. Taslak yazılar yalnızca yönetim panelinde görünür.
+                Yayına almadan önce EN, DE, HU ve TR sekmelerindeki başlıkları kontrol edin. Taslak yazılar yalnızca yönetim panelinde görünür.
               </p>
             </div>
             <DialogFooter className="border-t border-[#e9e5de] px-5 py-4 sm:px-6">
@@ -429,6 +460,14 @@ export function BlogView({ userId }: { userId: string }) {
           </form>
         </DialogContent>
       </Dialog>
+      <ConfirmDeleteDialog
+        open={Boolean(deleteTarget)}
+        title="Blog yazısını sil"
+        description={deleteTarget ? `“${deleteTarget.title_tr || deleteTarget.title_en}” kalıcı olarak silinecek. Bu işlem geri alınamaz.` : ""}
+        busy={Boolean(deletingId)}
+        onOpenChange={(open) => !open && setDeleteTarget(null)}
+        onConfirm={() => deleteTarget && void remove(deleteTarget)}
+      />
     </div>
   );
 }

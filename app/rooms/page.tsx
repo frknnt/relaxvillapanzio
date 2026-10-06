@@ -3,9 +3,9 @@ import type { Metadata } from "next";
 import { RoomsPageContent } from "./page-content";
 
 export const metadata: Metadata = {
-  title: "Four Bedrooms & Full Gallery | Relax Villa Badacsonytomaj",
+  title: "Rooms & Full Gallery | Relax Villa Badacsonytomaj",
   description:
-    "Explore all four bedrooms, shared living areas, garden, pool, outdoor hot tub and barrel sauna included in every Relax Villa booking.",
+    "Explore four bedrooms, shared living areas, garden, pool, outdoor hot tub and barrel sauna, available for room or whole-villa stays at Relax Villa.",
 };
 
 export default function RoomsPage() {

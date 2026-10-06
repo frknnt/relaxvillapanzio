@@ -4,6 +4,7 @@ export type LocalizedGalleryText = {
   en: string;
   de: string;
   hu: string;
+  tr: string;
 };
 
 export type GalleryImage = {

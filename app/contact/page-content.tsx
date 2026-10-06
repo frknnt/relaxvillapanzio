@@ -1,6 +1,7 @@
 "use client";
 
 import { ArrowRight, LoaderCircle, Mail, MapPin, MessageCircle, Send } from "lucide-react";
+import Image from "next/image";
 import { useEffect, useState, type FormEvent, type ReactNode } from "react";
 
 import { secondaryCopy } from "@/app/secondary-content";
@@ -126,15 +127,12 @@ export function ContactPageContent() {
   };
 
   return (
-    <main className="overflow-x-clip bg-white text-[#26272b]">
+    <main id="main-content" className="overflow-x-clip bg-white text-[#26272b]">
       <div className="relative">
         <SiteHeader overlay />
         <section className="relative flex min-h-[490px] items-center justify-center overflow-hidden px-6 pt-20 text-center text-white sm:min-h-[540px]">
-          <img
-            src="/images/gallery/outdoor-04.jpg"
-            alt="Relax Villa pool and outdoor area"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
+          <Image src="/images/hero.jpg" alt="Relax Villa" fill priority sizes="100vw" className="object-cover object-center max-sm:hidden" />
+          <Image src="/images/hero-mobile.jpg" alt="Relax Villa" fill priority sizes="100vw" className="object-cover object-center sm:hidden" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(19,24,27,.46),rgba(19,24,27,.64))]" />
           <div className="relative mx-auto max-w-5xl">
             <p className="text-[11px] font-semibold uppercase tracking-[.3em] text-[#ddcaa5] sm:text-xs">
@@ -159,8 +157,6 @@ export function ContactPageContent() {
             </div>
             <p className="eyebrow">{t.formEyebrow}</p>
             <h2 className="section-title mt-4">{t.formTitle}</h2>
-            <p className="mt-5 max-w-2xl text-base leading-7 text-[#707175]">{t.formIntro}</p>
-            <p className="mt-3 max-w-2xl text-sm leading-6 text-[#87888a]">{t.intro}</p>
             <div className="mt-9 grid gap-6 md:grid-cols-2">
               <FormField id="contact-name" label={`${t.formFields.name} *`}>
                 <Input
@@ -209,6 +205,7 @@ export function ContactPageContent() {
                     <SelectItem value="en">English</SelectItem>
                     <SelectItem value="de">Deutsch</SelectItem>
                     <SelectItem value="hu">Magyar</SelectItem>
+                    <SelectItem value="tr">Türkçe</SelectItem>
                   </SelectContent>
                 </Select>
               </div>

@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { secondaryCopy } from "@/app/secondary-content";
+import { professionalCopy } from "@/app/professional-copy";
 import { CONTACT_EMAIL, WHATSAPP_NUMBER } from "@/app/site-config";
 import { useLanguage } from "@/components/site/language-provider";
 import {
@@ -15,6 +17,7 @@ import {
 export function SiteFooter() {
   const { language } = useLanguage();
   const copy = secondaryCopy[language];
+  const professional = professionalCopy[language];
   const [whatsappNumber, setWhatsappNumber] = useState(WHATSAPP_NUMBER);
   const [contactEmail, setContactEmail] = useState(CONTACT_EMAIL);
   const links = [
@@ -50,10 +53,12 @@ export function SiteFooter() {
 
   return (
     <footer className="relative min-h-[510px] px-6 py-28 text-white sm:px-10 lg:px-16">
-      <img
+      <Image
         src="/images/footer.jpg"
-        alt="Relax Villa"
-        className="absolute inset-0 h-full w-full object-cover grayscale"
+        alt=""
+        fill
+        sizes="100vw"
+        className="object-cover grayscale"
       />
       <div className="absolute inset-0 bg-[#20232a]/90" />
       <div className="relative mx-auto grid max-w-[1500px] gap-14 md:grid-cols-[1.1fr_.8fr_1.1fr]">
@@ -87,6 +92,7 @@ export function SiteFooter() {
                 {label}
               </Link>
             ))}
+            <Link href="/reservation-status" className="w-fit transition hover:text-white">{professional.trackBooking}</Link>
           </nav>
         </div>
         <div>
@@ -101,6 +107,14 @@ export function SiteFooter() {
             {copy.common.availability}
             <ArrowRight className="size-4" />
           </Link>
+          <div className="mt-8 border-t border-white/15 pt-6">
+            <p className="text-xs font-semibold uppercase tracking-[.14em] text-white/45">{professional.policies}</p>
+            <div className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs text-white/65">
+              <Link href="/privacy" className="hover:text-white">{professional.privacy}</Link>
+              <Link href="/booking-terms" className="hover:text-white">{professional.bookingTerms}</Link>
+              <Link href="/cancellation-policy" className="hover:text-white">{professional.cancellation}</Link>
+            </div>
+          </div>
         </div>
       </div>
     </footer>

@@ -2,6 +2,7 @@
 
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useMemo, useState } from "react";
 
 import { secondaryCopy } from "@/app/secondary-content";
@@ -32,10 +33,30 @@ function getLocalizedPostField(
   language: Language,
 ) {
   const fields = {
-    category: { en: post.category_en, de: post.category_de, hu: post.category_hu },
-    title: { en: post.title_en, de: post.title_de, hu: post.title_hu },
-    excerpt: { en: post.excerpt_en, de: post.excerpt_de, hu: post.excerpt_hu },
-    content: { en: post.content_en, de: post.content_de, hu: post.content_hu },
+    category: {
+      en: post.category_en,
+      de: post.category_de,
+      hu: post.category_hu,
+      tr: post.category_tr,
+    },
+    title: {
+      en: post.title_en,
+      de: post.title_de,
+      hu: post.title_hu,
+      tr: post.title_tr,
+    },
+    excerpt: {
+      en: post.excerpt_en,
+      de: post.excerpt_de,
+      hu: post.excerpt_hu,
+      tr: post.excerpt_tr,
+    },
+    content: {
+      en: post.content_en,
+      de: post.content_de,
+      hu: post.content_hu,
+      tr: post.content_tr,
+    },
   } satisfies Record<LocalizedBlogField, Record<Language, string>>;
   const translations = fields[field];
 
@@ -44,6 +65,7 @@ function getLocalizedPostField(
     translations.en?.trim() ||
     translations.de?.trim() ||
     translations.hu?.trim() ||
+    translations.tr?.trim() ||
     ""
   );
 }
@@ -103,7 +125,7 @@ export function BlogPageContent({ initialPosts }: { initialPosts: BlogPost[] }) 
   }, [language, publishedPosts, t.articles]);
 
   return (
-    <main className="overflow-x-clip bg-white text-[#26272b]">
+    <main id="main-content" className="overflow-x-clip bg-white text-[#26272b]">
       <div className="relative">
         <SiteHeader overlay />
         <PageHero
@@ -129,11 +151,13 @@ export function BlogPageContent({ initialPosts }: { initialPosts: BlogPost[] }) 
                   aria-label={`${t.read}: ${article.title}`}
                 >
                   <div className="relative aspect-[1.5] overflow-hidden">
-                    <img
+                    <Image
                       src={article.cover}
                       alt=""
-                      loading="lazy"
-                      className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                      fill
+                      unoptimized={article.cover.startsWith("http")}
+                      sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+                      className="object-cover transition duration-700 group-hover:scale-105"
                     />
                     <span className="absolute bottom-0 left-0 bg-[#24262b] px-4 py-2 text-sm font-semibold tracking-[.04em] text-white">
                       {String(index + 1).padStart(2, "0")} / {String(articles.length).padStart(2, "0")}

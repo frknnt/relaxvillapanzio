@@ -1,7 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Bookmark, House, MessageCircle } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { secondaryCopy } from "@/app/secondary-content";
 import { siteCopy } from "@/app/site-content";
@@ -16,6 +18,10 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import {
+  getSupabaseBrowserClient,
+  isSupabaseConfigured,
+} from "@/lib/supabase/client";
 
 const localPhotos = [
   "/images/gallery/outdoor-02.jpg",
@@ -27,9 +33,36 @@ export function AboutPageContent() {
   const { language } = useLanguage();
   const copy = secondaryCopy[language];
   const t = copy.about;
+  const [stayTimes, setStayTimes] = useState({ checkIn: "15:00", checkOut: "10:00" });
+
+  useEffect(() => {
+    if (!isSupabaseConfigured()) return;
+
+    let active = true;
+    void getSupabaseBrowserClient()
+      .from("booking_settings")
+      .select("check_in_time, check_out_time")
+      .eq("id", 1)
+      .maybeSingle()
+      .then(({ data }) => {
+        if (!active || !data) return;
+        setStayTimes({
+          checkIn: String(data.check_in_time ?? "15:00").slice(0, 5),
+          checkOut: String(data.check_out_time ?? "10:00").slice(0, 5),
+        });
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const checkInOutAnswer = t.checkInOutAnswer
+    .replace("{checkIn}", stayTimes.checkIn)
+    .replace("{checkOut}", stayTimes.checkOut);
 
   return (
-    <main className="overflow-x-clip bg-white text-[#26272b]">
+    <main id="main-content" className="overflow-x-clip bg-white text-[#26272b]">
       <div className="relative">
         <SiteHeader overlay />
         <PageHero
@@ -41,7 +74,7 @@ export function AboutPageContent() {
         />
       </div>
 
-      <section className="px-6 py-28 sm:px-10 md:py-36 lg:px-16">
+      <section id="stay-options" className="scroll-mt-20 px-6 py-28 sm:px-10 md:py-36 lg:px-16">
         <div className="mx-auto grid max-w-[1500px] items-center gap-16 lg:grid-cols-[.85fr_1.15fr] lg:gap-24">
           <div className="max-w-xl">
             <p className="eyebrow">{t.storyEyebrow}</p>
@@ -50,18 +83,14 @@ export function AboutPageContent() {
             <p className="mt-5 text-base leading-7 text-[#747579]">{t.storyBody}</p>
             <p className="mt-5 text-base leading-7 text-[#747579]">{t.secondBody}</p>
           </div>
-          <div className="relative mx-auto min-h-[650px] w-full max-w-[720px]">
-            <img
-              src="/images/story.jpg"
-              alt="Relax Villa living space"
-              className="absolute right-0 top-0 h-[82%] w-[76%] rounded-[8px] object-cover shadow-[0_24px_70px_rgba(26,26,26,.15)]"
-            />
-            <img
-              src="/images/about-detail.jpg"
-              alt="Relax Villa interior detail"
-              className="absolute bottom-0 left-0 h-[54%] w-[48%] rounded-[7px] border-[7px] border-white object-cover shadow-[0_22px_50px_rgba(18,18,18,.22)]"
-            />
-            <div className="absolute bottom-[6%] right-[2%] max-w-[230px] bg-[#26292f] p-7 text-white shadow-xl">
+          <div className="mx-auto grid w-full max-w-[720px] gap-4 sm:grid-cols-2 lg:relative lg:block lg:min-h-[650px]">
+            <div className="relative h-80 w-full overflow-hidden rounded-[8px] shadow-[0_18px_45px_rgba(26,26,26,.12)] sm:h-96 lg:absolute lg:right-0 lg:top-0 lg:h-[82%] lg:w-[76%] lg:shadow-[0_24px_70px_rgba(26,26,26,.15)]">
+              <Image src="/images/story.jpg" alt="Relax Villa living space" fill sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
+            </div>
+            <div className="relative h-80 w-full overflow-hidden rounded-[8px] shadow-[0_18px_45px_rgba(18,18,18,.14)] sm:h-96 lg:absolute lg:bottom-0 lg:left-0 lg:h-[54%] lg:w-[48%] lg:border-[7px] lg:border-white lg:shadow-[0_22px_50px_rgba(18,18,18,.22)]">
+              <Image src="/images/about-detail.jpg" alt="Relax Villa interior detail" fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover" />
+            </div>
+            <div className="bg-[#26292f] p-6 text-white shadow-xl sm:col-span-2 lg:absolute lg:bottom-[6%] lg:right-[2%] lg:max-w-[230px] lg:p-7">
               <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-[#d2bd92]">
                 Badacsonytomaj
               </p>
@@ -101,13 +130,12 @@ export function AboutPageContent() {
           </div>
           <div className="space-y-5">
             {localPhotos.map((photo, index) => (
-              <img
+              <div
                 key={photo}
-                src={photo}
-                alt={t.localImageAlts[index]}
-                loading="lazy"
-                className="aspect-[1.5] w-full rounded-[8px] object-cover"
-              />
+                className="relative aspect-[1.5] w-full overflow-hidden rounded-[8px]"
+              >
+                <Image src={photo} alt={t.localImageAlts[index]} fill sizes="(min-width: 1024px) 38vw, 100vw" className="object-cover" />
+              </div>
             ))}
           </div>
         </div>
@@ -166,7 +194,7 @@ export function AboutPageContent() {
                   <span className="faq-plus ml-auto shrink-0 text-2xl font-light leading-none text-[#9c8964]" aria-hidden="true" />
                 </AccordionTrigger>
                 <AccordionContent className="px-6 pb-6 text-base leading-7 text-[#616368]">
-                  {faq.answer}
+                  {index === 4 ? checkInOutAnswer : faq.answer}
                 </AccordionContent>
               </AccordionItem>
             ))}

@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, ChevronRight, House, Maximize2 } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, BedDouble, ChevronLeft, ChevronRight, DoorOpen, Maximize2, Users, Wind } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { galleryImages, type GalleryImage } from "@/app/rooms/gallery-data";
@@ -19,9 +20,17 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { formatMoney } from "@/lib/booking/pricing";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
-import { PUBLIC_GALLERY_IMAGE_COLUMNS } from "@/lib/supabase/public-columns";
-import type { GalleryImageRecord } from "@/lib/supabase/types";
+import { PUBLIC_BOOKING_SETTINGS_COLUMNS, PUBLIC_GALLERY_IMAGE_COLUMNS, PUBLIC_ROOM_COLUMNS, PUBLIC_ROOM_MONTHLY_RATE_COLUMNS } from "@/lib/supabase/public-columns";
+import type { BookingSettings, GalleryImageRecord, RoomMonthlyRate, VillaRoom } from "@/lib/supabase/types";
+
+const factCopy = {
+  en: { capacity: "Up to {count} guests", bed: ["Double bed", "Double bed", "Two single beds", "Double + single bed"], bathroom: "Shared bathrooms nearby", climate: ["Skylight & TV", "Direct balcony access", "Flexible twin layout", "Air conditioning & balcony"], from: "From", cta: "Choose this room" },
+  de: { capacity: "Bis zu {count} Gäste", bed: ["Doppelbett", "Doppelbett", "Zwei Einzelbetten", "Doppel- + Einzelbett"], bathroom: "Gemeinschaftsbäder in der Nähe", climate: ["Dachfenster & TV", "Direkter Balkonzugang", "Flexible Zweibettaufteilung", "Klimaanlage & Balkon"], from: "Ab", cta: "Dieses Zimmer wählen" },
+  hu: { capacity: "Legfeljebb {count} vendég", bed: ["Franciaágy", "Franciaágy", "Két külön ágy", "Franciaágy + egyszemélyes ágy"], bathroom: "Közeli közös fürdőszobák", climate: ["Tetőablak és TV", "Közvetlen erkélykapcsolat", "Rugalmas kétágyas elrendezés", "Légkondicionáló és erkély"], from: "Ettől", cta: "Szoba kiválasztása" },
+  tr: { capacity: "En fazla {count} misafir", bed: ["Çift kişilik yatak", "Çift kişilik yatak", "İki tek kişilik yatak", "Çift + tek kişilik yatak"], bathroom: "Yakındaki ortak banyolar", climate: ["Çatı penceresi ve TV", "Doğrudan balkon erişimi", "Esnek iki yataklı düzen", "Klima ve balkon"], from: "Başlangıç", cta: "Bu odayı seç" },
+} satisfies Record<Language, { capacity: string; bed: string[]; bathroom: string; climate: string[]; from: string; cta: string }>;
 
 function toGalleryImage(record: GalleryImageRecord): GalleryImage | null {
   if (
@@ -46,11 +55,17 @@ function toGalleryImage(record: GalleryImageRecord): GalleryImage | null {
     category: record.category,
     room,
     order: Number.isFinite(record.sort_order) ? record.sort_order : 0,
-    alt: { en: record.alt_en, de: record.alt_de, hu: record.alt_hu },
+    alt: {
+      en: record.alt_en,
+      de: record.alt_de,
+      hu: record.alt_hu,
+      tr: record.alt_tr,
+    },
     caption: {
       en: record.caption_en,
       de: record.caption_de,
       hu: record.caption_hu,
+      tr: record.caption_tr,
     },
   };
 }
@@ -80,6 +95,7 @@ function getLocalizedGalleryText(
     translations.en?.trim() ||
     translations.de?.trim() ||
     translations.hu?.trim() ||
+    translations.tr?.trim() ||
     ""
   );
 }
@@ -90,6 +106,9 @@ export function RoomsPageContent() {
   const t = copy.rooms;
   const [activeImage, setActiveImage] = useState<GalleryImage | null>(null);
   const [remoteImages, setRemoteImages] = useState<GalleryImage[]>([]);
+  const [roomData, setRoomData] = useState<VillaRoom[]>([]);
+  const [startingRates, setStartingRates] = useState<Record<number, number>>({});
+  const [currency, setCurrency] = useState("HUF");
   const allGalleryImages = useMemo(() => mergeGalleryImages(remoteImages), [remoteImages]);
   const bedroomImageGroups = useMemo(
     () =>
@@ -130,6 +149,27 @@ export function RoomsPageContent() {
     return () => {
       isActive = false;
     };
+  }, []);
+
+  useEffect(() => {
+    let active = true;
+    const month = new Date().toISOString().slice(0, 7) + "-01";
+    void Promise.all([
+      getSupabaseBrowserClient().from("rooms").select(PUBLIC_ROOM_COLUMNS).eq("active", true).order("id"),
+      getSupabaseBrowserClient().from("room_monthly_rates").select(PUBLIC_ROOM_MONTHLY_RATE_COLUMNS).eq("active", true).gte("month", month),
+      getSupabaseBrowserClient().from("booking_settings").select(PUBLIC_BOOKING_SETTINGS_COLUMNS).eq("id", 1).maybeSingle(),
+    ]).then(([roomsResult, ratesResult, settingsResult]) => {
+      if (!active || roomsResult.error || ratesResult.error || settingsResult.error) return;
+      setRoomData((roomsResult.data ?? []) as VillaRoom[]);
+      const minimums: Record<number, number> = {};
+      for (const rate of (ratesResult.data ?? []) as RoomMonthlyRate[]) {
+        const value = Math.min(rate.weekday_rate, rate.weekend_rate);
+        minimums[rate.room_id] = minimums[rate.room_id] === undefined ? value : Math.min(minimums[rate.room_id], value);
+      }
+      setStartingRates(minimums);
+      if (settingsResult.data) setCurrency((settingsResult.data as BookingSettings).currency);
+    });
+    return () => { active = false; };
   }, []);
 
   const getImageAlt = (image: GalleryImage) => {
@@ -183,21 +223,17 @@ export function RoomsPageContent() {
     : -1;
 
   return (
-    <main className="overflow-hidden bg-white text-[#26272b]">
+    <>
+      <SiteHeader overlay />
+      <main id="main-content" className="overflow-hidden bg-white text-[#26272b]">
       <div className="relative">
-        <SiteHeader overlay />
         <PageHero
           image="/images/gallery/bedroom-1-01.jpg"
           imageAlt={t.bedroomNames[0]}
           eyebrow={t.eyebrow}
           title={t.title}
           intro={t.intro}
-        >
-          <div className="mt-8 inline-flex max-w-2xl items-center gap-3 border border-white/25 bg-black/20 px-5 py-3 text-sm text-white/82 backdrop-blur-sm">
-            <House className="size-4 shrink-0 text-[#d8c49a]" />
-            {t.notice}
-          </div>
-        </PageHero>
+        />
       </div>
 
       <section className="bg-[#faf8f5] px-6 py-24 sm:px-10 md:py-32 lg:px-16">
@@ -216,10 +252,13 @@ export function RoomsPageContent() {
                   aria-label={`${t.openImage}: ${t.bedroomNames[index]}`}
                   className="group absolute inset-0 overflow-hidden rounded-[8px] text-left shadow-[0_20px_55px_rgba(30,31,34,.12)]"
                 >
-                  <img
+                  <Image
                     src={images[0].src}
                     alt={t.bedroomNames[index]}
-                    className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.035]"
+                    fill
+                    unoptimized={images[0].src.startsWith("http")}
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className="object-cover transition duration-700 group-hover:scale-[1.035]"
                   />
                   <span className="absolute right-5 top-5 grid size-11 place-items-center rounded-full bg-white/90 text-[#2d2f33] shadow-md transition group-hover:bg-[#2d2f33] group-hover:text-white">
                     <Maximize2 className="size-4" />
@@ -232,10 +271,13 @@ export function RoomsPageContent() {
                     aria-label={`${t.openImage}: ${t.bedroomNames[index]}`}
                     className="group absolute bottom-5 right-5 h-[38%] w-[38%] overflow-hidden rounded-[6px] border-[5px] border-white bg-white shadow-2xl"
                   >
-                    <img
+                    <Image
                       src={images[1].src}
                       alt={t.bedroomNames[index]}
-                      className="h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                      fill
+                      unoptimized={images[1].src.startsWith("http")}
+                      sizes="(min-width: 1024px) 20vw, 40vw"
+                      className="object-cover transition duration-700 group-hover:scale-105"
                     />
                   </button>
                 ) : null}
@@ -246,6 +288,16 @@ export function RoomsPageContent() {
                   {t.bedroomNames[index]}
                 </h2>
                 <p className="mt-7 text-lg leading-8 text-[#696a6e]">{t.bedroomNotes[index]}</p>
+                <div className="mt-7 grid gap-2 text-sm text-[#56575b] sm:grid-cols-2">
+                  <p className="flex min-h-11 items-center gap-2 rounded-lg bg-[#f7f4ef] px-3"><Users className="size-4 text-[#806c45]" />{factCopy[language].capacity.replace("{count}", String(roomData.find((room) => room.id === index + 1)?.max_guests ?? [2, 2, 2, 3][index]))}</p>
+                  <p className="flex min-h-11 items-center gap-2 rounded-lg bg-[#f7f4ef] px-3"><BedDouble className="size-4 text-[#806c45]" />{factCopy[language].bed[index]}</p>
+                  <p className="flex min-h-11 items-center gap-2 rounded-lg bg-[#f7f4ef] px-3"><DoorOpen className="size-4 text-[#806c45]" />{factCopy[language].bathroom}</p>
+                  <p className="flex min-h-11 items-center gap-2 rounded-lg bg-[#f7f4ef] px-3"><Wind className="size-4 text-[#806c45]" />{factCopy[language].climate[index]}</p>
+                </div>
+                <div className="mt-6 flex flex-wrap items-center gap-4">
+                  {startingRates[index + 1] !== undefined ? <p className="text-sm text-[#66676b]"><span className="font-semibold text-[#806c45]">{factCopy[language].from}</span> {formatMoney(startingRates[index + 1], currency, language)} / {language === "tr" ? "gece" : language === "de" ? "Nacht" : language === "hu" ? "éj" : "night"}</p> : null}
+                  <Link href={`/?rooms=${index + 1}#availability`} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#303238] px-5 text-xs font-semibold uppercase tracking-[.1em] text-white transition hover:bg-[#806c45]">{factCopy[language].cta}<ArrowRight className="size-4" /></Link>
+                </div>
                 <p className="mt-6 border-l-2 border-[#b6a27b] pl-5 text-sm font-semibold uppercase leading-6 tracking-[.12em] text-[#8f7e5e]">
                   {t.notice}
                 </p>
@@ -303,12 +355,13 @@ export function RoomsPageContent() {
                               : ""
                         }`}
                       >
-                        <img
+                        <Image
                           src={image.src}
                           alt={getImageAlt(image)}
-                          loading="lazy"
-                          decoding="async"
-                          className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105"
+                          fill
+                          unoptimized={image.src.startsWith("http")}
+                          sizes="(min-width: 1280px) 25vw, (min-width: 768px) 33vw, 50vw"
+                          className="object-cover transition duration-700 group-hover:scale-105"
                         />
                         <span className="absolute inset-0 bg-black/0 transition group-hover:bg-black/35" />
                         {caption ? (
@@ -339,8 +392,6 @@ export function RoomsPageContent() {
         </div>
       </section>
 
-      <SiteFooter />
-
       <Dialog open={Boolean(activeImage)} onOpenChange={(open) => !open && setActiveImage(null)}>
         <DialogContent className="max-w-[min(1200px,calc(100%-2rem))] overflow-hidden border-0 bg-[#17191d] p-0">
           <DialogHeader className="sr-only">
@@ -349,10 +400,13 @@ export function RoomsPageContent() {
           </DialogHeader>
           {activeImage ? (
             <div className="relative flex min-h-[45vh] items-center justify-center bg-[#17191d]">
-              <img
+              <Image
                 src={activeImage.src}
                 alt={getImageAlt(activeImage)}
-                className="max-h-[88vh] w-full object-contain"
+                fill
+                unoptimized={activeImage.src.startsWith("http")}
+                sizes="100vw"
+                className="object-contain"
               />
               <button
                 type="button"
@@ -382,6 +436,8 @@ export function RoomsPageContent() {
           ) : null}
         </DialogContent>
       </Dialog>
-    </main>
+      </main>
+      <SiteFooter />
+    </>
   );
 }

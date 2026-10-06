@@ -41,6 +41,14 @@ const articleUi = {
     missingTitle: "A cikk nem található",
     missingText: "Ez a cikk már nem érhető el. A legfrissebb bejegyzésekhez térjen vissza a bloghoz.",
   },
+  tr: {
+    back: "Bloga dön",
+    book: "Tarihlerinizi sorun",
+    loading: "Yazı yükleniyor…",
+    missingEyebrow: "RELAX VILLA BLOG",
+    missingTitle: "Yazı bulunamadı",
+    missingText: "Bu yazı artık kullanılamıyor. En yeni yazıları incelemek için bloga dönün.",
+  },
 } as const satisfies Record<Language, object>;
 
 type LocalizedBlogField = "category" | "title" | "excerpt" | "content";
@@ -59,10 +67,30 @@ function getLocalizedPostField(
   language: Language,
 ) {
   const fields = {
-    category: { en: post.category_en, de: post.category_de, hu: post.category_hu },
-    title: { en: post.title_en, de: post.title_de, hu: post.title_hu },
-    excerpt: { en: post.excerpt_en, de: post.excerpt_de, hu: post.excerpt_hu },
-    content: { en: post.content_en, de: post.content_de, hu: post.content_hu },
+    category: {
+      en: post.category_en,
+      de: post.category_de,
+      hu: post.category_hu,
+      tr: post.category_tr,
+    },
+    title: {
+      en: post.title_en,
+      de: post.title_de,
+      hu: post.title_hu,
+      tr: post.title_tr,
+    },
+    excerpt: {
+      en: post.excerpt_en,
+      de: post.excerpt_de,
+      hu: post.excerpt_hu,
+      tr: post.excerpt_tr,
+    },
+    content: {
+      en: post.content_en,
+      de: post.content_de,
+      hu: post.content_hu,
+      tr: post.content_tr,
+    },
   } satisfies Record<LocalizedBlogField, Record<Language, string>>;
   const translations = fields[field];
 
@@ -71,6 +99,7 @@ function getLocalizedPostField(
     translations.en?.trim() ||
     translations.de?.trim() ||
     translations.hu?.trim() ||
+    translations.tr?.trim() ||
     ""
   );
 }
@@ -99,7 +128,7 @@ export function BlogArticlePageContent({
     slug: string;
     post: BlogPost | null;
     hasLoaded: boolean;
-  }>({ slug, post: initialPost, hasLoaded: true });
+  }>({ slug, post: initialPost, hasLoaded: initialPost !== null });
   const post = postResult.slug === slug ? postResult.post : null;
   const hasLoaded = postResult.slug === slug && postResult.hasLoaded;
 
@@ -169,7 +198,7 @@ export function BlogArticlePageContent({
 
   if (!article && !hasLoaded) {
     return (
-      <main className="min-h-screen bg-[#faf8f5] text-[#26272b]">
+      <main id="main-content" className="min-h-screen bg-[#faf8f5] text-[#26272b]">
         <SiteHeader />
         <div className="mx-auto flex min-h-[60vh] max-w-[1500px] items-center justify-center px-6 text-sm font-semibold uppercase tracking-[.14em] text-[#8e805f]">
           {ui.loading}
@@ -181,7 +210,7 @@ export function BlogArticlePageContent({
 
   if (!article) {
     return (
-      <main className="min-h-screen bg-[#faf8f5] text-[#26272b]">
+      <main id="main-content" className="min-h-screen bg-[#faf8f5] text-[#26272b]">
         <SiteHeader />
         <section className="mx-auto flex min-h-[64vh] max-w-3xl flex-col items-start justify-center px-6 py-24 sm:px-10">
           <p className="eyebrow">{ui.missingEyebrow}</p>
@@ -203,7 +232,7 @@ export function BlogArticlePageContent({
   }
 
   return (
-    <main className="overflow-x-clip bg-white text-[#26272b]">
+    <main id="main-content" className="overflow-x-clip bg-white text-[#26272b]">
       <div className="relative">
         <SiteHeader overlay />
         <PageHero

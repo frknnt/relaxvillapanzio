@@ -1,13 +1,16 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   AlertCircle,
   ArrowRight,
   ArrowUp,
+  BedDouble,
   CalendarDays,
   Check,
+  ChevronDown,
   Clock3,
   Copy,
   Loader2,
@@ -15,6 +18,7 @@ import {
   Minus,
   Plus,
   Search,
+  Users,
 } from "lucide-react";
 
 import { AvailabilityCalendar } from "@/components/booking/availability-calendar";
@@ -32,6 +36,7 @@ import {
 import {
   calculateBookingQuote,
   formatMoney,
+  isWholeVillaSelection,
   rangeContainsBlockedDate,
 } from "@/lib/booking/pricing";
 import {
@@ -41,15 +46,20 @@ import {
 import {
   PUBLIC_BOOKING_SETTINGS_COLUMNS,
   PUBLIC_MONTHLY_RATE_COLUMNS,
+  PUBLIC_ROOM_COLUMNS,
+  PUBLIC_ROOM_MONTHLY_RATE_COLUMNS,
 } from "@/lib/supabase/public-columns";
 import type {
   AvailabilityRange,
   BookingResult,
   BookingSettings,
   MonthlyRate,
+  RoomMonthlyRate,
+  VillaRoom,
 } from "@/lib/supabase/types";
 import { type Language, siteCopy } from "./site-content";
-import { BANK_IBAN, WHATSAPP_NUMBER } from "./site-config";
+import { professionalCopy } from "./professional-copy";
+import { WHATSAPP_NUMBER } from "./site-config";
 
 const roomImages = [
   "/images/gallery/bedroom-1-01.jpg",
@@ -79,7 +89,7 @@ function GuestCounter({
           type="button"
           aria-label={`Decrease ${label}`}
           onClick={() => onChange(Math.max(min, value - 1))}
-          className="grid size-7 place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958]"
+          className="grid size-11 place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958]"
         >
           <Minus className="size-3.5" />
         </button>
@@ -88,7 +98,7 @@ function GuestCounter({
           type="button"
           aria-label={`Increase ${label}`}
           onClick={() => onChange(Math.min(20, value + 1))}
-          className="grid size-7 place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958]"
+          className="grid size-11 place-items-center rounded-full border border-[#dcd7cf] transition hover:border-[#a08f6d] hover:text-[#8b7958]"
         >
           <Plus className="size-3.5" />
         </button>
@@ -112,10 +122,17 @@ export default function Home() {
   const [showTop, setShowTop] = useState(false);
   const [bookingSettings, setBookingSettings] = useState<BookingSettings | null>(null);
   const [monthlyRates, setMonthlyRates] = useState<MonthlyRate[]>([]);
+  const [rooms, setRooms] = useState<VillaRoom[]>([]);
+  const [roomMonthlyRates, setRoomMonthlyRates] = useState<RoomMonthlyRate[]>([]);
+  const [selectedRoomIds, setSelectedRoomIds] = useState<number[]>([]);
+  const [roomPickerOpen, setRoomPickerOpen] = useState(false);
   const [availabilityRanges, setAvailabilityRanges] = useState<AvailabilityRange[]>([]);
   const [availabilityLoading, setAvailabilityLoading] = useState(true);
+  const [bookingDataState, setBookingDataState] = useState<"loading" | "ready" | "error">("loading");
   const [bookingSubmitting, setBookingSubmitting] = useState(false);
   const [bookingResult, setBookingResult] = useState<BookingResult | null>(null);
+  const [policyAccepted, setPolicyAccepted] = useState(false);
+  const dialogErrorRef = useRef<HTMLParagraphElement>(null);
   const [guestForm, setGuestForm] = useState({
     name: "",
     email: "",
@@ -124,6 +141,7 @@ export default function Home() {
     website: "",
   });
   const t = siteCopy[language];
+  const professional = professionalCopy[language];
   const today = useMemo(() => localDateString(new Date()), []);
   const maxBookingDate = useMemo(() => {
     const date = new Date();
@@ -138,11 +156,13 @@ export default function Home() {
     }
 
     setAvailabilityLoading(true);
-    const supabase = getSupabaseBrowserClient();
-    const until = new Date();
-    until.setFullYear(until.getFullYear() + 2);
+    setBookingDataState("loading");
+    try {
+      const supabase = getSupabaseBrowserClient();
+      const until = new Date();
+      until.setFullYear(until.getFullYear() + 2);
 
-    const [settingsResult, ratesResult, availabilityResult] = await Promise.all([
+      const [settingsResult, ratesResult, roomsResult, roomRatesResult, availabilityResult] = await Promise.all([
       supabase
         .from("booking_settings")
         .select(PUBLIC_BOOKING_SETTINGS_COLUMNS)
@@ -153,23 +173,55 @@ export default function Home() {
         .select(PUBLIC_MONTHLY_RATE_COLUMNS)
         .eq("active", true)
         .order("month"),
-      supabase.rpc("get_availability", {
+      supabase
+        .from("rooms")
+        .select(PUBLIC_ROOM_COLUMNS)
+        .eq("active", true)
+        .order("id"),
+      supabase
+        .from("room_monthly_rates")
+        .select(PUBLIC_ROOM_MONTHLY_RATE_COLUMNS)
+        .eq("active", true)
+        .order("month"),
+      supabase.rpc("get_room_availability", {
         p_from: today,
         p_to: localDateString(until),
       }),
-    ]);
+      ]);
 
-    if (settingsResult.data) {
-      setBookingSettings(settingsResult.data as BookingSettings);
-    }
-    if (ratesResult.data) {
-      setMonthlyRates(ratesResult.data as MonthlyRate[]);
-    }
-    if (availabilityResult.data) {
-      setAvailabilityRanges(availabilityResult.data as AvailabilityRange[]);
-    }
+      const firstError = [settingsResult.error, ratesResult.error, roomsResult.error, roomRatesResult.error, availabilityResult.error].find(Boolean);
+      if (firstError) throw firstError;
 
-    setAvailabilityLoading(false);
+      if (!settingsResult.data) throw new Error("BOOKING_SETTINGS_MISSING");
+      const publicSettings = settingsResult.data as Partial<BookingSettings>;
+      setBookingSettings({
+        ...publicSettings,
+        iban: "",
+        bank_beneficiary: "",
+        bank_name: "",
+        bank_account_number: "",
+        bic_swift: "",
+      } as BookingSettings);
+      setMonthlyRates((ratesResult.data ?? []) as MonthlyRate[]);
+      if (roomsResult.data) {
+      const activeRooms = roomsResult.data as VillaRoom[];
+      setRooms(activeRooms);
+      setSelectedRoomIds((current) => {
+        return current.filter((roomId) =>
+          activeRooms.some((room) => room.id === roomId),
+        );
+      });
+      }
+      setRoomMonthlyRates((roomRatesResult.data ?? []) as RoomMonthlyRate[]);
+      setAvailabilityRanges((availabilityResult.data ?? []) as AvailabilityRange[]);
+      setBookingDataState("ready");
+    } catch {
+      setBookingDataState("error");
+      setBookingSettings(null);
+      setAvailabilityRanges([]);
+    } finally {
+      setAvailabilityLoading(false);
+    }
   }, [today]);
 
   useEffect(() => {
@@ -186,6 +238,16 @@ export default function Home() {
     return () => window.clearTimeout(timer);
   }, [loadBookingData]);
 
+  useEffect(() => {
+    const timer = window.setTimeout(() => {
+      const roomParam = new URL(window.location.href).searchParams.get("rooms");
+      if (!roomParam) return;
+      const requested = [...new Set(roomParam.split(",").map(Number).filter((id) => Number.isInteger(id) && id >= 1 && id <= 4))].sort((a, b) => a - b);
+      if (requested.length) setSelectedRoomIds(requested);
+    }, 0);
+    return () => window.clearTimeout(timer);
+  }, []);
+
   const scrollTo = (target: string) => {
     document
       .getElementById(target)
@@ -199,18 +261,53 @@ export default function Home() {
         departure,
         pets,
         rates: monthlyRates,
+        roomRates: roomMonthlyRates,
+        roomIds: selectedRoomIds,
         settings: bookingSettings,
       }),
-    [arrival, departure, pets, monthlyRates, bookingSettings],
+    [arrival, departure, pets, monthlyRates, roomMonthlyRates, selectedRoomIds, bookingSettings],
   );
 
+  const wholeVillaSelected = isWholeVillaSelection(selectedRoomIds);
+  const selectedCapacity = wholeVillaSelected
+    ? bookingSettings?.max_guests ?? 0
+    : rooms
+        .filter((room) => selectedRoomIds.includes(room.id))
+        .reduce((total, room) => total + room.max_guests, 0);
+
+  const selectRooms = (roomIds: number[]) => {
+    const normalized = [...new Set(roomIds)].sort((left, right) => left - right);
+    setSelectedRoomIds(normalized);
+    if (arrival && departure && rangeContainsBlockedDate(arrival, departure, availabilityRanges, normalized)) {
+      setFormError(t.dateUnavailable);
+    } else {
+      setFormError("");
+    }
+  };
+
   const startBooking = () => {
+    if (bookingDataState !== "ready") {
+      setFormError(professional.bookingDataError);
+      return;
+    }
+    if (!selectedRoomIds.length) {
+      setFormError(t.selectAtLeastOneRoom);
+      return;
+    }
+
     if (!arrival || !departure || departure <= arrival) {
       setFormError(t.dateError);
       return;
     }
 
-    if (rangeContainsBlockedDate(arrival, departure, availabilityRanges)) {
+    if (
+      rangeContainsBlockedDate(
+        arrival,
+        departure,
+        availabilityRanges,
+        selectedRoomIds,
+      )
+    ) {
       setFormError(t.dateUnavailable);
       return;
     }
@@ -231,28 +328,34 @@ export default function Home() {
     }
 
     if (
-      bookingSettings &&
-      adults + children > bookingSettings.max_guests
+      selectedCapacity > 0 &&
+      adults + children > selectedCapacity
     ) {
-      setFormError(`${t.maximumGuests}: ${bookingSettings.max_guests}`);
+      setFormError(`${t.maximumGuests}: ${selectedCapacity}`);
       return;
     }
 
     setFormError("");
     setDialogError("");
     setBookingResult(null);
+    setPolicyAccepted(false);
     setPaymentOpen(true);
   };
 
   const submitReservation = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!quote?.complete || !bookingSettings || bookingSubmitting) return;
+    if (!policyAccepted) {
+      setDialogError(professional.policyRequired);
+      window.setTimeout(() => dialogErrorRef.current?.focus(), 0);
+      return;
+    }
 
     setBookingSubmitting(true);
     setDialogError("");
 
     const supabase = getSupabaseBrowserClient();
-    const { data, error } = await supabase.rpc("create_reservation", {
+    const { data, error } = await supabase.rpc("create_room_reservation_secure", {
       p_guest_name: guestForm.name,
       p_email: guestForm.email,
       p_phone: guestForm.phone,
@@ -262,6 +365,7 @@ export default function Home() {
       p_adults: adults,
       p_children: children,
       p_pets: pets,
+      p_room_ids: selectedRoomIds,
       p_notes: guestForm.notes,
       p_website: guestForm.website,
     });
@@ -272,12 +376,18 @@ export default function Home() {
       if (error.message.includes("DATES_UNAVAILABLE") || error.code === "23P01") {
         setDialogError(t.dateUnavailable);
         void loadBookingData();
+      } else if (
+        error.message.includes("ROOM_NOT_AVAILABLE") ||
+        error.message.includes("INVALID_ROOM_SELECTION")
+      ) {
+        setDialogError(t.selectAtLeastOneRoom);
+        void loadBookingData();
       } else if (error.message.includes("RATE_NOT_CONFIGURED")) {
         setDialogError(t.priceMissing);
       } else if (error.message.includes("MINIMUM_NIGHTS_NOT_MET")) {
         setDialogError(`${t.minimumNights}: ${quote.minimumNights}`);
       } else if (error.message.includes("TOO_MANY_GUESTS")) {
-        setDialogError(`${t.maximumGuests}: ${bookingSettings.max_guests}`);
+        setDialogError(`${t.maximumGuests}: ${selectedCapacity}`);
       } else if (error.message.includes("STAY_TOO_LONG")) {
         setDialogError(t.maximumStay);
       } else if (error.message.includes("RATE_LIMITED")) {
@@ -290,35 +400,46 @@ export default function Home() {
 
     const result = (data?.[0] ?? null) as BookingResult | null;
     if (!result) {
-      setDialogError("Reservation could not be created.");
+      setDialogError(t.bookingCreationError);
       return;
     }
 
     setBookingResult(result);
+    window.sessionStorage.setItem("relax-villa-last-booking", JSON.stringify({ reference: result.reference_code, email: guestForm.email.trim().toLowerCase() }));
     setAvailabilityRanges((current) => [
       ...current,
-      { source: "reservation", start_date: arrival, end_date: departure },
+      ...result.room_ids.map((roomId) => ({
+        source: "reservation" as const,
+        room_id: roomId,
+        start_date: arrival,
+        end_date: departure,
+      })),
     ]);
   };
 
-  const effectiveIban = bookingSettings?.iban || BANK_IBAN;
   const effectiveWhatsapp = bookingSettings?.whatsapp_number || WHATSAPP_NUMBER;
   const paymentDetails = [
-    { key: "beneficiary", label: t.accountHolder, value: bookingSettings?.bank_beneficiary || "" },
-    { key: "bank", label: t.bankNameLabel, value: bookingSettings?.bank_name || "" },
-    { key: "account", label: t.bankAccountNumber, value: bookingSettings?.bank_account_number || "" },
-    { key: "iban", label: t.iban, value: effectiveIban },
-    { key: "bic", label: t.bicSwift, value: bookingSettings?.bic_swift || "" },
+    { key: "beneficiary", label: t.accountHolder, value: bookingResult?.bank_beneficiary || "" },
+    { key: "bank", label: t.bankNameLabel, value: bookingResult?.bank_name || "" },
+    { key: "account", label: t.bankAccountNumber, value: bookingResult?.bank_account_number || "" },
+    { key: "iban", label: t.iban, value: bookingResult?.iban || "" },
+    { key: "bic", label: t.bicSwift, value: bookingResult?.bic_swift || "" },
   ].filter((detail) => detail.value);
+  const selectedRoomLabel = wholeVillaSelected
+    ? t.wholeVillaBooking
+    : selectedRoomIds.length
+      ? selectedRoomIds.map((roomId) => t.roomNames[roomId - 1]).join(", ")
+      : t.noRoomsSelected;
 
   const whatsappUrl = useMemo(() => {
     const message = [
-      "Relax Villa booking / payment receipt",
+      t.receiptHeading,
       bookingResult ? `${t.bookingReference}: ${bookingResult.reference_code}` : null,
       `${t.arrival}: ${arrival || "-"}`,
       `${t.departure}: ${departure || "-"}`,
       `${t.guests}: ${adults + children}`,
       `${t.pets}: ${pets}`,
+      `${t.roomsLabel}: ${selectedRoomLabel}`,
       bookingResult
         ? `${t.bookingTotal}: ${formatMoney(bookingResult.total_price, bookingResult.currency, language)}`
         : null,
@@ -329,7 +450,7 @@ export default function Home() {
     return effectiveWhatsapp
       ? `https://wa.me/${effectiveWhatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(message)}`
       : "#";
-  }, [arrival, departure, adults, children, pets, t, bookingResult, effectiveWhatsapp, language]);
+  }, [arrival, departure, adults, children, pets, t, selectedRoomLabel, bookingResult, effectiveWhatsapp, language]);
 
   const copyPaymentDetail = async (key: string, value: string) => {
     if (!value) return;
@@ -339,18 +460,19 @@ export default function Home() {
   };
 
   return (
-    <main id="top" className="overflow-hidden bg-white text-[#26272b]">
+    <>
+      <SiteHeader overlay />
+      <main id="main-content" className="overflow-hidden bg-white text-[#26272b]">
       <section className="relative min-h-[760px] text-white sm:min-h-[720px] lg:min-h-[680px]">
-        <picture>
-          <source media="(max-width: 640px)" srcSet="/images/hero-mobile.jpg" />
-          <img
-            src="/images/hero.jpg"
-            alt={t.imageAlt}
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-        </picture>
+        <Image
+          src="/images/gallery/outdoor-04.jpg"
+          alt={t.imageAlt}
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(20,22,23,.58)_0%,rgba(18,20,21,.22)_42%,rgba(12,14,16,.68)_100%)]" />
-        <SiteHeader overlay />
 
         <div className="relative z-10 mx-auto flex min-h-[760px] w-full max-w-[1500px] flex-col items-center justify-center px-4 pb-16 pt-32 text-center sm:min-h-[720px] sm:px-10 sm:pb-20 sm:pt-36 lg:min-h-[680px] lg:pb-24">
           <p className="mb-5 max-w-full text-balance text-[10px] font-semibold uppercase leading-5 tracking-[.22em] text-[#d3c19f] sm:text-xs sm:tracking-[.36em]">
@@ -420,17 +542,19 @@ export default function Home() {
             <h2 className="section-title mt-4">{t.roomsTitle}</h2>
             <p className="mt-5 text-base leading-7 text-[#737477]">{t.roomsText}</p>
           </div>
-          <div className="grid min-h-[590px] gap-6 lg:grid-cols-[1.55fr_1fr_1fr_1fr]">
+          <div className="grid min-h-[590px] gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {roomImages.map((image, index) => (
               <button
                 key={image}
                 onClick={() => setGalleryImage(image)}
                 className="group relative min-h-[430px] overflow-hidden rounded-[8px] text-left shadow-[0_18px_45px_rgba(28,29,31,.12)] lg:min-h-0"
               >
-                <img
+                <Image
                   src={image}
                   alt={`${t.roomNames[index]} — ${t.imageAlt}`}
-                  className="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-[1.04]"
+                  fill
+                  sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  className="object-cover transition duration-700 group-hover:scale-[1.04]"
                 />
                 <span className="absolute inset-0 bg-[linear-gradient(180deg,transparent_50%,rgba(15,17,20,.82)_100%)]" />
                 <span className="absolute inset-x-0 bottom-0 p-7 text-white">
@@ -457,14 +581,12 @@ export default function Home() {
       </section>
 
       <VillaFeaturesSection t={t} />
-      <TestimonialsSection t={t} />
-
       <section
         id="availability"
         className="scroll-mt-0 bg-[#faf8f5] px-6 py-28 sm:px-10 md:py-36 lg:px-16"
       >
-        <div className="mx-auto grid max-w-[1500px] items-center gap-16 lg:grid-cols-[.72fr_1.28fr]">
-          <div className="max-w-xl">
+        <div className="mx-auto grid w-full min-w-0 max-w-[1500px] items-center gap-16 lg:grid-cols-[.72fr_1.28fr]">
+          <div className="min-w-0 max-w-xl">
             <p className="eyebrow">{t.bookingEyebrow}</p>
             <h2 className="section-title mt-4">{t.bookingTitle}</h2>
             <p className="mt-6 text-base leading-7 text-[#6f7073]">
@@ -485,31 +607,163 @@ export default function Home() {
             </div>
           </div>
 
-          <div>
+          <div className="min-w-0">
             <div className="rounded-[8px] bg-[#f1ede7] p-4 shadow-[0_16px_45px_rgba(38,39,43,.07)] sm:p-7">
+              <ol className="mb-4 grid grid-cols-3 gap-2 rounded-[5px] bg-[#25282e] p-3 text-white" aria-label={professional.bookingProgress.join(", ")}>
+                {professional.bookingProgress.map((step, index) => (
+                  <li key={step} className={`flex min-w-0 items-center gap-2 rounded px-2 py-2 text-[11px] font-semibold ${index === 0 ? "bg-white/12 text-white" : "text-white/55"}`}>
+                    <span className={`grid size-6 shrink-0 place-items-center rounded-full ${index === 0 ? "bg-[#b19a6c] text-white" : "border border-white/25"}`}>{index + 1}</span>
+                    <span className="hidden truncate sm:block">{step}</span>
+                  </li>
+                ))}
+              </ol>
+              <div className="mb-4 rounded-[5px] bg-white p-4 sm:p-5">
+                <button
+                  type="button"
+                  aria-expanded={roomPickerOpen}
+                  aria-controls="mobile-room-picker"
+                  onClick={() => setRoomPickerOpen((open) => !open)}
+                  className="flex min-h-12 w-full items-center justify-between gap-4 rounded-[5px] border border-[#e5e0d8] bg-[#faf8f5] px-4 py-3 text-left transition hover:border-[#b7a681] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a8866] focus-visible:ring-offset-2 md:hidden"
+                >
+                  <span className="min-w-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#9a8866]">
+                      {t.roomSelection}
+                    </p>
+                    <span className="mt-1 block truncate text-sm font-semibold text-[#2f3135]">
+                      {selectedRoomIds.length ? selectedRoomLabel : t.tapToChooseRooms}
+                    </span>
+                  </span>
+                  <ChevronDown
+                    aria-hidden="true"
+                    className={`size-5 shrink-0 text-[#8d7a58] transition-transform duration-200 ${roomPickerOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+
+                <div className="hidden items-start justify-between gap-4 md:flex">
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[.16em] text-[#9a8866]">
+                      {t.roomSelection}
+                    </p>
+                    <p className="mt-1 text-sm font-semibold text-[#2f3135]">{selectedRoomLabel}</p>
+                    <p className="mt-1 text-xs leading-5 text-[#77787b]">
+                      {wholeVillaSelected
+                        ? t.exclusiveAmenities
+                        : selectedRoomIds.length
+                          ? t.sharedAmenities
+                          : t.tapToChooseRooms}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    aria-pressed={wholeVillaSelected}
+                    onClick={() => selectRooms([1, 2, 3, 4])}
+                    className={`min-h-11 rounded-full border px-4 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a8866] focus-visible:ring-offset-2 ${
+                      wholeVillaSelected
+                        ? "border-[#2f3135] bg-[#2f3135] text-white"
+                        : "border-[#d9d2c7] bg-white text-[#4d4f53] hover:border-[#9a8866]"
+                    }`}
+                  >
+                    {t.selectAllRooms}
+                  </button>
+                </div>
+
+                <div
+                  id="mobile-room-picker"
+                  className={`${roomPickerOpen ? "grid" : "hidden"} mt-3 grid-cols-2 gap-2 md:mt-4 md:grid md:grid-cols-2`}
+                >
+                  <button
+                    type="button"
+                    aria-pressed={wholeVillaSelected}
+                    onClick={() => selectRooms([1, 2, 3, 4])}
+                    className={`col-span-2 min-h-11 rounded-[5px] border px-4 text-xs font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a8866] focus-visible:ring-offset-2 md:hidden ${
+                      wholeVillaSelected
+                        ? "border-[#2f3135] bg-[#2f3135] text-white"
+                        : "border-[#d9d2c7] bg-white text-[#4d4f53] hover:border-[#9a8866]"
+                    }`}
+                  >
+                    {t.selectAllRooms}
+                  </button>
+                  {roomImages.map((image, index) => {
+                    const roomId = index + 1;
+                    const room = rooms.find((candidate) => candidate.id === roomId);
+                    const selected = selectedRoomIds.includes(roomId);
+                    return (
+                      <button
+                        key={roomId}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() =>
+                          selectRooms(
+                            selected
+                              ? selectedRoomIds.filter((id) => id !== roomId)
+                              : [...selectedRoomIds, roomId],
+                          )
+                        }
+                        className={`group flex min-h-16 items-center gap-2 rounded-[5px] border p-2 text-left transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a8866] focus-visible:ring-offset-2 sm:gap-3 sm:p-2.5 ${
+                          selected
+                            ? "border-[#9a8866] bg-[#f8f4ed]"
+                            : "border-[#e5e0d8] bg-white hover:border-[#b7a681]"
+                        }`}
+                      >
+                        <span className="relative size-9 shrink-0 overflow-hidden rounded-[4px] bg-[#eee9e2] sm:size-11">
+                          <Image src={image} alt="" fill sizes="44px" className="object-cover" />
+                          {selected ? (
+                            <span className="absolute inset-0 grid place-items-center bg-[#2f3135]/55 text-white">
+                              <Check className="size-4" />
+                            </span>
+                          ) : null}
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-semibold text-[#303236]">
+                            {t.roomNames[index]}
+                          </span>
+                          {room ? (
+                            <span className="mt-1 flex items-center gap-1 text-[11px] text-[#7b7c80]">
+                              <Users className="size-3" />
+                              {t.roomCapacity.replace("{count}", String(room.max_guests))}
+                            </span>
+                          ) : null}
+                        </span>
+                        <BedDouble aria-hidden="true" className={`hidden size-4 shrink-0 sm:block ${selected ? "text-[#9a8866]" : "text-[#aaa69f]"}`} />
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               <div className="overflow-hidden rounded-[5px] bg-white">
                 <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ece8e2] px-5 py-4 sm:px-7">
                   <h3 className="text-sm font-bold uppercase tracking-[.12em]">
                     {t.selectDates}
                   </h3>
-                  <span className="inline-flex items-center gap-2 text-xs text-[#747570]">
-                    <span className={`size-2 rounded-full ${availabilityLoading ? "animate-pulse bg-amber-500" : "bg-emerald-500"}`} />
-                    {availabilityLoading ? t.availabilityLoading : t.availability}
+                  <span className="inline-flex items-center gap-2 text-xs text-[#747570]" aria-live="polite">
+                    <span className={`size-2 rounded-full ${bookingDataState === "loading" ? "animate-pulse bg-amber-500" : bookingDataState === "error" ? "bg-red-600" : "bg-emerald-600"}`} />
+                    {bookingDataState === "loading" ? t.availabilityLoading : bookingDataState === "error" ? professional.bookingDataError : t.availability}
                   </span>
                 </div>
-                <AvailabilityCalendar
+                {bookingDataState === "error" ? (
+                  <div className="m-5 rounded-lg border border-red-200 bg-red-50 p-5 text-sm text-red-900 sm:m-7">
+                    <p className="flex items-start gap-2 leading-6"><AlertCircle className="mt-1 size-4 shrink-0" />{professional.bookingDataError}</p>
+                    <button type="button" onClick={() => void loadBookingData()} className="mt-4 min-h-11 rounded-full border border-red-300 bg-white px-5 font-semibold transition hover:bg-red-100">{professional.retry}</button>
+                  </div>
+                ) : <AvailabilityCalendar
                   arrival={arrival}
                   departure={departure}
                   ranges={availabilityRanges}
                   rates={monthlyRates}
+                  roomRates={roomMonthlyRates}
+                  roomIds={selectedRoomIds}
                   locale={language}
                   onChange={(nextArrival, nextDeparture) => {
                     setArrival(nextArrival);
                     setDeparture(nextDeparture);
                     setFormError("");
                   }}
-                />
-                {!availabilityLoading && monthlyRates.length === 0 ? (
+                />}
+                {!availabilityLoading &&
+                (wholeVillaSelected
+                  ? monthlyRates.length === 0
+                  : roomMonthlyRates.length === 0) ? (
                   <div className="mx-5 mb-5 flex items-start gap-3 rounded-md bg-amber-50 px-4 py-3 text-sm leading-6 text-amber-900 sm:mx-7">
                     <AlertCircle className="mt-1 size-4 shrink-0" />
                     {t.noRates}
@@ -577,26 +831,20 @@ export default function Home() {
                 {formError}
               </p>
             ) : null}
-            <div className="mt-7 flex justify-end">
-              <OutlineAction onClick={startBooking}>{t.request}</OutlineAction>
+            <div className="mt-7 flex min-w-0 justify-end">
+              <OutlineAction onClick={startBooking} disabled={bookingDataState !== "ready"}>{t.request}</OutlineAction>
             </div>
           </div>
         </div>
       </section>
 
-      <SiteFooter />
-
-      <button
-        onClick={() => scrollTo("top")}
+      {showTop ? <button
+        onClick={() => scrollTo("main-content")}
         aria-label={t.top}
-        className={`fixed bottom-6 right-6 z-40 grid size-12 place-items-center rounded-full border border-[#bcb5a8] bg-white/95 text-[#33353a] shadow-lg backdrop-blur transition duration-300 hover:bg-[#2d2f33] hover:text-white ${
-          showTop
-            ? "translate-y-0 opacity-100"
-            : "pointer-events-none translate-y-4 opacity-0"
-        }`}
+        className="fixed bottom-6 right-6 z-40 grid size-12 place-items-center rounded-full border border-[#bcb5a8] bg-white/95 text-[#33353a] shadow-lg backdrop-blur transition duration-300 hover:bg-[#2d2f33] hover:text-white"
       >
         <ArrowUp className="size-4" />
-      </button>
+      </button> : null}
 
       <Dialog
         open={paymentOpen}
@@ -646,6 +894,15 @@ export default function Home() {
                   <p className="mt-1 text-xs text-[#77787b]">
                     {t.adults}: {adults} · {t.children}: {children} · {t.pets}: {pets}
                   </p>
+                </div>
+                <div className="flex items-start gap-2 border-t border-[#ece8e2] pt-3 sm:col-span-2">
+                  <BedDouble className="mt-0.5 size-4 shrink-0 text-[#9a8866]" />
+                  <div>
+                    <p className="text-[10px] font-semibold uppercase tracking-[.14em] text-[#9a8866]">
+                      {t.roomsLabel}
+                    </p>
+                    <p className="mt-1 font-semibold text-[#2f3135]">{selectedRoomLabel}</p>
+                  </div>
                 </div>
               </div>
 
@@ -718,8 +975,13 @@ export default function Home() {
                 </label>
               </div>
 
+              <label className="flex cursor-pointer items-start gap-3 rounded-[5px] border border-[#ded8cf] bg-white p-4 text-sm leading-6 text-[#55565a]">
+                <input type="checkbox" checked={policyAccepted} onChange={(event) => { setPolicyAccepted(event.target.checked); if (event.target.checked) setDialogError(""); }} className="mt-1 size-5 shrink-0 accent-[#806c45]" />
+                <span>{professional.policyAgreement} <span className="mt-1 block text-xs"><Link className="font-semibold underline underline-offset-4" href="/booking-terms" target="_blank">{professional.bookingTerms}</Link> · <Link className="font-semibold underline underline-offset-4" href="/cancellation-policy" target="_blank">{professional.cancellation}</Link> · <Link className="font-semibold underline underline-offset-4" href="/privacy" target="_blank">{professional.privacy}</Link></span></span>
+              </label>
+
               {dialogError ? (
-                <p role="alert" className="flex items-start gap-2 rounded-[4px] bg-red-50 px-4 py-3 text-sm leading-6 text-red-800">
+                <p ref={dialogErrorRef} tabIndex={-1} role="alert" className="flex items-start gap-2 rounded-[4px] bg-red-50 px-4 py-3 text-sm leading-6 text-red-800 focus:outline-none">
                   <AlertCircle className="mt-1 size-4 shrink-0" />
                   {dialogError}
                 </p>
@@ -767,6 +1029,10 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
+                <p className="mt-4 flex items-start gap-2 border-t border-amber-200 pt-4 text-sm leading-6">
+                  <Clock3 className="mt-1 size-4 shrink-0" />
+                  <span><strong>{professional.holdDeadline}:</strong> {new Intl.DateTimeFormat(language, { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Budapest" }).format(new Date(bookingResult.hold_expires_at))}<span className="mt-1 block">{professional.holdExplanation}</span></span>
+                </p>
               </div>
 
               <div className="grid gap-3 rounded-[5px] bg-white p-5 text-sm text-[#5e6064]">
@@ -822,6 +1088,7 @@ export default function Home() {
                 <MessageCircle className="size-5" />
                 {t.receiptWhatsApp}
               </a>
+              <Link href="/reservation-status" className="flex min-h-12 items-center justify-center rounded-full border border-[#bfb5a4] px-6 text-center text-sm font-semibold text-[#3d3f43] transition hover:border-[#806c45] hover:text-[#806c45]">{professional.trackBooking}</Link>
             </div>
           )}
         </DialogContent>
@@ -837,15 +1104,19 @@ export default function Home() {
             <DialogDescription>{t.roomsText}</DialogDescription>
           </DialogHeader>
           {galleryImage ? (
-            <img
+            <Image
               src={galleryImage}
               alt={t.imageAlt}
+              width={1600}
+              height={1200}
               className="max-h-[86vh] w-full object-contain"
             />
           ) : null}
         </DialogContent>
       </Dialog>
-    </main>
+      </main>
+      <SiteFooter />
+    </>
   );
 }
 
@@ -928,14 +1199,17 @@ function HeroDateField({
 function OutlineAction({
   children,
   onClick,
+  disabled = false,
 }: {
   children: React.ReactNode;
   onClick: () => void;
+  disabled?: boolean;
 }) {
   return (
     <button
       onClick={onClick}
-      className="group inline-flex items-center gap-3 rounded-full border border-[#2d2f33] px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em] transition hover:bg-[#2d2f33] hover:text-white"
+      disabled={disabled}
+      className="group inline-flex min-h-12 items-center gap-3 rounded-full border border-[#2d2f33] px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em] transition hover:bg-[#2d2f33] hover:text-white disabled:cursor-not-allowed disabled:opacity-45"
     >
       {children}
       <ArrowRight className="size-4 transition group-hover:translate-x-1" />
@@ -954,8 +1228,7 @@ function AboutSection({ t }: { t: (typeof siteCopy)[Language] }) {
         <div className="max-w-xl lg:pl-4">
           <p className="eyebrow">{t.aboutEyebrow}</p>
           <h2 className="section-title mt-5">{t.aboutTitle}</h2>
-          <p className="mt-8 text-xl leading-8 text-[#55575b]">{t.aboutLead}</p>
-          <p className="mt-5 max-w-lg text-base leading-7 text-[#757579]">
+          <p className="mt-8 max-w-lg text-base leading-7 text-[#757579]">
             {t.aboutBody}
           </p>
           <p className="mt-9 font-serif text-2xl italic text-[#6e6251]">
@@ -963,17 +1236,11 @@ function AboutSection({ t }: { t: (typeof siteCopy)[Language] }) {
           </p>
         </div>
         <div className="relative mx-auto h-[560px] w-full max-w-[700px]">
-          <img
-            src="/images/about-main.jpg"
-            alt={t.imageAlt}
-            className="absolute right-0 top-0 h-[90%] w-[72%] rounded-[8px] object-cover shadow-[0_20px_60px_rgba(26,26,26,.12)]"
-          />
+          <div className="absolute right-0 top-0 h-[90%] w-[72%] overflow-hidden rounded-[8px] shadow-[0_20px_60px_rgba(26,26,26,.12)]">
+            <Image src="/images/about-main.jpg" alt={t.imageAlt} fill sizes="(min-width: 1024px) 42vw, 72vw" className="object-cover" />
+          </div>
           <div className="absolute bottom-0 left-[4%] h-[62%] w-[42%] rounded-[7px] border-[7px] border-white bg-white shadow-[0_20px_45px_rgba(18,18,18,.22)]">
-            <img
-              src="/images/about-detail.jpg"
-              alt={t.imageAlt}
-              className="h-full w-full rounded-[2px] object-cover"
-            />
+            <Image src="/images/about-detail.jpg" alt={t.imageAlt} fill sizes="(min-width: 1024px) 24vw, 42vw" className="rounded-[2px] object-cover" />
           </div>
         </div>
       </div>
@@ -984,10 +1251,12 @@ function AboutSection({ t }: { t: (typeof siteCopy)[Language] }) {
 function MoodSection({ t }: { t: (typeof siteCopy)[Language] }) {
   return (
     <section className="relative flex min-h-[620px] items-center justify-center px-6 py-28 text-center text-white">
-      <img
+      <Image
         src="/images/mood.jpg"
         alt={t.imageAlt}
-        className="absolute inset-0 h-full w-full object-cover"
+        fill
+        sizes="100vw"
+        className="object-cover"
       />
       <div className="absolute inset-0 bg-[#11161a]/50" />
       <div className="relative max-w-4xl">
@@ -1000,66 +1269,3 @@ function MoodSection({ t }: { t: (typeof siteCopy)[Language] }) {
   );
 }
 
-function TestimonialsSection({ t }: { t: (typeof siteCopy)[Language] }) {
-  const [activeIndex, setActiveIndex] = useState(0);
-
-  return (
-    <section
-      id="testimonials"
-      className="relative flex min-h-[430px] items-center px-6 py-10 text-white sm:px-10 md:min-h-[450px] md:py-12 lg:px-16"
-    >
-      <img
-        src="/images/gallery/outdoor-04.jpg"
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div className="absolute inset-0 bg-[#131a1e]/65" />
-      <div className="relative mx-auto w-full max-w-[1230px] text-center">
-        <p className="eyebrow !text-[.68rem] !tracking-[.2em] !text-[#decba5]">{t.testimonialsEyebrow}</p>
-        <h2 className="mt-2 text-balance text-[clamp(1.9rem,3vw,2.75rem)] font-bold tracking-[-.035em]">
-          {t.testimonialsTitle}
-        </h2>
-        <div
-          aria-live="polite"
-          className="mx-auto mt-5 grid max-w-[720px] items-center gap-4 rounded-lg bg-[#25282e] px-5 py-5 text-left shadow-2xl sm:px-6 md:min-h-[145px] md:grid-cols-[160px_1fr] md:gap-5 md:px-7 md:py-6"
-        >
-          <div className="flex items-center gap-3 md:border-r md:border-white/20 md:pr-5">
-            <span className="grid size-14 shrink-0 place-items-center rounded-full bg-[#e8dcc8] text-base font-bold text-[#25282e]">
-              {t.testimonialNames[activeIndex].charAt(0)}
-            </span>
-            <div>
-              <p className="text-sm font-semibold">{t.testimonialNames[activeIndex]}</p>
-              <p className="mt-0.5 text-xs text-white/65">
-                {t.testimonialMeta[activeIndex]}
-              </p>
-            </div>
-          </div>
-          <blockquote className="text-balance text-base font-normal italic leading-[1.5] text-white md:text-[1.05rem]">
-            “{t.testimonials[activeIndex]}”
-          </blockquote>
-        </div>
-        <div className="mt-2 flex justify-center gap-0.5" aria-label={t.testimonialNavigation}>
-          {t.testimonials.map((_, index) => (
-            <button
-              key={index}
-              type="button"
-              onClick={() => setActiveIndex(index)}
-              aria-label={`${t.testimonialShow} ${index + 1}`}
-              aria-current={index === activeIndex ? "true" : undefined}
-              className="grid size-10 place-items-center rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
-            >
-              <span className={`grid size-4 place-items-center rounded-full border ${index === activeIndex ? "border-white" : "border-white/55"}`}>
-                <span className={`size-1.5 rounded-full ${index === activeIndex ? "bg-white" : "bg-transparent"}`} />
-              </span>
-            </button>
-          ))}
-        </div>
-        {t.testimonialNotice ? (
-          <p className="mx-auto mt-1 max-w-lg text-xs leading-4 text-white/70">
-            {t.testimonialNotice}
-          </p>
-        ) : null}
-      </div>
-    </section>
-  );
-}

@@ -57,6 +57,7 @@ const LANGUAGE_LABELS = {
   en: "İngilizce",
   de: "Almanca",
   hu: "Macarca",
+  tr: "Türkçe",
 } as const;
 
 function statusClass(status: SupportStatus) {
