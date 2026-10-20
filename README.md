@@ -1,6 +1,6 @@
-# Relax Villa Panzio
+# Harmony Balaton Villa
 
-![Relax Villa](./public/images/hero.jpg)
+![Harmony Balaton Villa](./public/images/hero.jpg)
 
 Badacsonytomaj, Macaristan'da bulunan dört yatak odalı özel bir villa için
 geliştirilen çok dilli tanıtım, rezervasyon ve içerik yönetim sistemi.
@@ -131,6 +131,11 @@ Supabase Dashboard içindeki **SQL Editor** bölümünde aşağıdaki dosyaları
 12. `supabase/fix_room_availability_security.sql`
 13. `supabase/private_property_and_turkish_blog.sql`
 14. `supabase/professional_booking_trust_and_safety.sql`
+15. `supabase/add_child_booking_fee.sql`
+16. `supabase/fix_child_fee_total_constraint.sql`
+17. `supabase/add_global_booking_rate_limit.sql`
+18. `supabase/fix_booking_result_after_child_fee.sql`
+19. `supabase/harmony_reference_prefix.sql`
 
 Ana şema aşağıdaki kaynakları oluşturur:
 
@@ -224,6 +229,7 @@ supabase/             Veritabanı şeması ve güvenlik SQL dosyaları
 - Misafirlerin kişisel ve rezervasyon bilgileri anonim sorgulara kapalıdır.
 - Ziyaretçiler destek talebini yalnızca doğrulamalı RPC üzerinden oluşturabilir; tabloya doğrudan anonim yazma kapalıdır.
 - İletişim ve rezervasyon formlarında veritabanı seviyesinde alan doğrulaması, istek sınırı ve sunucu taraflı bot tuzağı bulunur.
+- Sahte taleplerle takvimin kilitlenmesini önlemek için e-postadan bağımsız genel sınırlar vardır: saatte en fazla 10 yeni talep, aynı telefon numarasından saatte en fazla 3 talep ve aynı anda en fazla 15 ödenmemiş bekleyen talep. Sınırlar `supabase/add_global_booking_rate_limit.sql` dosyasının başından değiştirilebilir.
 - Rezervasyon tarih aralığı, maksimum konaklama, kişi sayısı ve fiyat taşması sunucu tarafında yeniden doğrulanır.
 - Güvenlik başlıkları CSP, HSTS, clickjacking, MIME-sniffing ve gereksiz tarayıcı izinlerini sınırlar.
 - Yönetim paneli yanıtları tarayıcı ve ara sunucu önbelleğine alınmaz.
@@ -256,5 +262,5 @@ npm run build
 
 ## Lisans
 
-Bu proje Relax Villa Panzio için özel olarak geliştirilmiştir. Kaynak kodun
+Bu proje Harmony Balaton Villa için özel olarak geliştirilmiştir. Kaynak kodun
 kullanımı ve dağıtımı proje sahibinin iznine tabidir.

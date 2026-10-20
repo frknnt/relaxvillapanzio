@@ -1,5 +1,5 @@
 export const PUBLIC_BOOKING_SETTINGS_COLUMNS =
-  "id, currency, weekend_days, payment_hold_hours, pet_fee, contact_email, whatsapp_number, max_guests, check_in_time, check_out_time, cancellation_free_days, late_cancellation_refund_percent, privacy_retention_months, legal_operator_name, legal_operator_address, updated_at";
+  "id, currency, weekend_days, payment_hold_hours, child_fee, pet_fee, contact_email, whatsapp_number, max_guests, check_in_time, check_out_time, cancellation_free_days, late_cancellation_refund_percent, privacy_retention_months, legal_operator_name, legal_operator_address, updated_at";
 
 export const PUBLIC_MONTHLY_RATE_COLUMNS =
   "id, month, weekday_rate, weekend_rate, minimum_nights, active, created_at, updated_at";

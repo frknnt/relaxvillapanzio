@@ -18,7 +18,7 @@ const fallback: Pick<BookingSettings, "cancellation_free_days" | "late_cancellat
   cancellation_free_days: 14,
   late_cancellation_refund_percent: 0,
   privacy_retention_months: 24,
-  legal_operator_name: "Relax Villa Panzió",
+  legal_operator_name: "Harmony Balaton Villa",
   legal_operator_address: "8257 Badacsonytomaj, Füredi út 5",
   contact_email: CONTACT_EMAIL,
   payment_hold_hours: 48,

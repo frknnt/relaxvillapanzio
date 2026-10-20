@@ -8,9 +8,9 @@ type BlogArticlePageProps = {
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "Relax Villa Blog | Badacsonytomaj",
+    title: "Harmony Balaton Villa Blog | Badacsonytomaj",
     description:
-      "Badacsony, Balaton Gölü ve Relax Villa'da konaklama üzerine yerel notlar ve pratik öneriler.",
+      "Badacsony, Balaton Gölü ve Harmony Balaton Villa'da konaklama üzerine yerel notlar ve pratik öneriler.",
   };
 }
 

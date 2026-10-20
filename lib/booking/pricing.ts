@@ -10,6 +10,7 @@ import type {
 export type BookingQuote = {
   nights: number;
   subtotal: number;
+  childFee: number;
   petFee: number;
   total: number;
   currency: string;
@@ -88,6 +89,7 @@ export function rangeContainsBlockedDate(
 export function calculateBookingQuote({
   arrival,
   departure,
+  children,
   pets,
   rates,
   roomRates,
@@ -96,6 +98,7 @@ export function calculateBookingQuote({
 }: {
   arrival: string;
   departure: string;
+  children: number;
   pets: number;
   rates: MonthlyRate[];
   roomRates: RoomMonthlyRate[];
@@ -167,13 +170,15 @@ export function calculateBookingQuote({
     cursor = addDays(cursor, 1);
   }
 
+  const childFee = children > 0 ? settings.child_fee : 0;
   const petFee = pets > 0 ? settings.pet_fee : 0;
 
   return {
     nights,
     subtotal,
+    childFee,
     petFee,
-    total: subtotal + petFee,
+    total: subtotal + childFee + petFee,
     currency: settings.currency,
     minimumNights,
     complete,

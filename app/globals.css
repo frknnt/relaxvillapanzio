@@ -137,6 +137,24 @@ input[type="date"] {
   content: "−";
 }
 
+.gallery-tabs [role="tab"] {
+  background: #ffffff;
+  color: #6f7074;
+}
+
+.gallery-tabs [role="tab"]::after {
+  display: none;
+}
+
+.gallery-tabs [role="tab"][data-state="active"] {
+  background: #2d2f33;
+  color: #ffffff;
+}
+
+.gallery-tabs [role="tab"][data-state="active"] span {
+  color: #d7c49f;
+}
+
 @media (max-width: 767px) {
   .hero-actions {
     position: absolute;

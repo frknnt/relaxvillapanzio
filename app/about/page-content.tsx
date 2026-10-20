@@ -67,7 +67,7 @@ export function AboutPageContent() {
         <SiteHeader overlay />
         <PageHero
           image="/images/about-main.jpg"
-          imageAlt="Relax Villa shared interior"
+          imageAlt="Harmony Balaton Villa shared interior"
           eyebrow={t.eyebrow}
           title={t.title}
           intro={t.intro}
@@ -85,10 +85,10 @@ export function AboutPageContent() {
           </div>
           <div className="mx-auto grid w-full max-w-[720px] gap-4 sm:grid-cols-2 lg:relative lg:block lg:min-h-[650px]">
             <div className="relative h-80 w-full overflow-hidden rounded-[8px] shadow-[0_18px_45px_rgba(26,26,26,.12)] sm:h-96 lg:absolute lg:right-0 lg:top-0 lg:h-[82%] lg:w-[76%] lg:shadow-[0_24px_70px_rgba(26,26,26,.15)]">
-              <Image src="/images/story.jpg" alt="Relax Villa living space" fill sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
+              <Image src="/images/story.jpg" alt="Harmony Balaton Villa living space" fill sizes="(min-width: 1024px) 46vw, 100vw" className="object-cover" />
             </div>
             <div className="relative h-80 w-full overflow-hidden rounded-[8px] shadow-[0_18px_45px_rgba(18,18,18,.14)] sm:h-96 lg:absolute lg:bottom-0 lg:left-0 lg:h-[54%] lg:w-[48%] lg:border-[7px] lg:border-white lg:shadow-[0_22px_50px_rgba(18,18,18,.22)]">
-              <Image src="/images/about-detail.jpg" alt="Relax Villa interior detail" fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover" />
+              <Image src="/images/about-detail.jpg" alt="Harmony Balaton Villa interior detail" fill sizes="(min-width: 1024px) 30vw, 100vw" className="object-cover" />
             </div>
             <div className="bg-[#26292f] p-6 text-white shadow-xl sm:col-span-2 lg:absolute lg:bottom-[6%] lg:right-[2%] lg:max-w-[230px] lg:p-7">
               <p className="text-[10px] font-semibold uppercase tracking-[.18em] text-[#d2bd92]">

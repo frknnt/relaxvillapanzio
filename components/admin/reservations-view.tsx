@@ -367,6 +367,10 @@ export function ReservationsView() {
                       <strong>{formatMoney(selected.subtotal, selected.currency)}</strong>
                     </div>
                     <div className="grid grid-cols-[1fr_auto] gap-4 border-b border-[#ebe7e0] px-4 py-3 text-sm">
+                      <span className="text-[#717276]">Çocuk ücreti</span>
+                      <strong>{formatMoney(selected.child_fee, selected.currency)}</strong>
+                    </div>
+                    <div className="grid grid-cols-[1fr_auto] gap-4 border-b border-[#ebe7e0] px-4 py-3 text-sm">
                       <span className="text-[#717276]">Evcil hayvan ücreti</span>
                       <strong>{formatMoney(selected.pet_fee, selected.currency)}</strong>
                     </div>

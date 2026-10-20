@@ -35,7 +35,7 @@ export function PageHero({
             {title}
           </h1>
           <p
-            className={`mt-9 text-balance text-base leading-7 text-white/78 md:text-xl md:leading-8 ${
+            className={`mt-9 text-balance text-base leading-7 text-white md:text-xl md:leading-8 ${
               align === "center" ? "mx-auto max-w-3xl" : "max-w-2xl"
             }`}
           >

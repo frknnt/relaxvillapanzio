@@ -51,7 +51,7 @@ export default function ReservationStatusContent() {
       <main id="main-content" className="min-h-[70vh] bg-[#faf8f5] px-5 py-16 sm:px-8 sm:py-24">
         <div className="mx-auto grid max-w-5xl gap-8 lg:grid-cols-[.8fr_1.2fr] lg:items-start">
           <div className="pt-4">
-            <p className="eyebrow">Relax Villa Panzió</p>
+            <p className="eyebrow">Harmony Balaton Villa</p>
             <h1 className="mt-4 text-balance text-4xl font-bold tracking-[-.04em] text-[#292a2e] sm:text-5xl">{copy.statusTitle}</h1>
             <p className="mt-5 text-base leading-8 text-[#68696d]">{copy.statusIntro}</p>
           </div>
@@ -59,11 +59,11 @@ export default function ReservationStatusContent() {
             <form onSubmit={submit} autoComplete="off" className="grid gap-4">
               <label className="grid gap-2 text-sm font-semibold text-[#45464a]">
                 {copy.reference}
-                <input value={reference} onChange={(event) => setReference(event.target.value.toUpperCase())} required minLength={10} maxLength={40} autoComplete="off" className="min-h-12 rounded-lg border border-[#dcd6cc] px-4 font-mono font-normal uppercase outline-none focus:border-[#78633e] focus:ring-2 focus:ring-[#78633e]/15" />
+                <input value={reference} onChange={(event) => setReference(event.target.value.toUpperCase())} required minLength={10} maxLength={40} autoComplete="off" className="min-h-12 rounded-lg border border-[#dcd6cc] px-4 text-base font-mono font-normal uppercase outline-none focus:border-[#78633e] focus:ring-2 focus:ring-[#78633e]/15 sm:text-sm" />
               </label>
               <label className="grid gap-2 text-sm font-semibold text-[#45464a]">
                 {copy.email}
-                <input type="email" value={email} onChange={(event) => setEmail(event.target.value)} required maxLength={254} autoComplete="off" className="min-h-12 rounded-lg border border-[#dcd6cc] px-4 font-normal outline-none focus:border-[#78633e] focus:ring-2 focus:ring-[#78633e]/15" />
+                <input type="email" inputMode="email" value={email} onChange={(event) => setEmail(event.target.value)} required maxLength={254} autoComplete="email" className="min-h-12 rounded-lg border border-[#dcd6cc] px-4 text-base font-normal outline-none focus:border-[#78633e] focus:ring-2 focus:ring-[#78633e]/15 sm:text-sm" />
               </label>
               <button disabled={loading} className="mt-2 inline-flex min-h-12 items-center justify-center gap-2 rounded-full bg-[#303238] px-6 text-sm font-semibold text-white transition hover:bg-[#78633e] disabled:cursor-wait disabled:opacity-60">
                 {loading ? <Loader2 className="size-4 animate-spin" /> : <CheckCircle2 className="size-4" />}{copy.checkStatus}

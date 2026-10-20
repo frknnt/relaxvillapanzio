@@ -28,7 +28,7 @@ export const secondaryCopy = {
       eyebrow: "BADACSONY, AT YOUR OWN PACE",
       title: "Enjoy Badacsony at your own pace",
       intro:
-        "Relax Villa offers four distinctive bedrooms and a complete villa experience in Badacsonytomaj. Book one room, several rooms or the entire villa.",
+        "Harmony Balaton Villa offers four distinctive bedrooms and a complete villa experience in Badacsonytomaj. Book one room, several rooms or the entire villa.",
       storyEyebrow: "ROOM OR WHOLE VILLA",
       storyTitle: "Choose the rooms that fit your stay",
       storyLead:
@@ -64,11 +64,11 @@ export const secondaryCopy = {
         },
       ],
       localImageAlts: [
-        "Relax Villa's pool and terrace",
-        "Relax Villa's outdoor hot tub",
-        "The shared dining table and kitchen at Relax Villa",
+        "Harmony Balaton Villa's pool and terrace",
+        "Harmony Balaton Villa's outdoor hot tub",
+        "The shared dining table and kitchen at Harmony Balaton Villa",
       ],
-      faqEyebrow: "RELAX VILLA FAQ",
+      faqEyebrow: "HARMONY BALATON VILLA FAQ",
       faqTitle: "Useful answers before you book",
       faqIntro: "The practical details matter. If your question is not covered here, contact us before making a payment.",
       faqContact: "Contact us",
@@ -260,7 +260,7 @@ export const secondaryCopy = {
       eyebrow: "BADACSONY IM EIGENEN TEMPO",
       title: "Erleben Sie Badacsony in Ihrem eigenen Tempo",
       intro:
-        "Die Relax Villa bietet vier unterschiedliche Schlafzimmer und ein vollständiges Villaerlebnis in Badacsonytomaj. Buchen Sie ein Zimmer, mehrere Zimmer oder die gesamte Villa.",
+        "Die Harmony Balaton Villa bietet vier unterschiedliche Schlafzimmer und ein vollständiges Villaerlebnis in Badacsonytomaj. Buchen Sie ein Zimmer, mehrere Zimmer oder die gesamte Villa.",
       storyEyebrow: "ZIMMER ODER GANZE VILLA",
       storyTitle: "Wählen Sie die passenden Zimmer",
       storyLead:
@@ -296,11 +296,11 @@ export const secondaryCopy = {
         },
       ],
       localImageAlts: [
-        "Pool und Terrasse der Relax Villa",
-        "Whirlpool im Außenbereich der Relax Villa",
-        "Gemeinsamer Esstisch und Küche in der Relax Villa",
+        "Pool und Terrasse der Harmony Balaton Villa",
+        "Whirlpool im Außenbereich der Harmony Balaton Villa",
+        "Gemeinsamer Esstisch und Küche in der Harmony Balaton Villa",
       ],
-      faqEyebrow: "RELAX VILLA FAQ",
+      faqEyebrow: "HARMONY BALATON VILLA FAQ",
       faqTitle: "Wichtige Antworten vor der Buchung",
       faqIntro: "Die praktischen Details zählen. Ist Ihre Frage nicht dabei, kontaktieren Sie uns bitte vor der Zahlung.",
       faqContact: "Kontakt aufnehmen",
@@ -492,7 +492,7 @@ export const secondaryCopy = {
       eyebrow: "BADACSONY, A SAJÁT RITMUSUKBAN",
       title: "Éljék meg Badacsonyt a saját ritmusukban",
       intro:
-        "A Relax Villa négy különböző hálószobát és teljes villaélményt kínál Badacsonytomajban. Foglaljanak egy szobát, több szobát vagy az egész villát.",
+        "A Harmony Balaton Villa négy különböző hálószobát és teljes villaélményt kínál Badacsonytomajban. Foglaljanak egy szobát, több szobát vagy az egész villát.",
       storyEyebrow: "SZOBA VAGY TELJES VILLA",
       storyTitle: "Válasszák ki a megfelelő szobákat",
       storyLead:
@@ -528,11 +528,11 @@ export const secondaryCopy = {
         },
       ],
       localImageAlts: [
-        "A Relax Villa medencéje és terasza",
-        "A Relax Villa kültéri jakuzzija",
+        "A Harmony Balaton Villa medencéje és terasza",
+        "A Harmony Balaton Villa kültéri jakuzzija",
         "Közös étkezőasztal és konyha a Relax Villában",
       ],
-      faqEyebrow: "RELAX VILLA GYIK",
+      faqEyebrow: "HARMONY BALATON VILLA GYIK",
       faqTitle: "Hasznos válaszok foglalás előtt",
       faqIntro:
         "A gyakorlati részletek számítanak. Ha valamire itt nincs válasz, fizetés előtt keressenek minket.",
@@ -727,7 +727,7 @@ export const secondaryCopy = {
       eyebrow: "BADACSONY'DE KENDİ RİTMİNİZDE",
       title: "Badacsony'de günü kendi ritminizde yaşayın",
       intro:
-        "Relax Villa, Badacsonytomaj'da dört farklı yatak odası ve dolu dolu bir villa deneyimi sunar. İster tek oda, ister birden fazla oda, isterseniz villanın tamamını rezerve edebilirsiniz.",
+        "Harmony Balaton Villa, Badacsonytomaj'da dört farklı yatak odası ve dolu dolu bir villa deneyimi sunar. İster tek oda, ister birden fazla oda, isterseniz villanın tamamını rezerve edebilirsiniz.",
       storyEyebrow: "ODA VEYA TÜM VİLLA",
       storyTitle: "Konaklamanıza uygun odaları seçin",
       storyLead:
@@ -763,11 +763,11 @@ export const secondaryCopy = {
         },
       ],
       localImageAlts: [
-        "Relax Villa'nın havuzu ve terası",
-        "Relax Villa'nın açık hava jakuzisi",
-        "Relax Villa'daki ortak yemek masası ve mutfak",
+        "Harmony Balaton Villa'nın havuzu ve terası",
+        "Harmony Balaton Villa'nın açık hava jakuzisi",
+        "Harmony Balaton Villa'daki ortak yemek masası ve mutfak",
       ],
-      faqEyebrow: "RELAX VILLA SSS",
+      faqEyebrow: "HARMONY BALATON VILLA SSS",
       faqTitle: "Rezervasyondan önce yararlı yanıtlar",
       faqIntro:
         "Pratik ayrıntılar önemlidir. Sorunuzun yanıtını burada bulamazsanız ödeme yapmadan önce bize ulaşın.",

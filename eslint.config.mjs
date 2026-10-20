@@ -11,6 +11,13 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "dist/**",
+    "work/**",
+    "deployment/**",
+    "output/**",
+    "tmp/**",
+    // Adobe/graphics helper scripts are not browser or application source.
+    "scripts/*harmony-brand*.jsx",
     "next-env.d.ts",
   ]),
   {

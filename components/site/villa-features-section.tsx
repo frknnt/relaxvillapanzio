@@ -30,7 +30,7 @@ const featureIcons = [
 
 export function VillaFeaturesSection({ t }: { t: (typeof siteCopy)[Language] }) {
   return (
-    <section className="relative overflow-hidden bg-[#faf8f5] px-6 pb-32 pt-20 sm:px-10 md:pb-36 lg:px-16">
+    <section className="relative overflow-hidden bg-[#faf8f5] px-6 pb-20 pt-20 sm:px-10 sm:pb-24 lg:px-16 lg:pb-36">
       <div className="relative z-10 mx-auto max-w-[1500px]">
         <div className="text-center">
           <p className="eyebrow">{t.facilitiesEyebrow}</p>
@@ -60,7 +60,7 @@ export function VillaFeaturesSection({ t }: { t: (typeof siteCopy)[Language] }) 
 
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -bottom-2 inset-x-3 whitespace-nowrap text-center text-[7vw] font-extrabold tracking-[-.06em] text-[#f0ede8] sm:-bottom-4 sm:inset-x-5 lg:-bottom-6 lg:text-[clamp(4rem,7vw,8rem)]"
+        className="relative z-0 mt-16 w-full text-balance break-words px-1 text-center text-[clamp(2.35rem,11vw,4.5rem)] font-extrabold leading-[.95] tracking-[-.055em] text-[#ebe7e1] lg:pointer-events-none lg:absolute lg:-bottom-6 lg:inset-x-5 lg:mt-0 lg:w-auto lg:whitespace-nowrap lg:px-0 lg:text-[clamp(4rem,7vw,8rem)]"
       >
         {t.facilitiesBackdrop}
       </div>

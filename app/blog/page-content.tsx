@@ -130,7 +130,7 @@ export function BlogPageContent({ initialPosts }: { initialPosts: BlogPost[] }) 
         <SiteHeader overlay />
         <PageHero
           image="/images/story.jpg"
-          imageAlt="Relax Villa dining area"
+          imageAlt="Harmony Balaton Villa dining area"
           eyebrow={t.eyebrow}
           title={t.title}
           intro={t.intro}

@@ -1,8 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, BedDouble, ChevronLeft, ChevronRight, DoorOpen, Maximize2, Users, Wind } from "lucide-react";
+import { BedDouble, ChevronLeft, ChevronRight, DoorOpen, Maximize2, Users, Wind } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { galleryImages, type GalleryImage } from "@/app/rooms/gallery-data";
@@ -26,11 +25,11 @@ import { PUBLIC_BOOKING_SETTINGS_COLUMNS, PUBLIC_GALLERY_IMAGE_COLUMNS, PUBLIC_R
 import type { BookingSettings, GalleryImageRecord, RoomMonthlyRate, VillaRoom } from "@/lib/supabase/types";
 
 const factCopy = {
-  en: { capacity: "Up to {count} guests", bed: ["Double bed", "Double bed", "Two single beds", "Double + single bed"], bathroom: "Shared bathrooms nearby", climate: ["Skylight & TV", "Direct balcony access", "Flexible twin layout", "Air conditioning & balcony"], from: "From", cta: "Choose this room" },
-  de: { capacity: "Bis zu {count} Gäste", bed: ["Doppelbett", "Doppelbett", "Zwei Einzelbetten", "Doppel- + Einzelbett"], bathroom: "Gemeinschaftsbäder in der Nähe", climate: ["Dachfenster & TV", "Direkter Balkonzugang", "Flexible Zweibettaufteilung", "Klimaanlage & Balkon"], from: "Ab", cta: "Dieses Zimmer wählen" },
-  hu: { capacity: "Legfeljebb {count} vendég", bed: ["Franciaágy", "Franciaágy", "Két külön ágy", "Franciaágy + egyszemélyes ágy"], bathroom: "Közeli közös fürdőszobák", climate: ["Tetőablak és TV", "Közvetlen erkélykapcsolat", "Rugalmas kétágyas elrendezés", "Légkondicionáló és erkély"], from: "Ettől", cta: "Szoba kiválasztása" },
-  tr: { capacity: "En fazla {count} misafir", bed: ["Çift kişilik yatak", "Çift kişilik yatak", "İki tek kişilik yatak", "Çift + tek kişilik yatak"], bathroom: "Yakındaki ortak banyolar", climate: ["Çatı penceresi ve TV", "Doğrudan balkon erişimi", "Esnek iki yataklı düzen", "Klima ve balkon"], from: "Başlangıç", cta: "Bu odayı seç" },
-} satisfies Record<Language, { capacity: string; bed: string[]; bathroom: string; climate: string[]; from: string; cta: string }>;
+  en: { capacity: "Up to {count} guests", bed: ["Double bed", "Double bed", "Two single beds", "Double + single bed"], bathroom: "Shared bathrooms nearby", climate: ["Skylight & TV", "Direct balcony access", "Flexible twin layout", "Air conditioning & balcony"], from: "From" },
+  de: { capacity: "Bis zu {count} Gäste", bed: ["Doppelbett", "Doppelbett", "Zwei Einzelbetten", "Doppel- + Einzelbett"], bathroom: "Gemeinschaftsbäder in der Nähe", climate: ["Dachfenster & TV", "Direkter Balkonzugang", "Flexible Zweibettaufteilung", "Klimaanlage & Balkon"], from: "Ab" },
+  hu: { capacity: "Legfeljebb {count} vendég", bed: ["Franciaágy", "Franciaágy", "Két külön ágy", "Franciaágy + egyszemélyes ágy"], bathroom: "Közeli közös fürdőszobák", climate: ["Tetőablak és TV", "Közvetlen erkélykapcsolat", "Rugalmas kétágyas elrendezés", "Légkondicionáló és erkély"], from: "Ettől" },
+  tr: { capacity: "En fazla {count} misafir", bed: ["Çift kişilik yatak", "Çift kişilik yatak", "İki tek kişilik yatak", "Çift + tek kişilik yatak"], bathroom: "Yakındaki ortak banyolar", climate: ["Çatı penceresi ve TV", "Doğrudan balkon erişimi", "Esnek iki yataklı düzen", "Klima ve balkon"], from: "Başlangıç" },
+} satisfies Record<Language, { capacity: string; bed: string[]; bathroom: string; climate: string[]; from: string }>;
 
 function toGalleryImage(record: GalleryImageRecord): GalleryImage | null {
   if (
@@ -296,7 +295,6 @@ export function RoomsPageContent() {
                 </div>
                 <div className="mt-6 flex flex-wrap items-center gap-4">
                   {startingRates[index + 1] !== undefined ? <p className="text-sm text-[#66676b]"><span className="font-semibold text-[#806c45]">{factCopy[language].from}</span> {formatMoney(startingRates[index + 1], currency, language)} / {language === "tr" ? "gece" : language === "de" ? "Nacht" : language === "hu" ? "éj" : "night"}</p> : null}
-                  <Link href={`/?rooms=${index + 1}#availability`} className="inline-flex min-h-11 items-center gap-2 rounded-full bg-[#303238] px-5 text-xs font-semibold uppercase tracking-[.1em] text-white transition hover:bg-[#806c45]">{factCopy[language].cta}<ArrowRight className="size-4" /></Link>
                 </div>
                 <p className="mt-6 border-l-2 border-[#b6a27b] pl-5 text-sm font-semibold uppercase leading-6 tracking-[.12em] text-[#8f7e5e]">
                   {t.notice}
@@ -307,7 +305,7 @@ export function RoomsPageContent() {
         </div>
       </section>
 
-      <section className="px-6 py-24 sm:px-10 md:py-32 lg:px-16">
+      <section id="gallery" className="scroll-mt-20 px-6 py-24 sm:px-10 md:py-32 lg:px-16">
         <div className="mx-auto max-w-[1500px]">
           <div className="mb-12 max-w-3xl">
             <p className="eyebrow">{t.galleryEyebrow}</p>
@@ -316,20 +314,20 @@ export function RoomsPageContent() {
           </div>
 
           <Tabs defaultValue="all" className="gap-0">
-            <div className="pb-2">
+            <div>
               <TabsList
                 variant="line"
                 aria-label={t.galleryEyebrow}
-                className="grid h-auto w-full grid-cols-2 gap-1 border-b border-[#ded8ce] p-0 sm:inline-flex sm:w-fit sm:min-w-max sm:gap-2"
+                className="gallery-tabs grid h-auto w-full grid-cols-2 auto-rows-fr gap-2 rounded-xl bg-[#f3efe9] p-2 group-data-[orientation=horizontal]/tabs:h-auto sm:inline-flex sm:w-fit sm:min-w-max"
               >
                 {galleryTabs.map((tab) => (
                   <TabsTrigger
                     key={tab.value}
                     value={tab.value}
-                    className="min-h-12 w-full flex-none rounded-none px-2 text-[10px] font-semibold uppercase tracking-[.1em] text-[#77787b] data-[state=active]:text-[#292b2f] sm:w-auto sm:px-6 sm:text-xs sm:tracking-[.12em]"
+                    className="min-h-12 w-full flex-none rounded-lg px-2 text-center text-[10px] font-semibold uppercase leading-4 tracking-[.08em] whitespace-normal sm:w-auto sm:px-6 sm:text-xs sm:tracking-[.12em]"
                   >
                     {tab.label}
-                    <span className="text-[10px] text-[#a08f6d]">{tab.images.length}</span>
+                    <span className="text-[10px] text-[#9b8355] data-[state=active]:text-[#d7c49f]">{tab.images.length}</span>
                   </TabsTrigger>
                 ))}
               </TabsList>
@@ -380,15 +378,6 @@ export function RoomsPageContent() {
             ))}
           </Tabs>
 
-          <div className="mt-12 flex justify-end">
-            <Link
-              href="/#availability"
-              className="inline-flex min-h-13 items-center gap-3 rounded-full border border-[#2d2f33] px-7 text-xs font-semibold uppercase tracking-[.14em] transition hover:bg-[#2d2f33] hover:text-white"
-            >
-              {t.cta}
-              <ArrowRight className="size-4" />
-            </Link>
-          </div>
         </div>
       </section>
 

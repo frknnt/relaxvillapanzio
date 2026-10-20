@@ -131,8 +131,8 @@ export function ContactPageContent() {
       <div className="relative">
         <SiteHeader overlay />
         <section className="relative flex min-h-[490px] items-center justify-center overflow-hidden px-6 pt-20 text-center text-white sm:min-h-[540px]">
-          <Image src="/images/hero.jpg" alt="Relax Villa" fill priority sizes="100vw" className="object-cover object-center max-sm:hidden" />
-          <Image src="/images/hero-mobile.jpg" alt="Relax Villa" fill priority sizes="100vw" className="object-cover object-center sm:hidden" />
+          <Image src="/images/hero.jpg" alt="Harmony Balaton Villa" fill priority sizes="100vw" className="object-cover object-center max-sm:hidden" />
+          <Image src="/images/hero-mobile.jpg" alt="Harmony Balaton Villa" fill priority sizes="100vw" className="object-cover object-center sm:hidden" />
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(19,24,27,.46),rgba(19,24,27,.64))]" />
           <div className="relative mx-auto max-w-5xl">
             <p className="text-[11px] font-semibold uppercase tracking-[.3em] text-[#ddcaa5] sm:text-xs">

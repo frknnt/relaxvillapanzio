@@ -19,6 +19,7 @@ import {
   Plus,
   Search,
   Users,
+  X,
 } from "lucide-react";
 
 import { AvailabilityCalendar } from "@/components/booking/availability-calendar";
@@ -28,6 +29,7 @@ import { SiteHeader } from "@/components/site/site-header";
 import { VillaFeaturesSection } from "@/components/site/villa-features-section";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -109,8 +111,12 @@ function GuestCounter({
 
 export default function Home() {
   const { language } = useLanguage();
-  const [arrival, setArrival] = useState("");
-  const [departure, setDeparture] = useState("");
+  const [arrival, setArrival] = useState(() => localDateString(new Date()));
+  const [departure, setDeparture] = useState(() => {
+    const nextDay = new Date();
+    nextDay.setDate(nextDay.getDate() + 1);
+    return localDateString(nextDay);
+  });
   const [adults, setAdults] = useState(2);
   const [children, setChildren] = useState(0);
   const [pets, setPets] = useState(0);
@@ -259,13 +265,14 @@ export default function Home() {
       calculateBookingQuote({
         arrival,
         departure,
+        children,
         pets,
         rates: monthlyRates,
         roomRates: roomMonthlyRates,
         roomIds: selectedRoomIds,
         settings: bookingSettings,
       }),
-    [arrival, departure, pets, monthlyRates, roomMonthlyRates, selectedRoomIds, bookingSettings],
+    [arrival, departure, children, pets, monthlyRates, roomMonthlyRates, selectedRoomIds, bookingSettings],
   );
 
   const wholeVillaSelected = isWholeVillaSelection(selectedRoomIds);
@@ -481,7 +488,7 @@ export default function Home() {
           <h1 className="hero-title w-full max-w-5xl break-words text-balance text-[clamp(2.05rem,5.6vw,5.7rem)] font-extrabold uppercase leading-[.98] tracking-[-.045em]">
             {t.heroTitle}
           </h1>
-          <p className="hero-copy mt-6 w-full max-w-2xl text-balance text-base leading-7 text-white/80 md:text-lg">
+          <p className="hero-copy mt-6 w-full max-w-2xl text-balance text-base leading-7 text-white md:text-lg">
             {t.heroText}
           </p>
           <div className="hero-address mt-5 max-w-full break-words text-center text-[9px] uppercase leading-5 tracking-[.12em] text-white/70 sm:text-xs sm:tracking-[.18em]">
@@ -489,8 +496,8 @@ export default function Home() {
           </div>
 
           <div className="mt-9 w-full max-w-[1344px] rounded-[5px] bg-white p-1.5 text-[#24262d] shadow-[0_20px_55px_rgba(8,9,10,.32)] sm:mt-11">
-            <div className="grid grid-cols-2 lg:grid-cols-[minmax(290px,1.05fr)_minmax(150px,.65fr)_minmax(160px,.7fr)_minmax(160px,.7fr)_minmax(170px,.72fr)]">
-              <div className="col-span-2 flex min-w-0 border-b border-[#e9e6e1] lg:col-span-1 lg:border-b-0 lg:border-r">
+            <div className="grid grid-cols-2 gap-px overflow-hidden rounded-[3px] bg-[#e9e6e1] lg:grid-cols-[minmax(290px,1.05fr)_minmax(150px,.65fr)_minmax(160px,.7fr)_minmax(160px,.7fr)_minmax(170px,.72fr)] lg:gap-0 lg:bg-white">
+              <div className="col-span-2 grid min-w-0 grid-cols-2 divide-x divide-[#e9e6e1] bg-white lg:col-span-1 lg:border-r lg:border-[#e9e6e1]">
                 <HeroDateField
                   label={t.arrival}
                   value={arrival}
@@ -498,7 +505,6 @@ export default function Home() {
                   max={maxBookingDate}
                   onChange={setArrival}
                 />
-                <div className="my-3 w-px bg-[#e9e6e1]" aria-hidden="true" />
                 <HeroDateField
                   label={t.departure}
                   value={departure}
@@ -507,13 +513,13 @@ export default function Home() {
                   onChange={setDeparture}
                 />
               </div>
-              <div className="flex min-h-18 min-w-0 items-center border-r border-[#e9e6e1] px-3 lg:px-3">
+              <div className="flex min-h-18 min-w-0 items-center bg-white px-3 lg:border-r lg:border-[#e9e6e1]">
                 <GuestCounter value={adults} onChange={setAdults} label={t.adults} hero min={1} />
               </div>
-              <div className="flex min-h-18 min-w-0 items-center px-3 lg:border-r lg:border-[#e9e6e1]">
+              <div className="flex min-h-18 min-w-0 items-center bg-white px-3 lg:border-r lg:border-[#e9e6e1]">
                 <GuestCounter value={children} onChange={setChildren} label={t.children} hero />
               </div>
-              <div className="flex min-h-18 min-w-0 items-center border-r border-[#e9e6e1] px-3">
+              <div className="flex min-h-18 min-w-0 items-center bg-white px-3 lg:border-r lg:border-[#e9e6e1]">
                 <GuestCounter value={pets} onChange={setPets} label={t.pets} hero />
               </div>
               <button
@@ -569,13 +575,13 @@ export default function Home() {
             ))}
           </div>
           <div className="mt-10 flex justify-end">
-            <Link
-              href="/rooms"
+            <a
+              href="/rooms#gallery"
               className="group inline-flex items-center gap-3 rounded-full border border-[#2d2f33] px-7 py-3.5 text-xs font-semibold uppercase tracking-[.14em] transition hover:bg-[#2d2f33] hover:text-white"
             >
               {t.gallery}
               <ArrowRight className="size-4 transition group-hover:translate-x-1" />
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -601,7 +607,7 @@ export default function Home() {
                   {t.bookingHelp}
                 </p>
                 <p className="mt-1 text-sm font-semibold">
-                  8257 Badacsonytomaj · Füredi út 5
+                  <span dir="ltr">{effectiveWhatsapp || "—"}</span>
                 </p>
               </div>
             </div>
@@ -809,6 +815,11 @@ export default function Home() {
                         ? formatMoney(quote.total, quote.currency, language)
                         : t.priceMissing}
                     </p>
+                    {quote.childFee > 0 ? (
+                      <p className="mt-1 text-xs text-white/60">
+                        {t.childFeeLabel}: {formatMoney(quote.childFee, quote.currency, language)}
+                      </p>
+                    ) : null}
                     {quote.petFee > 0 ? (
                       <p className="mt-1 text-xs text-white/60">
                         {t.petFeeLabel}: {formatMoney(quote.petFee, quote.currency, language)}
@@ -848,10 +859,19 @@ export default function Home() {
           }
         }}
       >
-        <DialogContent className="max-h-[92vh] overflow-y-auto rounded-[8px] border-0 bg-[#faf8f5] p-0 sm:max-w-2xl">
+        <DialogContent showCloseButton={false} className="max-h-[92dvh] overflow-y-auto overscroll-contain rounded-[8px] border-0 bg-[#faf8f5] p-0 sm:max-w-2xl">
+          <DialogClose asChild>
+            <button
+              type="button"
+              aria-label={language === "tr" ? "Rezervasyon penceresini kapat" : language === "de" ? "Buchungsfenster schließen" : language === "hu" ? "Foglalási ablak bezárása" : "Close booking window"}
+              className="sticky top-3 z-30 ml-auto mr-3 -mb-14 grid size-11 shrink-0 place-items-center rounded-full border border-white/30 bg-white text-[#2f3135] shadow-[0_8px_24px_rgba(0,0,0,.22)] transition hover:bg-[#eee8de] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#d7c49f] focus-visible:ring-offset-2 focus-visible:ring-offset-[#25282e]"
+            >
+              <X aria-hidden="true" className="size-5" />
+            </button>
+          </DialogClose>
           <DialogHeader className="bg-[#25282e] px-5 py-7 pr-12 text-left text-white sm:px-8 sm:py-8 sm:pr-14">
             <p className="text-[10px] font-semibold uppercase tracking-[.2em] text-[#cfbb92]">
-              Relax Villa · Badacsonytomaj
+              Harmony Balaton Villa · Badacsonytomaj
             </p>
             <DialogTitle className="mt-2 text-3xl font-bold tracking-tight">
               {bookingResult ? t.bookingCreated : t.guestDetails}
@@ -910,7 +930,7 @@ export default function Home() {
                     onChange={(event) =>
                       setGuestForm((current) => ({ ...current, name: event.target.value }))
                     }
-                    className="min-h-12 rounded-[4px] border border-[#ded8cf] bg-white px-4 text-sm font-normal normal-case tracking-normal text-[#2f3135] outline-none transition focus:border-[#9a8866] focus:ring-2 focus:ring-[#9a8866]/15"
+                    className="min-h-12 rounded-[4px] border border-[#ded8cf] bg-white px-4 text-base font-normal normal-case tracking-normal text-[#2f3135] outline-none transition focus:border-[#9a8866] focus:ring-2 focus:ring-[#9a8866]/15 sm:text-sm"
                   />
                 </label>
                 <label className="grid gap-2 text-xs font-semibold uppercase tracking-[.1em] text-[#66686c]">
@@ -924,7 +944,7 @@ export default function Home() {
                     onChange={(event) =>
                       setGuestForm((current) => ({ ...current, email: event.target.value }))
                     }
-                    className="min-h-12 rounded-[4px] border border-[#ded8cf] bg-white px-4 text-sm font-normal normal-case tracking-normal text-[#2f3135] outline-none transition focus:border-[#9a8866] focus:ring-2 focus:ring-[#9a8866]/15"
+                    className="min-h-12 rounded-[4px] border border-[#ded8cf] bg-white px-4 text-base font-normal normal-case tracking-normal text-[#2f3135] outline-none transition focus:border-[#9a8866] focus:ring-2 focus:ring-[#9a8866]/15 sm:text-sm"
                   />
                 </label>
                 <label className="grid gap-2 text-xs font-semibold uppercase tracking-[.1em] text-[#66686c]">
@@ -939,7 +959,7 @@ export default function Home() {
                     onChange={(event) =>
                       setGuestForm((current) => ({ ...current, phone: event.target.value }))
                     }
-                    className="min-h-12 rounded-[4px] border border-[#ded8cf] bg-white px-4 text-sm font-normal normal-case tracking-normal text-[#2f3135] outline-none transition focus:border-[#9a8866] focus:ring-2 focus:ring-[#9a8866]/15"
+                    className="min-h-12 rounded-[4px] border border-[#ded8cf] bg-white px-4 text-base font-normal normal-case tracking-normal text-[#2f3135] outline-none transition focus:border-[#9a8866] focus:ring-2 focus:ring-[#9a8866]/15 sm:text-sm"
                   />
                 </label>
                 <label className="grid gap-2 text-xs font-semibold uppercase tracking-[.1em] text-[#66686c] sm:col-span-2">
@@ -951,7 +971,7 @@ export default function Home() {
                     onChange={(event) =>
                       setGuestForm((current) => ({ ...current, notes: event.target.value }))
                     }
-                    className="resize-y rounded-[4px] border border-[#ded8cf] bg-white px-4 py-3 text-sm font-normal normal-case leading-6 tracking-normal text-[#2f3135] outline-none transition focus:border-[#9a8866] focus:ring-2 focus:ring-[#9a8866]/15"
+                    className="resize-y rounded-[4px] border border-[#ded8cf] bg-white px-4 py-3 text-base font-normal normal-case leading-6 tracking-normal text-[#2f3135] outline-none transition focus:border-[#9a8866] focus:ring-2 focus:ring-[#9a8866]/15 sm:text-sm"
                   />
                 </label>
                 <label className="absolute -left-[9999px]" aria-hidden="true">
@@ -1080,7 +1100,7 @@ export default function Home() {
                 <MessageCircle className="size-5" />
                 {t.receiptWhatsApp}
               </a>
-              <Link href="/reservation-status" className="flex min-h-12 items-center justify-center rounded-full border border-[#bfb5a4] px-6 text-center text-sm font-semibold text-[#3d3f43] transition hover:border-[#806c45] hover:text-[#806c45]">{professional.trackBooking}</Link>
+              <a href="/reservation-status" className="flex min-h-12 items-center justify-center rounded-full border border-[#bfb5a4] px-6 text-center text-sm font-semibold text-[#3d3f43] transition hover:border-[#806c45] hover:text-[#806c45]">{professional.trackBooking}</a>
             </div>
           )}
         </DialogContent>

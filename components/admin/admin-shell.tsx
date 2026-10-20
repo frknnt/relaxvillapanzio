@@ -2,6 +2,7 @@
 
 import type { ComponentType, ReactNode } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Banknote,
   BedDouble,
@@ -78,18 +79,19 @@ export function AdminShell({
   const activeLabel = ADMIN_NAV.find((item) => item.id === activeView)?.label;
 
   return (
-    <div className="min-h-dvh bg-[#f5f2ed] text-[#2d2f33]">
+    <div className="min-h-dvh min-w-0 overflow-x-clip bg-[#f5f2ed] text-[#2d2f33]">
       <aside className="fixed inset-y-0 left-0 z-40 hidden w-[17rem] flex-col bg-[#25272a] text-white lg:flex">
         <div className="border-b border-white/8 px-6 py-6">
-          <Link href="/" className="flex items-center gap-3">
-            <span className="grid size-10 place-items-center rounded-full border border-white/20 text-[0.7rem] font-semibold tracking-[0.16em]">
-              RV
-            </span>
-            <span>
-              <span className="block text-sm font-semibold">Relax Villa</span>
-              <span className="mt-0.5 block text-[0.65rem] tracking-[0.18em] text-white/40 uppercase">
-                Yönetim paneli
-              </span>
+          <Link href="/" aria-label="Harmony Balaton Villa" className="block">
+            <Image
+              src="/brand/logo-exact-white.svg"
+              alt="Harmony Balaton Villa"
+              width={394}
+              height={158}
+              className="h-12 w-auto max-w-full"
+            />
+            <span className="mt-1 block pl-0.5 text-[0.62rem] tracking-[0.2em] text-white/45 uppercase">
+              Yönetim paneli
             </span>
           </Link>
         </div>
@@ -141,10 +143,16 @@ export function AdminShell({
         </div>
       </aside>
 
-      <div className="lg:pl-[17rem]">
+      <div className="min-w-0 lg:pl-[17rem]">
         <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-[#e2ddd5] bg-[#f5f2ed]/90 px-4 backdrop-blur-md sm:px-6 lg:px-9">
           <div>
-            <p className="text-[0.62rem] font-bold tracking-[0.2em] text-[#9a855f] uppercase lg:hidden">Relax Villa</p>
+            <Image
+              src="/brand/logo-exact-primary.svg"
+              alt="Harmony Balaton Villa"
+              width={394}
+              height={158}
+              className="mb-0.5 h-5 w-auto lg:hidden"
+            />
             <p className="text-sm font-semibold text-[#38393c]">{activeLabel}</p>
           </div>
           <div className="flex items-center gap-2 lg:hidden">
@@ -161,7 +169,7 @@ export function AdminShell({
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-[96rem] p-4 pb-28 sm:p-6 sm:pb-28 lg:p-9 lg:pb-10">
+        <main className="mx-auto w-full min-w-0 max-w-[96rem] overflow-x-clip p-4 pb-28 sm:p-6 sm:pb-28 lg:p-9 lg:pb-10">
           {children}
         </main>
       </div>

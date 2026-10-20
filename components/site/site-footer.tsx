@@ -69,12 +69,16 @@ export function SiteFooter() {
       <div className="absolute inset-0 bg-[#20232a]/90" />
       <div className="relative mx-auto grid max-w-[1500px] gap-14 md:grid-cols-[1.1fr_.8fr_1.1fr]">
         <div>
-          <div className="mb-8 flex items-center gap-3">
-            <span className="grid size-12 place-items-center rounded-full border border-white/20 text-sm font-bold text-[#d6c29b]">
-              RV
-            </span>
-            <span className="text-sm font-semibold uppercase tracking-[.2em]">Relax Villa Panzio</span>
-          </div>
+          <Link href="/" onClick={navigateReliably} aria-label="Harmony Balaton Villa" className="mb-8 block w-fit">
+            <Image
+              src="/brand/logo-exact-white.svg"
+              alt=""
+              width={1800}
+              height={600}
+              unoptimized
+              className="h-auto w-[220px] sm:w-[250px]"
+            />
+          </Link>
           <h3 className="text-sm font-bold">{copy.common.contact}</h3>
           <address className="mt-5 max-w-xs not-italic text-sm leading-7 text-white/65">
             {copy.common.address}

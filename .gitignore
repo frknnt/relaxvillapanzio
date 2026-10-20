@@ -46,3 +46,9 @@ next-env.d.ts
 /.codex/
 /outputs/
 /work/
+
+# local scratch files, browser profiles and generated packages
+/tmp/
+/output/
+*.zip
+*.tar.gz

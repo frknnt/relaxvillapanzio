@@ -2,6 +2,7 @@
 
 import { FormEvent, useEffect, useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff, KeyRound, LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -97,11 +98,15 @@ export function AdminLogin() {
       <section className="relative hidden min-h-dvh flex-col justify-between overflow-hidden bg-[#26282b] p-10 text-white lg:flex xl:p-14">
         <div className="absolute -top-40 -right-48 size-[34rem] rounded-full border border-white/10" />
         <div className="absolute -top-20 -right-32 size-[24rem] rounded-full border border-[#bca77d]/25" />
-        <Link href="/" className="relative z-10 inline-flex items-center gap-3 font-semibold">
-          <span className="grid size-10 place-items-center rounded-full border border-white/20 text-xs tracking-[0.18em]">
-            RV
-          </span>
-          <span>Relax Villa</span>
+        <Link href="/" aria-label="Harmony Balaton Villa" className="relative z-10 inline-flex min-h-14 items-center">
+          <Image
+            src="/brand/logo-exact-white.svg"
+            alt="Harmony Balaton Villa"
+            width={394}
+            height={158}
+            priority
+            className="h-14 w-auto"
+          />
         </Link>
 
         <div className="relative z-10 max-w-xl">
@@ -119,8 +124,8 @@ export function AdminLogin() {
         <p className="relative z-10 text-xs text-white/35">Badacsonytomaj · Macaristan</p>
       </section>
 
-      <section className="relative z-10 flex min-h-dvh items-center justify-center p-5 sm:p-8">
-        <div className="w-full max-w-md">
+      <section className="relative z-10 flex min-h-dvh min-w-0 items-center justify-center overflow-x-hidden p-5 sm:p-8">
+        <div className="w-full min-w-0 max-w-md">
           <Link
             href="/"
             className="mb-7 inline-flex items-center gap-2 text-sm font-medium text-[#68696c] transition hover:text-[#2d2f33] lg:hidden"
@@ -129,12 +134,12 @@ export function AdminLogin() {
             Siteye dön
           </Link>
 
-          <div className="rounded-[1.5rem] border border-white/70 bg-white/95 p-6 shadow-[0_28px_80px_rgba(38,39,43,0.12)] backdrop-blur sm:p-9">
+          <div className="w-full min-w-0 max-w-full overflow-hidden rounded-[1.5rem] border border-white/70 bg-white/95 p-6 shadow-[0_28px_80px_rgba(38,39,43,0.12)] backdrop-blur sm:p-9">
             <div className="mb-7 grid size-12 place-items-center rounded-2xl bg-[#2d2f33] text-white shadow-lg shadow-black/10">
               <KeyRound className="size-5" />
             </div>
             <p className="text-[0.68rem] font-bold tracking-[0.24em] text-[#9b8762] uppercase">
-              Relax Villa
+              Harmony Balaton Villa
             </p>
             <h2 className="mt-2 text-3xl font-semibold tracking-[-0.045em] text-[#26272b]">
               Yönetici girişi
@@ -157,22 +162,22 @@ export function AdminLogin() {
                 Oturum kontrol ediliyor…
               </div>
             ) : (
-              <form className="mt-7 grid gap-5" onSubmit={handleSubmit}>
-                <label className="grid gap-2 text-sm font-medium text-[#36373a]">
+              <form className="mt-7 grid min-w-0 gap-5" onSubmit={handleSubmit}>
+                <label className="grid min-w-0 gap-2 text-sm font-medium text-[#36373a]">
                   E-posta adresi
                   <Input
                     type="email"
                     autoComplete="email"
-                    placeholder="yonetici@relaxvilla.hu"
+                    placeholder="yonetici@harmonybalatonvilla.com"
                     value={email}
                     onChange={(event) => setEmail(event.target.value)}
                     required
                     disabled={submitting}
-                    className="h-11 bg-white"
+                    className="h-11 min-w-0 max-w-full bg-white"
                   />
                 </label>
 
-                <label className="grid gap-2 text-sm font-medium text-[#36373a]">
+                <label className="grid min-w-0 gap-2 text-sm font-medium text-[#36373a]">
                   Şifre
                   <span className="relative">
                     <Input
@@ -183,7 +188,7 @@ export function AdminLogin() {
                       onChange={(event) => setPassword(event.target.value)}
                       required
                       disabled={submitting}
-                      className="h-11 bg-white pr-11"
+                      className="h-11 min-w-0 max-w-full bg-white pr-11"
                     />
                     <button
                       type="button"
@@ -210,7 +215,7 @@ export function AdminLogin() {
             )}
           </div>
 
-          <p className="mt-5 text-center text-xs leading-5 text-[#87887f]">
+          <p className="mt-5 break-words text-center text-xs leading-5 text-[#87887f]">
             Erişim yetkiniz yoksa sistem yöneticinizle iletişime geçin.
           </p>
         </div>

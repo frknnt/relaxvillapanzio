@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useCallback, useEffect, useState } from "react";
-import { Banknote, Building2, CheckCircle2, Clock3, CreditCard, Mail, MessageCircle, RefreshCw, Save, ShieldCheck, Users } from "lucide-react";
+import { Banknote, Building2, CheckCircle2, Clock3, CreditCard, Mail, MessageCircle, RefreshCw, Save, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { getSupabaseBrowserClient } from "@/lib/supabase/client";
 import type { BookingSettings } from "@/lib/supabase/types";
@@ -22,6 +22,7 @@ type SettingsForm = {
   currency: string;
   weekendDays: number[];
   paymentHoldHours: string;
+  childFee: string;
   petFee: string;
   iban: string;
   bankBeneficiary: string;
@@ -44,6 +45,7 @@ const defaultForm: SettingsForm = {
   currency: "HUF",
   weekendDays: [5, 6],
   paymentHoldHours: "48",
+  childFee: "0",
   petFee: "0",
   iban: "",
   bankBeneficiary: "",
@@ -58,7 +60,7 @@ const defaultForm: SettingsForm = {
   cancellationFreeDays: "14",
   lateCancellationRefundPercent: "0",
   privacyRetentionMonths: "24",
-  legalOperatorName: "Relax Villa Panzió",
+  legalOperatorName: "Harmony Balaton Villa",
   legalOperatorAddress: "8257 Badacsonytomaj, Füredi út 5",
 };
 
@@ -104,6 +106,7 @@ export function SettingsView({ userId }: { userId: string }) {
         currency: settings.currency,
         weekendDays: settings.weekend_days,
         paymentHoldHours: String(settings.payment_hold_hours),
+        childFee: String(settings.child_fee),
         petFee: String(settings.pet_fee),
         iban: settings.iban,
         bankBeneficiary: settings.bank_beneficiary,
@@ -118,7 +121,7 @@ export function SettingsView({ userId }: { userId: string }) {
         cancellationFreeDays: String(settings.cancellation_free_days ?? 14),
         lateCancellationRefundPercent: String(settings.late_cancellation_refund_percent ?? 0),
         privacyRetentionMonths: String(settings.privacy_retention_months ?? 24),
-        legalOperatorName: settings.legal_operator_name || "Relax Villa Panzió",
+        legalOperatorName: settings.legal_operator_name || "Harmony Balaton Villa",
         legalOperatorAddress: settings.legal_operator_address || "8257 Badacsonytomaj, Füredi út 5",
       });
       setLastUpdated(settings.updated_at);
@@ -149,6 +152,7 @@ export function SettingsView({ userId }: { userId: string }) {
     setFeedback(null);
     try {
       const paymentHoldHours = Number(form.paymentHoldHours);
+      const childFee = Number(form.childFee);
       const petFee = Number(form.petFee);
       const maxGuests = Number(form.maxGuests);
       const currency = form.currency.trim().toUpperCase();
@@ -158,6 +162,7 @@ export function SettingsView({ userId }: { userId: string }) {
 
       if (!/^[A-Z]{3}$/.test(currency)) throw new Error("Para birimi üç harfli ISO kodu olmalı (örn. HUF). ");
       if (paymentHoldHours < 1 || paymentHoldHours > 336) throw new Error("Ödeme bekleme süresi 1 ile 336 saat arasında olmalı.");
+      if (childFee < 0) throw new Error("Çocuk ücreti negatif olamaz.");
       if (petFee < 0) throw new Error("Evcil hayvan ücreti negatif olamaz.");
       if (maxGuests < 1 || maxGuests > 30) throw new Error("Maksimum misafir sayısı 1 ile 30 arasında olmalı.");
       if (form.weekendDays.length === 0) throw new Error("En az bir hafta sonu günü seçin.");
@@ -178,6 +183,7 @@ export function SettingsView({ userId }: { userId: string }) {
             currency,
             weekend_days: form.weekendDays,
             payment_hold_hours: paymentHoldHours,
+            child_fee: childFee,
             pet_fee: petFee,
             iban: form.iban.replace(/\s+/g, "").toUpperCase(),
             bank_beneficiary: form.bankBeneficiary.trim(),
@@ -280,20 +286,6 @@ export function SettingsView({ userId }: { userId: string }) {
             </div>
           </SettingsSection>
 
-          <SettingsSection icon={ShieldCheck} title="İptal ve gizlilik kuralları" description="Müşterinin rezervasyon öncesinde göreceği açık koşullar.">
-            <div className="grid gap-4 sm:grid-cols-3">
-              <Field label="Ücretsiz iptal (gün)" hint="Varıştan kaç gün öncesine kadar tam iade yapılır.">
-                <input type="number" min="0" max="365" step="1" inputMode="numeric" value={form.cancellationFreeDays} onChange={(event) => setForm((current) => ({ ...current, cancellationFreeDays: event.target.value }))} required className={adminInputClass} />
-              </Field>
-              <Field label="Geç iptal iadesi (%)" hint="Ücretsiz iptal süresi geçtikten sonraki iade oranı.">
-                <input type="number" min="0" max="100" step="1" inputMode="numeric" value={form.lateCancellationRefundPercent} onChange={(event) => setForm((current) => ({ ...current, lateCancellationRefundPercent: event.target.value }))} required className={adminInputClass} />
-              </Field>
-              <Field label="Veri saklama (ay)" hint="Rezervasyon ve destek kayıtlarının saklama süresi.">
-                <input type="number" min="1" max="120" step="1" inputMode="numeric" value={form.privacyRetentionMonths} onChange={(event) => setForm((current) => ({ ...current, privacyRetentionMonths: event.target.value }))} required className={adminInputClass} />
-              </Field>
-            </div>
-          </SettingsSection>
-
           <SettingsSection icon={Building2} title="Yasal işletmeci bilgileri" description="Gizlilik ve rezervasyon koşullarında gösterilecek işletme bilgileri.">
             <div className="grid gap-4 lg:grid-cols-2">
               <Field label="İşletmeci adı">
@@ -305,23 +297,28 @@ export function SettingsView({ userId }: { userId: string }) {
             </div>
           </SettingsSection>
 
-          <SettingsSection icon={Banknote} title="Ücret ve hafta sonu" description="Evcil hayvan sabit ücreti ve hafta sonu fiyatının uygulanacağı günler.">
-            <div className="grid gap-5 lg:grid-cols-[minmax(14rem,0.55fr)_minmax(0,1.45fr)] lg:items-end">
+          <SettingsSection icon={Banknote} title="Ücret ve hafta sonu" description="Çocuk ve evcil hayvan sabit ücretleri ile hafta sonu fiyatının uygulanacağı günler.">
+            <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-[minmax(12rem,0.55fr)_minmax(12rem,0.55fr)_minmax(0,1.4fr)] xl:items-end">
+              <Field label={`Çocuk ücreti (${form.currency || "HUF"})`} hint="Rezervasyonda en az bir çocuk varsa bir kez eklenir.">
+                <input type="number" min="0" step="1" inputMode="numeric" value={form.childFee} onChange={(event) => setForm((current) => ({ ...current, childFee: event.target.value }))} required className={adminInputClass} />
+              </Field>
               <Field label={`Evcil hayvan ücreti (${form.currency || "HUF"})`} hint="Rezervasyonda en az bir evcil hayvan varsa bir kez eklenir.">
                 <input type="number" min="0" step="1" inputMode="numeric" value={form.petFee} onChange={(event) => setForm((current) => ({ ...current, petFee: event.target.value }))} required className={adminInputClass} />
               </Field>
-              <Field label="Hafta sonu fiyatı uygulanacak günler" hint="ISO gün sırası kullanılır; Pazartesi 1, Pazar 7.">
-                <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
-                  {days.map((day) => {
-                    const selected = form.weekendDays.includes(day.id);
-                    return (
-                      <button key={day.id} type="button" aria-pressed={selected} onClick={() => toggleWeekend(day.id)} className={cn("h-10 rounded-lg border text-xs font-semibold transition", selected ? "border-[#9a855f] bg-[#9a855f] text-white" : "border-[#dcd6cd] bg-white text-[#696a6e] hover:border-[#b8a887]")}>
-                        {day.label}
-                      </button>
-                    );
-                  })}
-                </div>
-              </Field>
+              <div className="md:col-span-2 xl:col-span-1">
+                <Field label="Hafta sonu fiyatı uygulanacak günler" hint="ISO gün sırası kullanılır; Pazartesi 1, Pazar 7.">
+                  <div className="grid grid-cols-4 gap-2 sm:grid-cols-7">
+                    {days.map((day) => {
+                      const selected = form.weekendDays.includes(day.id);
+                      return (
+                        <button key={day.id} type="button" aria-pressed={selected} onClick={() => toggleWeekend(day.id)} className={cn("h-10 rounded-lg border text-xs font-semibold transition", selected ? "border-[#9a855f] bg-[#9a855f] text-white" : "border-[#dcd6cd] bg-white text-[#696a6e] hover:border-[#b8a887]")}>
+                          {day.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </Field>
+              </div>
             </div>
           </SettingsSection>
 
@@ -330,7 +327,7 @@ export function SettingsView({ userId }: { userId: string }) {
               <Field label="İletişim e-postası" hint="İletişim sayfasında ve site alt bilgisinde gösterilir.">
                 <div className="relative">
                   <Mail className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[#9a855f]" />
-                  <input type="email" value={form.contactEmail} onChange={(event) => setForm((current) => ({ ...current, contactEmail: event.target.value }))} placeholder="info@relaxvilla.hu" autoComplete="email" maxLength={254} className={cn(adminInputClass, "pl-10")} />
+                  <input type="email" value={form.contactEmail} onChange={(event) => setForm((current) => ({ ...current, contactEmail: event.target.value }))} placeholder="info@harmonybalatonvilla.com" autoComplete="email" maxLength={254} className={cn(adminInputClass, "pl-10")} />
                 </div>
               </Field>
               <Field label="WhatsApp numarası" hint="Ülke koduyla birlikte girin; örn. +36…">

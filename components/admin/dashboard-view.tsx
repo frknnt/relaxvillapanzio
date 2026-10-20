@@ -148,7 +148,7 @@ export function DashboardView() {
   ];
 
   return (
-    <div className="space-y-7">
+    <div className="min-w-0 space-y-7">
       <SectionHeading
         eyebrow="Bugünün özeti"
         title="Genel bakış"
@@ -167,11 +167,11 @@ export function DashboardView() {
         <BusyState label="Panel özeti hazırlanıyor…" />
       ) : (
         <>
-          <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <section className="grid min-w-0 gap-3 sm:grid-cols-2 xl:grid-cols-4">
             {cards.map((card) => {
               const Icon = card.icon;
               return (
-                <article key={card.label} className={`${panelClass} p-5`}>
+                <article key={card.label} className={`${panelClass} min-w-0 overflow-hidden p-5`}>
                   <div className="flex items-start justify-between gap-4">
                     <div className={`grid size-10 place-items-center rounded-xl ${card.iconClass}`}>
                       <Icon className="size-[1.1rem]" />
@@ -179,15 +179,15 @@ export function DashboardView() {
                     <ArrowDownRight className="size-4 text-[#d1ccc4]" />
                   </div>
                   <p className="mt-5 text-xs font-medium text-[#77787b]">{card.label}</p>
-                  <p className="mt-1 text-2xl font-semibold tracking-[-0.035em] text-[#28292c]">{card.value}</p>
+                  <p className="mt-1 break-words text-xl font-semibold tracking-[-0.035em] text-[#28292c] sm:text-2xl">{card.value}</p>
                   <p className="mt-1 text-xs text-[#98999b]">{card.detail}</p>
                 </article>
               );
             })}
           </section>
 
-          <section className={`${panelClass} overflow-hidden`}>
-            <div className="flex items-center justify-between gap-4 border-b border-[#ebe7e0] px-5 py-4 sm:px-6">
+          <section className={`${panelClass} min-w-0 overflow-hidden`}>
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#ebe7e0] px-4 py-4 sm:px-6">
               <div>
                 <h2 className="font-semibold text-[#303135]">Son rezervasyonlar</h2>
                 <p className="mt-1 text-xs text-[#85868a]">En yeni başvurular ve ödeme durumları</p>
@@ -208,16 +208,16 @@ export function DashboardView() {
             ) : (
               <div className="divide-y divide-[#eeeae4]">
                 {reservations.slice(0, 6).map((reservation) => (
-                  <article key={reservation.id} className="grid gap-3 px-5 py-4 sm:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_auto] sm:items-center sm:px-6">
+                  <article key={reservation.id} className="grid min-w-0 gap-3 px-4 py-4 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,1fr)_auto] lg:items-center sm:px-6">
                     <div className="min-w-0">
                       <div className="flex flex-wrap items-center gap-2">
                         <h3 className="truncate text-sm font-semibold text-[#303135]">{reservation.guest_name}</h3>
-                        <span className="font-mono text-[0.66rem] text-[#96979a]">{reservation.reference_code}</span>
+                        <span className="max-w-full truncate font-mono text-[0.66rem] text-[#96979a]">{reservation.reference_code}</span>
                       </div>
                       <p className="mt-1 truncate text-xs text-[#848589]">{reservation.email}</p>
                     </div>
-                    <div>
-                      <p className="text-sm font-medium text-[#3d3e41]">
+                    <div className="min-w-0">
+                      <p className="break-words text-sm font-medium text-[#3d3e41]">
                         {formatDate(reservation.check_in)} – {formatDate(reservation.check_out)}
                       </p>
                       <p className="mt-1 text-xs text-[#88898c]">

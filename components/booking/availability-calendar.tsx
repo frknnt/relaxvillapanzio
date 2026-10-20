@@ -71,8 +71,9 @@ export function AvailabilityCalendar({
       defaultMonth={selected?.from ?? today}
       disabled={(date) =>
         date < today ||
-        isBlockedDate(date, ranges, roomIds) ||
-        !hasRateForDate(date, rates, roomRates, roomIds)
+        (roomIds.length > 0 &&
+          (isBlockedDate(date, ranges, roomIds) ||
+            !hasRateForDate(date, rates, roomRates, roomIds)))
       }
       excludeDisabled
       showOutsideDays={false}
@@ -95,8 +96,8 @@ export function AvailabilityCalendar({
         month_grid: "w-full min-w-0 table-fixed border-collapse",
         day_button:
           "rounded-md hover:bg-[#eee8dd] data-[range-start=true]:bg-[#a08f6d] data-[range-start=true]:text-white data-[range-end=true]:bg-[#a08f6d] data-[range-end=true]:text-white data-[range-middle=true]:bg-[#eee8dd] data-[range-middle=true]:text-[#292b2f]",
-        disabled: "text-[#bbb8b2] opacity-45 line-through",
-        today: "rounded-md ring-1 ring-[#a08f6d]",
+        disabled: "text-[#aaa69f] opacity-55 line-through",
+        today: "rounded-md font-bold text-[#292b2f] ring-2 ring-[#a08f6d] ring-inset",
       }}
     />
   );

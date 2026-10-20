@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useState, type MouseEvent } from "react";
@@ -36,12 +37,17 @@ export function SiteHeader({ overlay = false }: { overlay?: boolean }) {
     <header className={`${overlay ? "absolute inset-x-0 top-0" : "relative bg-white"} z-40 ${textTone}`}>
       <a href="#main-content" className="fixed left-4 top-3 z-[100] -translate-y-24 rounded-md bg-white px-4 py-3 text-sm font-semibold text-[#292a2e] shadow-xl transition focus:translate-y-0">{professional.skipToContent}</a>
       <div className="mx-auto flex min-h-24 w-full max-w-[1630px] items-center justify-between px-5 sm:px-8 lg:min-h-28">
-        <Link href="/" onClick={navigateReliably} aria-label="Relax Villa Panzió" className="group flex min-h-11 items-center gap-3">
-          <span className="relative grid h-12 w-16 place-items-center" aria-hidden="true">
-            <span className={`absolute left-0 h-8 w-12 -skew-x-12 rounded-full border-[9px] ${overlay ? "border-white/25" : "border-[#2d2f33]/15"}`} />
-            <span className="absolute right-0 h-8 w-12 -skew-x-12 rounded-full border-[9px] border-[#ad9872] border-l-transparent" />
-          </span>
-          <span className="hidden text-left text-[11px] font-semibold uppercase leading-tight tracking-[.24em] sm:block">Relax<br />Villa</span>
+        <Link href="/" onClick={navigateReliably} aria-label="Harmony Balaton Villa" className="group flex min-h-11 items-center">
+          <Image
+            src={overlay ? "/brand/logo-exact-white.svg" : "/brand/logo-exact-primary.svg"}
+            alt="Harmony Balaton Villa"
+            width={394}
+            height={158}
+            priority
+            unoptimized
+            sizes="(min-width: 1024px) 220px, (min-width: 640px) 190px, 148px"
+            className="h-auto w-[148px] object-contain transition-transform duration-300 group-hover:scale-[1.02] sm:w-[190px] lg:w-[220px]"
+          />
         </Link>
 
         <nav className="hidden items-center gap-3 xl:flex xl:gap-5" aria-label={copy.navigation.menu}>

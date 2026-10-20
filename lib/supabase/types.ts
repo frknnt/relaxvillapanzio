@@ -14,6 +14,7 @@ export type BookingSettings = {
   currency: string;
   weekend_days: number[];
   payment_hold_hours: number;
+  child_fee: number;
   pet_fee: number;
   iban: string;
   bank_beneficiary: string;
@@ -83,6 +84,7 @@ export type Reservation = {
   status: ReservationStatus;
   payment_status: PaymentStatus;
   subtotal: number;
+  child_fee: number;
   pet_fee: number;
   total_price: number;
   currency: string;

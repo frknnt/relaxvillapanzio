@@ -1,4 +1,4 @@
-# Relax Villa yönetici paneli kurulumu
+# Harmony Balaton Villa yönetici paneli kurulumu
 
 Panel ve veritabanı bağlantısı hazırdır. Güvenlik nedeniyle yönetici şifresi kodda
 tutulmaz. İlk hesabı yalnızca bir kez Supabase panelinden oluşturmanız gerekir.
